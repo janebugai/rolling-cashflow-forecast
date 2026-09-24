@@ -75,76 +75,6 @@
     white-space: nowrap;
   }
 
-  /* --- control panel --- */
-  .control-panel {
-    background: var(--panel-bg);
-    border: 1px solid var(--border);
-    border-radius: 12px;
-    padding: 10px 16px;
-    margin-bottom: 14px;
-  }
-
-  .scenario-row {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    flex-wrap: wrap;
-    margin-bottom: 8px;
-  }
-
-  .scenario-row .scenario-label {
-    font-size: 13px;
-    color: var(--ink);
-    font-weight: 700;
-  }
-
-  .inputs-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-    gap: 10px 14px;
-  }
-
-  .field {
-    display: flex;
-    flex-direction: column;
-    gap: 3px;
-  }
-
-  .field label {
-    font-size: 11px;
-    color: var(--ink-soft);
-    font-weight: 600;
-  }
-
-  .field input {
-    border: 1px solid var(--border);
-    border-radius: 7px;
-    padding: 5px 8px;
-    font-size: 13px;
-    font-family: inherit;
-    background: #fff;
-    color: var(--ink);
-    width: 100%;
-  }
-
-  .field input:focus {
-    outline: 2px solid var(--blue-line);
-    outline-offset: 1px;
-  }
-
-  .field.invalid input {
-    border-color: var(--red-ink);
-    background: #fff6f6;
-  }
-
-  .field .error-msg {
-    font-size: 10px;
-    color: var(--red-ink);
-    display: none;
-  }
-
-  .field.invalid .error-msg { display: block; }
-
   /* --- chart --- */
   .chart-section {
     margin-bottom: 8px;
@@ -335,36 +265,104 @@
   }
 
   .pipeline {
-    margin: 12px 0 8px 0;
+    position: relative;
+    margin: 24px auto 16px auto;
     width: 100%;
     max-width: 1200px;
-  }
-  .pipeline svg {
-    display: block;
-    width: 100%;
-    max-width: 100%;
-    height: auto;
     font-family: inherit;
-  }
-  .pipeline svg text {
-    font-family: inherit;
-    fill: var(--ink);
+    font-size: 12px;
     font-weight: 600;
+    color: var(--ink);
+    line-height: 1.35;
   }
-  .pipeline svg text.panel-title {
-    fill: #ffffff;
-    font-weight: 700;
-    font-size: 15px;
+  .pipeline-sr {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
   }
-  .pipeline svg text.card-label {
-    font-size: 13px;
+  .pipe-board {
+    display: grid;
+    grid-template-columns: minmax(140px, 0.7fr) minmax(360px, 3fr) minmax(140px, 0.7fr);
+    gap: 10px;
+    align-items: stretch;
   }
-  .pipeline svg text.tier-title {
+  .pipe-panel {
+    border-radius: 16px;
+    padding: 14px 12px 12px;
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+  }
+  .pipe-panel-src { background: #e8f7f2; }
+  .pipe-panel-model { background: #e8eefb; }
+  .pipe-panel-out { background: #eee9f6; }
+  .pipe-panel-title,
+  .pipe-col h3 {
+    margin: 0 0 10px 0;
+    text-align: center;
     font-size: 12px;
     font-weight: 700;
+    color: var(--ink);
+    font-family: inherit;
   }
-  .pipeline svg text.file-label {
-    font-size: 8.5px;
+  .pipe-stack,
+  .pipe-files {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    flex: 1;
+  }
+  .pipe-stack li,
+  .pipe-files li {
+    background: #ffffff;
+    border-radius: 10px;
+    padding: 10px 8px;
+    text-align: center;
+    font-size: 12px;
+    font-weight: 600;
+    font-family: inherit;
+    color: var(--ink);
+    line-height: 1.35;
+    box-shadow: 0 1px 2px rgba(20, 24, 40, 0.04);
+  }
+  .pipe-inner {
+    flex: 1;
+    background: #fbfbfe;
+    border-radius: 12px;
+    padding: 10px;
+    display: grid;
+    grid-template-columns: 1fr auto 1fr auto 1fr;
+    gap: 0;
+    align-items: stretch;
+    min-width: 0;
+  }
+  .pipe-col {
+    min-width: 0;
+    height: 100%;
+    border-radius: 12px;
+    padding: 12px 8px 10px;
+  }
+  .pipe-col-raw { background: #e8f7f2; }
+  .pipe-col-xf { background: #eef2fb; }
+  .pipe-col-rpt { background: #f1eef8; }
+  .pipe-h-arrow {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #b7bdd0;
+    font-size: 12px;
+    font-weight: 600;
+    padding: 0 4px;
+  }
+  @media (max-width: 720px) {
+    .pipe-board { grid-template-columns: 1fr; }
+    .pipe-inner { grid-template-columns: 1fr; }
+    .pipe-h-arrow { transform: rotate(90deg); padding: 6px 0; }
   }
   .process-lead {
     font-size: 14px;
@@ -374,6 +372,14 @@
   }
 
   .process-lead:last-child { margin-bottom: 0; }
+
+  .process-lead a {
+    color: var(--blue-line);
+    text-decoration: none;
+    border-bottom: 1px solid rgba(58, 95, 206, 0.35);
+  }
+
+  .process-lead a:hover { border-bottom-color: var(--blue-line); }
 
   .process-section h2 {
     font-size: 17px;
@@ -419,33 +425,6 @@
   table.process-map td:first-child { font-weight: 600; white-space: nowrap; }
   table.process-map code { font-size: 12px; }
 
-  .source-block { margin: 0 0 4px 0; }
-  .source-block details { margin: 0; }
-  .source-block summary {
-    font-size: 15px;
-    font-weight: 700;
-    cursor: pointer;
-    list-style: none;
-    margin: 0;
-    padding: 2px 0;
-    user-select: none;
-  }
-  .source-block summary::-webkit-details-marker { display: none; }
-  .source-block summary::before {
-    content: "▶";
-    display: inline-block;
-    width: 12px;
-    margin-right: 6px;
-    color: var(--ink-soft);
-    font-size: 10px;
-  }
-  .source-block details[open] summary { margin-bottom: 8px; }
-  .source-block details[open] summary::before { content: "▼"; }
-  .source-block summary:hover { color: var(--blue-line); }
-  .source-block summary:focus-visible {
-    outline: 2px solid var(--blue-line);
-    outline-offset: 2px;
-  }
   table.source-table {
     border-collapse: collapse;
     width: 100%;
@@ -503,7 +482,7 @@
     <section class="table-section">
       <h2>Monthly Detail</h2>
       <div class="table-wrap">
-        <table class="detail-table" id="detailTable">
+        <table class="detail-table">
           <thead><tr id="tableHeadRow"><th>&nbsp;</th></tr></thead>
           <tbody id="tableBody"></tbody>
         </table>
@@ -511,7 +490,7 @@
       <div id="drilldown" class="drilldown" hidden>
         <h3 id="drilldownTitle">Source transactions</h3>
         <div class="table-wrap">
-          <table class="source-table" id="drilldownTable">
+          <table class="source-table">
             <thead>
               <tr>
                 <th>transaction_id</th>
@@ -543,125 +522,60 @@
 
       <section class="process-section" id="proc-model">
         <h2><span class="sec-num">2.</span>Data Model</h2>
-        <div class="pipeline">
-          <svg viewBox="0 0 1140 320" preserveAspectRatio="xMinYMin meet" role="img" aria-labelledby="pipelineTitle">
-            <title id="pipelineTitle">Data sources feed the FP&amp;A data model, which feeds reports</title>
-            <defs>
-              <linearGradient id="srcGrad" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="0%" stop-color="#2aa89c"></stop>
-                <stop offset="100%" stop-color="#1a7f76"></stop>
-              </linearGradient>
-              <linearGradient id="modelGrad" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="0%" stop-color="#5b7ef5"></stop>
-                <stop offset="100%" stop-color="#3d5bd4"></stop>
-              </linearGradient>
-              <linearGradient id="repGrad" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="0%" stop-color="#8b6fd4"></stop>
-                <stop offset="100%" stop-color="#6a4cbf"></stop>
-              </linearGradient>
-              <marker id="pipeArrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto">
-                <path d="M 0 1.2 L 10 5 L 0 8.8 z" fill="#3d5bd4"></path>
-              </marker>
-              <marker id="pipeArrowLight" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto">
-                <path d="M 0 1.2 L 10 5 L 0 8.8 z" fill="#c4b5fd"></path>
-              </marker>
-            </defs>
-
-            <rect x="12" y="12" width="204" height="296" rx="14" fill="url(#srcGrad)"></rect>
-            <text x="114" y="44" text-anchor="middle" class="panel-title">Data Sources</text>
-            <rect x="28" y="64" width="172" height="64" rx="10" fill="#e7fff8"></rect>
-            <text x="114" y="102" text-anchor="middle" class="card-label">ERP</text>
-            <rect x="28" y="140" width="172" height="64" rx="10" fill="#e7fff8"></rect>
-            <text x="114" y="178" text-anchor="middle" class="card-label">Planning tools</text>
-            <rect x="28" y="216" width="172" height="64" rx="10" fill="#e7fff8"></rect>
-            <text x="114" y="254" text-anchor="middle" class="card-label">Operational systems</text>
-
-            <rect x="232" y="12" width="668" height="296" rx="14" fill="url(#modelGrad)"></rect>
-            <text x="566" y="42" text-anchor="middle" class="panel-title">FP&amp;A Data Model</text>
-            <rect x="248" y="56" width="636" height="236" rx="10" fill="#f4f7ff"></rect>
-
-            <rect x="264" y="72" width="176" height="204" rx="10" fill="#ecfdf8" stroke="#b8eadc"></rect>
-            <text x="352" y="94" text-anchor="middle" class="tier-title">Raw Tier</text>
-            <rect x="276" y="106" width="152" height="28" rx="6" fill="#ccfbf1"></rect>
-            <text x="352" y="124" text-anchor="middle" class="file-label">bitcoin_sales.csv</text>
-            <rect x="276" y="138" width="152" height="28" rx="6" fill="#ccfbf1"></rect>
-            <text x="352" y="156" text-anchor="middle" class="file-label">operating_payments.csv</text>
-            <rect x="276" y="170" width="152" height="28" rx="6" fill="#ccfbf1"></rect>
-            <text x="352" y="188" text-anchor="middle" class="file-label">capital_payments.csv</text>
-            <rect x="276" y="202" width="152" height="28" rx="6" fill="#ccfbf1"></rect>
-            <text x="352" y="220" text-anchor="middle" class="file-label">loan_draws.csv</text>
-            <rect x="276" y="234" width="152" height="28" rx="6" fill="#ccfbf1"></rect>
-            <text x="352" y="252" text-anchor="middle" class="file-label">bank_balance.csv</text>
-
-            <rect x="476" y="72" width="176" height="204" rx="10" fill="#eef4ff" stroke="#c5d4fb"></rect>
-            <text x="564" y="94" text-anchor="middle" class="tier-title">Transformed Tier</text>
-            <rect x="488" y="122" width="152" height="28" rx="6" fill="#dbe7ff"></rect>
-            <text x="564" y="140" text-anchor="middle" class="file-label">activity_mapping.csv</text>
-            <rect x="488" y="160" width="152" height="28" rx="6" fill="#dbe7ff"></rect>
-            <text x="564" y="178" text-anchor="middle" class="file-label">cash_transactions.csv</text>
-            <rect x="488" y="198" width="152" height="28" rx="6" fill="#dbe7ff"></rect>
-            <text x="564" y="216" text-anchor="middle" class="file-label">opening_balance.csv</text>
-
-            <rect x="688" y="72" width="176" height="204" rx="10" fill="#f4f0ff" stroke="#d8cff8"></rect>
-            <text x="776" y="94" text-anchor="middle" class="tier-title">Reporting Tier</text>
-            <rect x="700" y="132" width="152" height="40" rx="6" fill="#e9e0ff"></rect>
-            <text x="776" y="149" text-anchor="middle" class="file-label">monthly_cash_flow_</text>
-            <text x="776" y="162" text-anchor="middle" class="file-label">lines.csv</text>
-            <rect x="700" y="180" width="152" height="40" rx="6" fill="#e9e0ff"></rect>
-            <text x="776" y="197" text-anchor="middle" class="file-label">monthly_cash_</text>
-            <text x="776" y="210" text-anchor="middle" class="file-label">summary.csv</text>
-
-            <line x1="440" y1="174" x2="476" y2="174" stroke="#3d5bd4" stroke-width="2" marker-end="url(#pipeArrow)"></line>
-            <line x1="652" y1="174" x2="688" y2="174" stroke="#3d5bd4" stroke-width="2" marker-end="url(#pipeArrow)"></line>
-            <line x1="864" y1="174" x2="916" y2="174" stroke="#c4b5fd" stroke-width="2" marker-end="url(#pipeArrowLight)"></line>
-
-            <rect x="924" y="12" width="204" height="296" rx="14" fill="url(#repGrad)"></rect>
-            <text x="1026" y="44" text-anchor="middle" class="panel-title">Reports</text>
-            <rect x="940" y="64" width="172" height="48" rx="10" fill="#f3eeff"></rect>
-            <text x="1026" y="93" text-anchor="middle" class="card-label">Tableau</text>
-            <rect x="940" y="124" width="172" height="48" rx="10" fill="#f3eeff"></rect>
-            <text x="1026" y="153" text-anchor="middle" class="card-label">Power BI</text>
-            <rect x="940" y="184" width="172" height="48" rx="10" fill="#f3eeff"></rect>
-            <text x="1026" y="213" text-anchor="middle" class="card-label">Static HTML</text>
-            <rect x="940" y="244" width="172" height="48" rx="10" fill="#f3eeff"></rect>
-            <text x="1026" y="273" text-anchor="middle" class="card-label">AI workflows</text>
-          </svg>
-        </div>
-        <p class="process-lead">Data Sources – ERP, planning tools, and operational systems provide the original records.</p>
-        <p class="process-lead">Raw Tier – Data captured by operational systems in its original format, before business rules are applied.</p>
-        <p class="process-lead">Transformed Tier – Data is validated, cleaned, standardized, and mapped to consistent business definitions. Records retain a link to their sources.</p>
-        <p class="process-lead">Reporting Tier – Transformed data is aggregated into metrics and tables designed for dashboards, analysis, and decision-making.</p>
-        <p class="process-lead">Reports – Reports can use any tools on top of the foundation data model (i.e. Tableau, Power BI, static HTML, and AI workflows).</p>
-        <p class="process-lead">These are the five raw extracts, shown as they arrive.</p>
-        <div id="sourceExtracts"></div>
-        <p class="process-lead">The SQL transform keeps eligible settled, paid, and funded events, maps them through <code>activity_mapping.csv</code>, and writes one cash-activity row per transaction. Opening cash is stored separately and is not a cash-flow event.</p>
-        <div class="table-wrap">
-          <table class="process-map">
-            <thead>
-              <tr>
-                <th>Table</th>
-                <th>Grain</th>
-                <th>Keys / measures</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td><code>activity_mapping.csv</code></td>
-                <td>Source × category</td>
-                <td>business activity, cash-flow section, reporting line</td>
-              </tr>
-              <tr>
-                <td><code>cash_transactions.csv</code></td>
-                <td>Eligible cash event</td>
-                <td><code>transaction_id</code>, <code>cash_date</code>, <code>reporting_month</code>, <code>signed_amount_usd</code></td>
-              </tr>
-              <tr>
-                <td><code>opening_balance.csv</code></td>
-                <td>Account snapshot</td>
-                <td><code>available_balance_usd</code></td>
-              </tr>
-            </tbody>
-          </table>
+        <p class="process-lead">Data from ERP, planning tools, and operational systems flows through three tiers: <strong>Raw Tier</strong> retains the original records and their history to support data lineage; <strong>Transformed Tier</strong> validates, cleans, and standardizes the data while maintaining source traceability; and <strong>Reporting Tier</strong> organizes it into purpose-specific metrics and tables, including plans, forecasts, actuals, and related analysis. This shared foundation supports Tableau, Power BI, static HTML reports, and AI workflows. Please visit <a href="https://github.com/janebugai/rolling-cashflow-forecast/tree/main/data" target="_blank" rel="noopener">data directory on GitHub</a> for a mock-up data model</p>
+        <div class="pipeline" role="img" aria-labelledby="pipelineTitle">
+          <p id="pipelineTitle" class="pipeline-sr">Data sources feed the FP&amp;A data model, which feeds reports</p>
+          <div class="pipe-board">
+            <div class="pipe-panel pipe-panel-src">
+              <p class="pipe-panel-title">Data Sources</p>
+              <ul class="pipe-stack">
+                <li>ERP</li>
+                <li>Planning tools</li>
+                <li>Operational systems</li>
+              </ul>
+            </div>
+            <div class="pipe-panel pipe-panel-model">
+              <p class="pipe-panel-title">FP&amp;A Data Model</p>
+              <div class="pipe-inner">
+                <div class="pipe-col pipe-col-raw">
+                  <h3>Raw Tier</h3>
+                  <ul class="pipe-files">
+                    <li>bitcoin_sales</li>
+                    <li>operating_payments</li>
+                    <li>capital_payments</li>
+                    <li>loan_draws</li>
+                    <li>bank_balance</li>
+                  </ul>
+                </div>
+                <div class="pipe-h-arrow" aria-hidden="true">→</div>
+                <div class="pipe-col pipe-col-xf">
+                  <h3>Transformed Tier</h3>
+                  <ul class="pipe-files">
+                    <li>activity_mapping</li>
+                    <li>cash_transactions</li>
+                    <li>opening_balance</li>
+                  </ul>
+                </div>
+                <div class="pipe-h-arrow" aria-hidden="true">→</div>
+                <div class="pipe-col pipe-col-rpt">
+                  <h3>Reporting Tier</h3>
+                  <ul class="pipe-files">
+                    <li>monthly_cash_flow_lines</li>
+                    <li>monthly_cash_summary</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+            <div class="pipe-panel pipe-panel-out">
+              <p class="pipe-panel-title">Reports</p>
+              <ul class="pipe-stack">
+                <li>Tableau</li>
+                <li>Power BI</li>
+                <li>Static HTML</li>
+                <li>AI workflows</li>
+              </ul>
+            </div>
+          </div>
         </div>
       </section>
 
@@ -1089,32 +1003,6 @@ function loadReportingMart() {
 
 loadReportingMart().catch(showLoadError);
 
-const MONEY_COLS = ["usd_per_btc","usd_received","amount_paid","draw_amount","available_balance"];
-const QTY_COLS = ["btc_sold","mwh","rate_per_mwh"];
-
-const RAW_SOURCES = [
-  {
-    heading: "Bitcoin sales",
-    file: "data/raw/bitcoin_sales.csv"
-  },
-  {
-    heading: "Operating payments",
-    file: "data/raw/operating_payments.csv"
-  },
-  {
-    heading: "Capital payments",
-    file: "data/raw/capital_payments.csv"
-  },
-  {
-    heading: "Loan draws",
-    file: "data/raw/loan_draws.csv"
-  },
-  {
-    heading: "Bank balance",
-    file: "data/raw/bank_balance.csv"
-  }
-];
-
 function escapeHtml(value) {
   return String(value)
     .replace(/&/g, "&amp;")
@@ -1122,64 +1010,6 @@ function escapeHtml(value) {
     .replace(/>/g, "&gt;")
     .replace(/"/g, "&quot;");
 }
-
-function formatUsd(value) {
-  const n = Number(value);
-  if (!Number.isFinite(n)) return "";
-  return "$" + n.toLocaleString("en-US", { maximumFractionDigits: 0 });
-}
-
-function formatQty(value) {
-  if (value === "" || value === null || value === undefined) return "";
-  const n = Number(value);
-  if (!Number.isFinite(n)) return escapeHtml(value);
-  return n.toLocaleString("en-US");
-}
-
-function displayCell(col, value) {
-  if (value === null || value === undefined) return { text: "", cls: "" };
-  if (MONEY_COLS.indexOf(col) !== -1) return { text: formatUsd(value), cls: "num" };
-  if (QTY_COLS.indexOf(col) !== -1) return { text: formatQty(value), cls: "num" };
-  return { text: escapeHtml(value), cls: "" };
-}
-
-function renderRows(records, cols) {
-  return records.map(row =>
-    `<tr>${cols.map(c => {
-      const cell = displayCell(c, row[c]);
-      return `<td${cell.cls ? ' class="' + cell.cls + '"' : ""}>${cell.text}</td>`;
-    }).join("")}</tr>`
-  ).join("");
-}
-
-function renderRecordTable(records) {
-  if (!records.length) return "";
-  const cols = [];
-  records.forEach(row => {
-    Object.keys(row).forEach(key => {
-      if (cols.indexOf(key) === -1) cols.push(key);
-    });
-  });
-  const head = cols.map(c => `<th${MONEY_COLS.indexOf(c) !== -1 || QTY_COLS.indexOf(c) !== -1 ? ' class="num"' : ""}>${escapeHtml(c)}</th>`).join("");
-  return `<div class="table-wrap"><table class="source-table"><thead><tr>${head}</tr></thead><tbody>${renderRows(records, cols)}</tbody></table></div>`;
-}
-
-function renderSourceBlock(spec, rows) {
-  return `<article class="source-block"><details><summary>${escapeHtml(spec.heading)}</summary>${renderRecordTable(rows)}</details></article>`;
-}
-
-function loadSourceExtracts() {
-  const host = document.getElementById("sourceExtracts");
-  Promise.all(RAW_SOURCES.map(spec =>
-    fetchCsv(spec.file).then(rows => ({ spec: spec, rows: rows }))
-  )).then(tables => {
-    host.innerHTML = tables.map(t => renderSourceBlock(t.spec, t.rows)).join("");
-  }).catch(err => {
-    host.innerHTML = `<p class="load-error">Could not load source extracts. ${escapeHtml(err && err.message ? err.message : err)}</p>`;
-  });
-}
-
-loadSourceExtracts();
 
 (function initTabs() {
   const tabs = Array.from(document.querySelectorAll("[role='tab']"));
