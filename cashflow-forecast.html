@@ -13,10 +13,10 @@
     --border: #e4e6f0;
     --panel-bg: #f4f5fb;
     --blue-line: #3a5fce;
-    --net-line: #b1740f;
-    --cat-operating: #57b8ff;
-    --cat-investing: #42e2b8;
-    --cat-financing: #b4c5e4;
+    --net-line: #6a5ab8;
+    --cat-operating: #63c9ae;
+    --cat-investing: #93b5ea;
+    --cat-financing: #bda9e0;
     --red-ink: #b3283d;
     --pos-bg: #d8f3e1;
     --pos-ink: #1f7a45;
@@ -366,7 +366,7 @@
   }
   .process-lead {
     font-size: 14px;
-    color: var(--ink-soft);
+    color: #3d4457;
     margin: 0 0 10px 0;
     line-height: 1.5;
   }
@@ -581,47 +581,73 @@
 
       <section class="process-section" id="proc-semantic">
         <h2><span class="sec-num">3.</span>Semantic Layer</h2>
-        <p class="process-lead">Business names sit in the mapping, not in the source systems. The Forecast tab’s Operating / Investing / Financing rows are this layer. Bitcoin sale proceeds are treated as operating cash receipts in a management cash flow view.</p>
+        <p class="process-lead">The semantic layer centralizes business definitions, dimensions, and calculation rules so they can be reused across reports. In this design, shared SQL views define cash-flow classifications and measures such as cash inflows, cash outflows, and net cash movement, with the underlying code maintained in GitHub.</p>
+        <p class="process-lead">For example, a <strong>Tableau published data source</strong> makes these definitions available to everyone building connected dashboards. Teams use shared dimensions such as “Reporting Month,” “Cash-Flow Category,” and “Actual / Forecast,” along with approved calculations.</p>
         <div class="table-wrap">
           <table class="process-map">
             <thead>
               <tr>
-                <th>Category</th>
-                <th>Inflow</th>
-                <th>Outflow</th>
+                <th>Shared dimension: Cash-Flow Category</th>
+                <th>Example transactions</th>
               </tr>
             </thead>
             <tbody>
               <tr>
-                <td>Operating Activities</td>
-                <td>Mining cash received</td>
-                <td>Mining power paid + overhead paid</td>
+                <td>Operating</td>
+                <td>Electricity and other operating payments</td>
               </tr>
               <tr>
-                <td>Investing Activities</td>
-                <td>None in this actuals set</td>
-                <td>Data center buildout paid + mining equipment paid</td>
+                <td>Investing</td>
+                <td>Equipment purchases and capital expenditures</td>
               </tr>
               <tr>
-                <td>Financing Activities</td>
-                <td>Construction loan drawn</td>
-                <td>None in this actuals set</td>
+                <td>Financing</td>
+                <td>Loan proceeds and principal repayments</td>
               </tr>
             </tbody>
           </table>
         </div>
-        <p class="process-lead" style="margin-top:14px">
-          Net operating = mining receipts + power paid + overhead paid.
-          Net investing = buildout paid + equipment paid.
-          Net financing = loan draws.
-          Net change in cash = operating + investing + financing.
-          Ending cash = beginning cash + net change.
-        </p>
+        <p class="process-lead" style="margin-top:14px">The <strong>Finance team</strong> can use this dimension to summarize monthly cash flow by category, while the <strong>Operations team</strong> uses it to review individual payments. Both reports apply the same classifications, while each team chooses its own layout, filters, and level of detail. This maintains consistent business definitions while giving teams the flexibility to create their own views, dashboards, and reports. Other tools can also reuse the underlying SQL views.</p>
+        <p class="process-lead"><strong>The semantic layer also provides essential business context for AI.</strong> It gives AI workflows access to approved definitions, relationships, and calculation rules—for example, what counts as a cash inflow and which periods contain actuals versus forecasts. Without this context, AI may misinterpret fields, apply inconsistent calculations, or invent definitions and unsupported figures. Connecting AI workflows to shared models and requiring answers to use queried results helps keep responses consistent with reporting tools. Validation and traceability to source data remain necessary to verify accuracy.</p>
       </section>
 
       <section class="process-section" id="proc-reporting">
         <h2><span class="sec-num">4.</span>Reporting</h2>
-        <p class="process-lead">The reporting tier is CSV files in <code>data/reporting/</code>. The Forecast tab fetches <code>monthly_cash_summary.csv</code> and <code>monthly_cash_flow_lines.csv</code>, and drills into <code>data/transformed/cash_transactions.csv</code> by <code>reporting_month</code> and <code>reporting_line</code>.</p>
+        <p class="process-lead">The reporting layer turns the shared definitions into the tables that reports actually read: one row per reporting line per month, and a monthly summary carrying the section nets and the cash roll-forward. It is built for a rolling twelve-month view refreshed after each close, so treasury, FP&amp;A, and operations all work from the same numbers at the level of detail each one needs.</p>
+        <div class="table-wrap">
+          <table class="process-map">
+            <thead>
+              <tr>
+                <th>Report</th>
+                <th>Audience</th>
+                <th>Question it answers</th>
+                <th>Built with</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Rolling twelve-month cash flow</td>
+                <td>Treasury and finance leadership</td>
+                <td>Where is cash heading over the next year?</td>
+                <td><code>monthly_cash_summary.csv</code></td>
+              </tr>
+              <tr>
+                <td>Monthly cash flow detail</td>
+                <td>FP&amp;A</td>
+                <td>Which lines moved, and by how much?</td>
+                <td><code>monthly_cash_flow_lines.csv</code></td>
+              </tr>
+              <tr>
+                <td>Payment-level review</td>
+                <td>Operations</td>
+                <td>Which transactions sit behind a line?</td>
+                <td><code>cash_transactions.csv</code> drilldown</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="process-lead" style="margin-top:14px">Reports carry no business logic of their own. Every figure arrives precomputed from <code>data/reporting/</code>, so a chart and a spreadsheet built on the same file cannot disagree, and a definition changes in one place rather than in each report. Amounts are signed once, with inflows positive and outflows negative, and months are stored as month starts so periods line up across files.</p>
+        <p class="process-lead">Each number stays traceable back to a transaction. A bar in the chart is a section net, which resolves to statement lines in <code>monthly_cash_flow_lines.csv</code>, which join to individual <code>transaction_id</code> values in <code>data/transformed/cash_transactions.csv</code> on <code>reporting_month</code> and <code>reporting_line</code>. The Forecast tab works that path end to end: expand a section, then click a monthly figure to list the source transactions behind it. Column-level detail for both reporting files is in <code>data/reporting/README.md</code>.</p>
         <div class="table-wrap">
           <table class="process-map">
             <thead>

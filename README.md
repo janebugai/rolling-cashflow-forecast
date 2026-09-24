@@ -44,23 +44,33 @@ python scripts/run_sql.py
 
 ## 3. Semantic Layer
 
-Business names sit in the mapping, not in the source systems. The Forecast tab’s Operating / Investing / Financing rows are this layer. Bitcoin sale proceeds are treated as operating cash receipts in a management cash flow view.
+The semantic layer centralizes business definitions, dimensions, and calculation rules so they can be reused across reports. In this design, shared SQL views define cash-flow classifications and measures such as cash inflows, cash outflows, and net cash movement, with the underlying code maintained in GitHub.
 
-| Category | Inflow | Outflow |
-| --- | --- | --- |
-| Operating Activities | Mining cash received | Mining power paid + overhead paid |
-| Investing Activities | None in this actuals set | Data center buildout paid + mining equipment paid |
-| Financing Activities | Construction loan drawn | None in this actuals set |
+For example, a **Tableau published data source** makes these definitions available to everyone building connected dashboards. Teams use shared dimensions such as “Reporting Month,” “Cash-Flow Category,” and “Actual / Forecast,” along with approved calculations.
 
-- Net operating = mining receipts + power paid + overhead paid.
-- Net investing = buildout paid + equipment paid.
-- Net financing = loan draws.
-- Net change in cash = operating + investing + financing.
-- Ending cash = beginning cash + net change.
+| Shared dimension: Cash-Flow Category | Example transactions |
+| --- | --- |
+| Operating | Electricity and other operating payments |
+| Investing | Equipment purchases and capital expenditures |
+| Financing | Loan proceeds and principal repayments |
+
+The **Finance team** can use this dimension to summarize monthly cash flow by category, while the **Operations team** uses it to review individual payments. Both reports apply the same classifications, while each team chooses its own layout, filters, and level of detail. This maintains consistent business definitions while giving teams the flexibility to create their own views, dashboards, and reports. Other tools can also reuse the underlying SQL views.
+
+**The semantic layer also provides essential business context for AI.** It gives AI workflows access to approved definitions, relationships, and calculation rules—for example, what counts as a cash inflow and which periods contain actuals versus forecasts. Without this context, AI may misinterpret fields, apply inconsistent calculations, or invent definitions and unsupported figures. Connecting AI workflows to shared models and requiring answers to use queried results helps keep responses consistent with reporting tools. Validation and traceability to source data remain necessary to verify accuracy.
 
 ## 4. Reporting
 
-The reporting tier is CSV files in `data/reporting/`. The Forecast tab fetches `monthly_cash_summary.csv` and `monthly_cash_flow_lines.csv`, and drills into `data/transformed/cash_transactions.csv` by `reporting_month` and `reporting_line`. Column details are in `data/reporting/README.md`.
+The reporting layer turns the shared definitions into the tables that reports actually read: one row per reporting line per month, and a monthly summary carrying the section nets and the cash roll-forward. It is built for a rolling twelve-month view refreshed after each close, so treasury, FP&A, and operations all work from the same numbers at the level of detail each one needs.
+
+| Report | Audience | Question it answers | Built with |
+| --- | --- | --- | --- |
+| Rolling twelve-month cash flow | Treasury and finance leadership | Where is cash heading over the next year? | `monthly_cash_summary.csv` |
+| Monthly cash flow detail | FP&A | Which lines moved, and by how much? | `monthly_cash_flow_lines.csv` |
+| Payment-level review | Operations | Which transactions sit behind a line? | `cash_transactions.csv` drilldown |
+
+Reports carry no business logic of their own. Every figure arrives precomputed from `data/reporting/`, so a chart and a spreadsheet built on the same file cannot disagree, and a definition changes in one place rather than in each report. Amounts are signed once, with inflows positive and outflows negative, and months are stored as month starts so periods line up across files.
+
+Each number stays traceable back to a transaction. A bar in the chart is a section net, which resolves to statement lines in `monthly_cash_flow_lines.csv`, which join to individual `transaction_id` values in `data/transformed/cash_transactions.csv` on `reporting_month` and `reporting_line`. The Forecast tab works that path end to end: expand a section, then click a monthly figure to list the source transactions behind it. Column-level detail for both reporting files is in `data/reporting/README.md`.
 
 | Reporting file | What is kept | Used for |
 | --- | --- | --- |
