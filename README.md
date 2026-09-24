@@ -19,30 +19,36 @@ Then open the **Data process** tab in `cashflow-forecast.html` to see the full t
 ```mermaid
 flowchart LR
   subgraph ds["Data Sources"]
+    direction TB
     ERP[ERP]
     Plan[Planning tools]
     Ops[Operational systems]
   end
   subgraph fpa["FP&A Data Model"]
+    direction LR
     subgraph raw["Raw Tier"]
-      BTC["bitcoin_sales.csv"]
-      OP["operating_payments.csv"]
-      CAP["capital_payments.csv"]
-      LN["loan_draws.csv"]
-      BK["bank_balance.csv"]
+      direction TB
+      BTC[bitcoin_sales]
+      OP[operating_payments]
+      CAP[capital_payments]
+      LN[loan_draws]
+      BK[bank_balance]
     end
     subgraph xf["Transformed Tier"]
-      MAP["activity_mapping.csv"]
-      TXN["cash_transactions.csv"]
-      OPB["opening_balance.csv"]
+      direction TB
+      MAP[activity_mapping]
+      TXN[cash_transactions]
+      OPB[opening_balance]
     end
     subgraph rpt["Reporting Tier"]
-      LINES["monthly_cash_flow_lines.csv"]
-      SUM["monthly_cash_summary.csv"]
+      direction TB
+      LINES[monthly_cash_flow_lines]
+      SUM[monthly_cash_summary]
     end
     raw --> xf --> rpt
   end
   subgraph reports["Reports"]
+    direction TB
     Tableau[Tableau]
     PBI[Power BI]
     HTML[Static HTML]
