@@ -1,0 +1,12 @@
+# Render Blueprint: serves this repo as a static site.
+# The dashboard is plain HTML that fetches the reporting CSVs with relative
+# paths, so the publish directory is the repo root and there is no build.
+#
+# Apply it from the Render Dashboard: New > Blueprint, then pick this repo.
+services:
+  - type: web
+    name: rolling-cashflow-forecast
+    runtime: static
+    branch: main
+    buildCommand: ""
+    staticPublishPath: .
