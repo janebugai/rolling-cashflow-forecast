@@ -1,0 +1,7 @@
+source,category,business_activity,cash_flow_section,reporting_line
+Bitcoin sales,settled,Bitcoin mining operations,Operating,Mining cash received
+Operating payments,Mining power,Bitcoin mining operations,Operating,Mining power paid
+Operating payments,Overhead,Corporate operations,Operating,Overhead paid
+Capital payments,Data center buildout,Data center expansion,Investing,Data center buildout paid
+Capital payments,Mining equipment,Bitcoin mining operations,Investing,Mining equipment paid
+Loan draws,funded,Data center financing,Financing,Construction loan drawn

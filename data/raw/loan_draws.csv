@@ -1,0 +1,5 @@
+draw_id,funding_date,facility_id,lender,draw_amount,status
+DRAW-CL-2026-01,2026-01-08,TL-2026-A,First Prairie Bank,500000,FUNDED
+DRAW-CL-2026-04,2026-04-08,TL-2026-A,First Prairie Bank,500000,FUNDED
+DRAW-CL-2026-07,2026-07-08,TL-2026-A,First Prairie Bank,1000000,FUNDED
+DRAW-CL-2026-10,2026-10-08,TL-2026-A,First Prairie Bank,500000,FUNDED

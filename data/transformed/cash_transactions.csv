@@ -1,0 +1,54 @@
+transaction_id,source_system,source_file,source_category,cash_date,reporting_month,business_activity,cash_flow_section,reporting_line,cash_direction,signed_amount_usd
+DRAW-CL-2026-01,Treasury / loan system,loan_draws.csv,funded,2026-01-08,2026-01-01,Data center financing,Financing,Construction loan drawn,inflow,500000
+INV-PWR-2026-01,Accounts payable,operating_payments.csv,Mining power,2026-01-15,2026-01-01,Bitcoin mining operations,Operating,Mining power paid,outflow,-260000
+INV-OH-2026-01,Accounts payable,operating_payments.csv,Overhead,2026-01-20,2026-01-01,Corporate operations,Operating,Overhead paid,outflow,-60000
+PAY-DC-2026-01,Capital projects / AP,capital_payments.csv,Data center buildout,2026-01-31,2026-01-01,Data center expansion,Investing,Data center buildout paid,outflow,-100000
+SALE-2026-01,Treasury / exchange,bitcoin_sales.csv,settled,2026-01-31,2026-01-01,Bitcoin mining operations,Operating,Mining cash received,inflow,300000
+PAY-MIN-EQ-2026-02,Capital projects / AP,capital_payments.csv,Mining equipment,2026-02-12,2026-02-01,Bitcoin mining operations,Investing,Mining equipment paid,outflow,-500000
+INV-PWR-2026-02,Accounts payable,operating_payments.csv,Mining power,2026-02-15,2026-02-01,Bitcoin mining operations,Operating,Mining power paid,outflow,-270000
+INV-OH-2026-02,Accounts payable,operating_payments.csv,Overhead,2026-02-20,2026-02-01,Corporate operations,Operating,Overhead paid,outflow,-70000
+PAY-DC-2026-02,Capital projects / AP,capital_payments.csv,Data center buildout,2026-02-28,2026-02-01,Data center expansion,Investing,Data center buildout paid,outflow,-150000
+SALE-2026-02,Treasury / exchange,bitcoin_sales.csv,settled,2026-02-28,2026-02-01,Bitcoin mining operations,Operating,Mining cash received,inflow,300000
+INV-PWR-2026-03,Accounts payable,operating_payments.csv,Mining power,2026-03-15,2026-03-01,Bitcoin mining operations,Operating,Mining power paid,outflow,-270000
+INV-OH-2026-03,Accounts payable,operating_payments.csv,Overhead,2026-03-20,2026-03-01,Corporate operations,Operating,Overhead paid,outflow,-70000
+PAY-DC-2026-03,Capital projects / AP,capital_payments.csv,Data center buildout,2026-03-31,2026-03-01,Data center expansion,Investing,Data center buildout paid,outflow,-250000
+SALE-2026-03,Treasury / exchange,bitcoin_sales.csv,settled,2026-03-31,2026-03-01,Bitcoin mining operations,Operating,Mining cash received,inflow,400000
+DRAW-CL-2026-04,Treasury / loan system,loan_draws.csv,funded,2026-04-08,2026-04-01,Data center financing,Financing,Construction loan drawn,inflow,500000
+INV-PWR-2026-04,Accounts payable,operating_payments.csv,Mining power,2026-04-15,2026-04-01,Bitcoin mining operations,Operating,Mining power paid,outflow,-260000
+INV-OH-2026-04,Accounts payable,operating_payments.csv,Overhead,2026-04-20,2026-04-01,Corporate operations,Operating,Overhead paid,outflow,-60000
+PAY-DC-2026-04,Capital projects / AP,capital_payments.csv,Data center buildout,2026-04-30,2026-04-01,Data center expansion,Investing,Data center buildout paid,outflow,-250000
+SALE-2026-04,Treasury / exchange,bitcoin_sales.csv,settled,2026-04-30,2026-04-01,Bitcoin mining operations,Operating,Mining cash received,inflow,300000
+INV-PWR-2026-05,Accounts payable,operating_payments.csv,Mining power,2026-05-15,2026-05-01,Bitcoin mining operations,Operating,Mining power paid,outflow,-270000
+INV-OH-2026-05,Accounts payable,operating_payments.csv,Overhead,2026-05-20,2026-05-01,Corporate operations,Operating,Overhead paid,outflow,-70000
+PAY-DC-2026-05,Capital projects / AP,capital_payments.csv,Data center buildout,2026-05-31,2026-05-01,Data center expansion,Investing,Data center buildout paid,outflow,-350000
+SALE-2026-05,Treasury / exchange,bitcoin_sales.csv,settled,2026-05-31,2026-05-01,Bitcoin mining operations,Operating,Mining cash received,inflow,400000
+INV-PWR-2026-06,Accounts payable,operating_payments.csv,Mining power,2026-06-15,2026-06-01,Bitcoin mining operations,Operating,Mining power paid,outflow,-270000
+INV-OH-2026-06,Accounts payable,operating_payments.csv,Overhead,2026-06-20,2026-06-01,Corporate operations,Operating,Overhead paid,outflow,-70000
+PAY-DC-2026-06,Capital projects / AP,capital_payments.csv,Data center buildout,2026-06-30,2026-06-01,Data center expansion,Investing,Data center buildout paid,outflow,-400000
+SALE-2026-06,Treasury / exchange,bitcoin_sales.csv,settled,2026-06-30,2026-06-01,Bitcoin mining operations,Operating,Mining cash received,inflow,500000
+DRAW-CL-2026-07,Treasury / loan system,loan_draws.csv,funded,2026-07-08,2026-07-01,Data center financing,Financing,Construction loan drawn,inflow,1000000
+INV-PWR-2026-07,Accounts payable,operating_payments.csv,Mining power,2026-07-15,2026-07-01,Bitcoin mining operations,Operating,Mining power paid,outflow,-260000
+INV-OH-2026-07,Accounts payable,operating_payments.csv,Overhead,2026-07-20,2026-07-01,Corporate operations,Operating,Overhead paid,outflow,-60000
+PAY-DC-2026-07,Capital projects / AP,capital_payments.csv,Data center buildout,2026-07-31,2026-07-01,Data center expansion,Investing,Data center buildout paid,outflow,-400000
+SALE-2026-07,Treasury / exchange,bitcoin_sales.csv,settled,2026-07-31,2026-07-01,Bitcoin mining operations,Operating,Mining cash received,inflow,400000
+INV-PWR-2026-08,Accounts payable,operating_payments.csv,Mining power,2026-08-15,2026-08-01,Bitcoin mining operations,Operating,Mining power paid,outflow,-270000
+INV-OH-2026-08,Accounts payable,operating_payments.csv,Overhead,2026-08-20,2026-08-01,Corporate operations,Operating,Overhead paid,outflow,-70000
+PAY-DC-2026-08,Capital projects / AP,capital_payments.csv,Data center buildout,2026-08-31,2026-08-01,Data center expansion,Investing,Data center buildout paid,outflow,-500000
+SALE-2026-08,Treasury / exchange,bitcoin_sales.csv,settled,2026-08-31,2026-08-01,Bitcoin mining operations,Operating,Mining cash received,inflow,400000
+INV-PWR-2026-09,Accounts payable,operating_payments.csv,Mining power,2026-09-15,2026-09-01,Bitcoin mining operations,Operating,Mining power paid,outflow,-270000
+INV-OH-2026-09,Accounts payable,operating_payments.csv,Overhead,2026-09-20,2026-09-01,Corporate operations,Operating,Overhead paid,outflow,-70000
+PAY-DC-2026-09,Capital projects / AP,capital_payments.csv,Data center buildout,2026-09-30,2026-09-01,Data center expansion,Investing,Data center buildout paid,outflow,-600000
+SALE-2026-09,Treasury / exchange,bitcoin_sales.csv,settled,2026-09-30,2026-09-01,Bitcoin mining operations,Operating,Mining cash received,inflow,500000
+DRAW-CL-2026-10,Treasury / loan system,loan_draws.csv,funded,2026-10-08,2026-10-01,Data center financing,Financing,Construction loan drawn,inflow,500000
+INV-PWR-2026-10,Accounts payable,operating_payments.csv,Mining power,2026-10-15,2026-10-01,Bitcoin mining operations,Operating,Mining power paid,outflow,-260000
+INV-OH-2026-10,Accounts payable,operating_payments.csv,Overhead,2026-10-20,2026-10-01,Corporate operations,Operating,Overhead paid,outflow,-60000
+PAY-DC-2026-10,Capital projects / AP,capital_payments.csv,Data center buildout,2026-10-31,2026-10-01,Data center expansion,Investing,Data center buildout paid,outflow,-200000
+SALE-2026-10,Treasury / exchange,bitcoin_sales.csv,settled,2026-10-31,2026-10-01,Bitcoin mining operations,Operating,Mining cash received,inflow,400000
+INV-PWR-2026-11,Accounts payable,operating_payments.csv,Mining power,2026-11-15,2026-11-01,Bitcoin mining operations,Operating,Mining power paid,outflow,-270000
+INV-OH-2026-11,Accounts payable,operating_payments.csv,Overhead,2026-11-20,2026-11-01,Corporate operations,Operating,Overhead paid,outflow,-70000
+PAY-DC-2026-11,Capital projects / AP,capital_payments.csv,Data center buildout,2026-11-30,2026-11-01,Data center expansion,Investing,Data center buildout paid,outflow,-300000
+SALE-2026-11,Treasury / exchange,bitcoin_sales.csv,settled,2026-11-30,2026-11-01,Bitcoin mining operations,Operating,Mining cash received,inflow,500000
+INV-PWR-2026-12,Accounts payable,operating_payments.csv,Mining power,2026-12-15,2026-12-01,Bitcoin mining operations,Operating,Mining power paid,outflow,-270000
+INV-OH-2026-12,Accounts payable,operating_payments.csv,Overhead,2026-12-20,2026-12-01,Corporate operations,Operating,Overhead paid,outflow,-70000
+PAY-DC-2026-12,Capital projects / AP,capital_payments.csv,Data center buildout,2026-12-31,2026-12-01,Data center expansion,Investing,Data center buildout paid,outflow,-500000
+SALE-2026-12,Treasury / exchange,bitcoin_sales.csv,settled,2026-12-31,2026-12-01,Bitcoin mining operations,Operating,Mining cash received,inflow,600000

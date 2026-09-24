@@ -1,0 +1,14 @@
+payment_id,payment_date,project_id,vendor,spend_category,amount_paid,status
+PAY-DC-2026-01,2026-01-31,PRJ-DC-SITEA,Summit Data Build LLC,Data center buildout,100000,PAID
+PAY-MIN-EQ-2026-02,2026-02-12,PRJ-MIN-FLEET,Bitmain Technologies,Mining equipment,500000,PAID
+PAY-DC-2026-02,2026-02-28,PRJ-DC-SITEA,Summit Data Build LLC,Data center buildout,150000,PAID
+PAY-DC-2026-03,2026-03-31,PRJ-DC-SITEA,Summit Data Build LLC,Data center buildout,250000,PAID
+PAY-DC-2026-04,2026-04-30,PRJ-DC-SITEA,Summit Data Build LLC,Data center buildout,250000,PAID
+PAY-DC-2026-05,2026-05-31,PRJ-DC-SITEA,Summit Data Build LLC,Data center buildout,350000,PAID
+PAY-DC-2026-06,2026-06-30,PRJ-DC-SITEA,Summit Data Build LLC,Data center buildout,400000,PAID
+PAY-DC-2026-07,2026-07-31,PRJ-DC-SITEA,Summit Data Build LLC,Data center buildout,400000,PAID
+PAY-DC-2026-08,2026-08-31,PRJ-DC-SITEA,Summit Data Build LLC,Data center buildout,500000,PAID
+PAY-DC-2026-09,2026-09-30,PRJ-DC-SITEA,Summit Data Build LLC,Data center buildout,600000,PAID
+PAY-DC-2026-10,2026-10-31,PRJ-DC-SITEA,Summit Data Build LLC,Data center buildout,200000,PAID
+PAY-DC-2026-11,2026-11-30,PRJ-DC-SITEA,Summit Data Build LLC,Data center buildout,300000,PAID
+PAY-DC-2026-12,2026-12-31,PRJ-DC-SITEA,Summit Data Build LLC,Data center buildout,500000,PAID

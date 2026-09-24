@@ -18,7 +18,10 @@
     --cat-investing: #42e2b8;
     --cat-financing: #b4c5e4;
     --red-ink: #b3283d;
-    --neg-red: #fb3640;
+    --pos-bg: #d8f3e1;
+    --pos-ink: #1f7a45;
+    --neg-bg: #f8d4d2;
+    --neg-ink: #c13b3b;
     --radius: 14px;
   }
 
@@ -226,9 +229,28 @@
 
   table.detail-table tr.row-parent:hover td:first-child { color: var(--ink); }
 
-  table.detail-table tr.row-total td { font-weight: 600; }
+  table.detail-table td.cell-heat-pos {
+    background: var(--pos-bg);
+    color: var(--pos-ink);
+  }
+  table.detail-table td.cell-heat-neg {
+    background: var(--neg-bg);
+    color: var(--neg-ink);
+  }
 
-  table.detail-table td.cell-neg { color: var(--neg-red); }
+  table.detail-table td.cell-click {
+    cursor: pointer;
+    text-decoration: underline;
+    text-decoration-style: dotted;
+    text-underline-offset: 3px;
+  }
+  table.detail-table td.cell-click:hover { color: var(--blue-line); }
+
+  .drilldown { margin-top: 18px; }
+  .drilldown h3 {
+    font-size: 15px;
+    margin: 0 0 10px 0;
+  }
 
   .caret {
     display: inline-block;
@@ -243,8 +265,6 @@
     font-weight: 400;
     color: var(--ink-soft);
   }
-
-  table.detail-table tr.row-sub td.cell-neg { color: var(--neg-red); }
 
   table.detail-table tr.row-sub td:first-child {
     background: #fbfbff;
@@ -314,6 +334,38 @@
     outline-offset: -2px;
   }
 
+  .pipeline {
+    margin: 12px 0 8px 0;
+    width: 100%;
+    max-width: 1200px;
+  }
+  .pipeline svg {
+    display: block;
+    width: 100%;
+    max-width: 100%;
+    height: auto;
+    font-family: inherit;
+  }
+  .pipeline svg text {
+    font-family: inherit;
+    fill: var(--ink);
+    font-weight: 600;
+  }
+  .pipeline svg text.panel-title {
+    fill: #ffffff;
+    font-weight: 700;
+    font-size: 15px;
+  }
+  .pipeline svg text.card-label {
+    font-size: 13px;
+  }
+  .pipeline svg text.tier-title {
+    font-size: 12px;
+    font-weight: 700;
+  }
+  .pipeline svg text.file-label {
+    font-size: 8.5px;
+  }
   .process-lead {
     font-size: 14px;
     color: var(--ink-soft);
@@ -367,16 +419,32 @@
   table.process-map td:first-child { font-weight: 600; white-space: nowrap; }
   table.process-map code { font-size: 12px; }
 
-  .source-block { margin: 0 0 28px 0; }
-  .source-block h3 {
+  .source-block { margin: 0 0 4px 0; }
+  .source-block details { margin: 0; }
+  .source-block summary {
     font-size: 15px;
-    margin: 0 0 2px 0;
     font-weight: 700;
+    cursor: pointer;
+    list-style: none;
+    margin: 0;
+    padding: 2px 0;
+    user-select: none;
   }
-  .source-block h4 {
-    font-size: 13px;
-    margin: 14px 0 8px 0;
-    font-weight: 700;
+  .source-block summary::-webkit-details-marker { display: none; }
+  .source-block summary::before {
+    content: "▶";
+    display: inline-block;
+    width: 12px;
+    margin-right: 6px;
+    color: var(--ink-soft);
+    font-size: 10px;
+  }
+  .source-block details[open] summary { margin-bottom: 8px; }
+  .source-block details[open] summary::before { content: "▼"; }
+  .source-block summary:hover { color: var(--blue-line); }
+  .source-block summary:focus-visible {
+    outline: 2px solid var(--blue-line);
+    outline-offset: 2px;
   }
   table.source-table {
     border-collapse: collapse;
@@ -394,6 +462,8 @@
     background: #fafafd;
     font-weight: 700;
   }
+  table.source-table td.num,
+  table.source-table th.num { text-align: right; font-variant-numeric: tabular-nums; }
 
   @media (max-width: 640px) {
     .dashboard-card { padding: 16px; }
@@ -406,7 +476,7 @@
   <div class="dashboard-card">
 
     <header class="dash-header">
-      <h1>12-Months Rolling Cash Flow Forecast</h1>
+      <h1>12-Months Rolling Cashflow Forecast</h1>
       <span class="illustrative-badge">Imaginary Datacenter Company</span>
     </header>
     <p class="load-error" id="loadError" hidden></p>
@@ -417,32 +487,6 @@
     </div>
 
     <div id="panel-forecast" role="tabpanel" aria-labelledby="tab-forecast" hidden>
-
-    <section class="control-panel">
-      <div class="scenario-row">
-        <span class="scenario-label">Scenario Modeling</span>
-      </div>
-
-      <div class="inputs-grid">
-        <div class="field" data-field="btcPrice">
-          <label for="in-btcPrice">BTC price ($)</label>
-          <input type="number" id="in-btcPrice" min="0" step="1000" />
-          <span class="error-msg">Must be 0 or greater.</span>
-        </div>
-
-        <div class="field" data-field="costOverrunPct">
-          <label for="in-costOverrunPct">Construction cost overrun (%)</label>
-          <input type="number" id="in-costOverrunPct" min="-100" step="1" />
-          <span class="error-msg">Must be -100 or greater.</span>
-        </div>
-
-        <div class="field" data-field="delayMonths">
-          <label for="in-delayMonths">Construction delay (months)</label>
-          <input type="number" id="in-delayMonths" min="0" max="24" step="1" />
-          <span class="error-msg">Must be a whole number, 0–24.</span>
-        </div>
-      </div>
-    </section>
 
     <section class="chart-section">
       <div class="chart-wrap">
@@ -464,6 +508,22 @@
           <tbody id="tableBody"></tbody>
         </table>
       </div>
+      <div id="drilldown" class="drilldown" hidden>
+        <h3 id="drilldownTitle">Source transactions</h3>
+        <div class="table-wrap">
+          <table class="source-table" id="drilldownTable">
+            <thead>
+              <tr>
+                <th>transaction_id</th>
+                <th>cash_date</th>
+                <th class="num">signed_amount_usd</th>
+                <th>source_file</th>
+              </tr>
+            </thead>
+            <tbody id="drilldownBody"></tbody>
+          </table>
+        </div>
+      </div>
     </section>
 
     </div>
@@ -471,7 +531,6 @@
     <div id="panel-process" role="tabpanel" aria-labelledby="tab-process">
       <ol class="process-outline">
         <li>Overview</li>
-        <li>Data Source</li>
         <li>Data Model</li>
         <li>Semantic Layer</li>
         <li>Reporting</li>
@@ -479,19 +538,103 @@
 
       <section class="process-section" id="proc-overview">
         <h2><span class="sec-num">1.</span>Overview</h2>
-        <p class="process-lead">This report is a picture of cash going in and out of one fictional site as it moves from Bitcoin mining to a data center. The numbers are examples, not a live company feed. Finance already has cash, bills, and loans; operations has how much Bitcoin the site still produces; commercial has when the data center should open and what it might earn; planning has “what if” assumptions like Bitcoin price and construction delay. Those pieces do not arrive in one language, so we first tidy them so months and dollars line up, then name them the way a cash-flow statement does (day-to-day operations, building the facility, money from lenders). Only after that do we assemble the Forecast tab — the chart and table you can click through. Changing Bitcoin price, cost overrun, or delay on that tab is like asking “what if?” without touching the original source files.</p>
-      </section>
-
-      <section class="process-section" id="proc-source">
-        <h2><span class="sec-num">2.</span>Data Source</h2>
-        <p class="process-lead">These are the live extracts from each source system, shown as they arrive — including extra columns the report does not use.</p>
-        <div id="sourceExtracts"></div>
-        <p class="process-lead" style="margin-top:14px">Left in raw and never promoted: vendor IDs, PO numbers, WBS, restricted-cash GL, online MW, CRM pipeline stage, term-loan interest rate.</p>
+        <p class="process-lead">This report is a picture of cash going in and out of one fictional site as it moves from Bitcoin mining to a data center. The numbers are examples, not a live company feed. Raw extracts cover Bitcoin sales, operating bills, capital payments, loan draws, and the bank balance. Those pieces are tidied so months and dollars line up, then named the way a cash-flow statement does (day-to-day operations, building the facility, money from lenders). The Forecast tab shows that management cash flow view — not a GAAP statement — with a chart, monthly table, and drilldown to source transaction IDs.</p>
       </section>
 
       <section class="process-section" id="proc-model">
-        <h2><span class="sec-num">3.</span>Data Model</h2>
-        <p class="process-lead">The transform script types amounts as USD numbers, maps calendar dates to <code>YYYY-MM</code> and a forecast month index (October 2026 = 1), and writes one table per entity. Grain is site × forecast month unless noted.</p>
+        <h2><span class="sec-num">2.</span>Data Model</h2>
+        <div class="pipeline">
+          <svg viewBox="0 0 1140 320" preserveAspectRatio="xMinYMin meet" role="img" aria-labelledby="pipelineTitle">
+            <title id="pipelineTitle">Data sources feed the FP&amp;A data model, which feeds reports</title>
+            <defs>
+              <linearGradient id="srcGrad" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stop-color="#2aa89c"></stop>
+                <stop offset="100%" stop-color="#1a7f76"></stop>
+              </linearGradient>
+              <linearGradient id="modelGrad" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stop-color="#5b7ef5"></stop>
+                <stop offset="100%" stop-color="#3d5bd4"></stop>
+              </linearGradient>
+              <linearGradient id="repGrad" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stop-color="#8b6fd4"></stop>
+                <stop offset="100%" stop-color="#6a4cbf"></stop>
+              </linearGradient>
+              <marker id="pipeArrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto">
+                <path d="M 0 1.2 L 10 5 L 0 8.8 z" fill="#3d5bd4"></path>
+              </marker>
+              <marker id="pipeArrowLight" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto">
+                <path d="M 0 1.2 L 10 5 L 0 8.8 z" fill="#c4b5fd"></path>
+              </marker>
+            </defs>
+
+            <rect x="12" y="12" width="204" height="296" rx="14" fill="url(#srcGrad)"></rect>
+            <text x="114" y="44" text-anchor="middle" class="panel-title">Data Sources</text>
+            <rect x="28" y="64" width="172" height="64" rx="10" fill="#e7fff8"></rect>
+            <text x="114" y="102" text-anchor="middle" class="card-label">ERP</text>
+            <rect x="28" y="140" width="172" height="64" rx="10" fill="#e7fff8"></rect>
+            <text x="114" y="178" text-anchor="middle" class="card-label">Planning tools</text>
+            <rect x="28" y="216" width="172" height="64" rx="10" fill="#e7fff8"></rect>
+            <text x="114" y="254" text-anchor="middle" class="card-label">Operational systems</text>
+
+            <rect x="232" y="12" width="668" height="296" rx="14" fill="url(#modelGrad)"></rect>
+            <text x="566" y="42" text-anchor="middle" class="panel-title">FP&amp;A Data Model</text>
+            <rect x="248" y="56" width="636" height="236" rx="10" fill="#f4f7ff"></rect>
+
+            <rect x="264" y="72" width="176" height="204" rx="10" fill="#ecfdf8" stroke="#b8eadc"></rect>
+            <text x="352" y="94" text-anchor="middle" class="tier-title">Raw Tier</text>
+            <rect x="276" y="106" width="152" height="28" rx="6" fill="#ccfbf1"></rect>
+            <text x="352" y="124" text-anchor="middle" class="file-label">bitcoin_sales.csv</text>
+            <rect x="276" y="138" width="152" height="28" rx="6" fill="#ccfbf1"></rect>
+            <text x="352" y="156" text-anchor="middle" class="file-label">operating_payments.csv</text>
+            <rect x="276" y="170" width="152" height="28" rx="6" fill="#ccfbf1"></rect>
+            <text x="352" y="188" text-anchor="middle" class="file-label">capital_payments.csv</text>
+            <rect x="276" y="202" width="152" height="28" rx="6" fill="#ccfbf1"></rect>
+            <text x="352" y="220" text-anchor="middle" class="file-label">loan_draws.csv</text>
+            <rect x="276" y="234" width="152" height="28" rx="6" fill="#ccfbf1"></rect>
+            <text x="352" y="252" text-anchor="middle" class="file-label">bank_balance.csv</text>
+
+            <rect x="476" y="72" width="176" height="204" rx="10" fill="#eef4ff" stroke="#c5d4fb"></rect>
+            <text x="564" y="94" text-anchor="middle" class="tier-title">Transformed Tier</text>
+            <rect x="488" y="122" width="152" height="28" rx="6" fill="#dbe7ff"></rect>
+            <text x="564" y="140" text-anchor="middle" class="file-label">activity_mapping.csv</text>
+            <rect x="488" y="160" width="152" height="28" rx="6" fill="#dbe7ff"></rect>
+            <text x="564" y="178" text-anchor="middle" class="file-label">cash_transactions.csv</text>
+            <rect x="488" y="198" width="152" height="28" rx="6" fill="#dbe7ff"></rect>
+            <text x="564" y="216" text-anchor="middle" class="file-label">opening_balance.csv</text>
+
+            <rect x="688" y="72" width="176" height="204" rx="10" fill="#f4f0ff" stroke="#d8cff8"></rect>
+            <text x="776" y="94" text-anchor="middle" class="tier-title">Reporting Tier</text>
+            <rect x="700" y="132" width="152" height="40" rx="6" fill="#e9e0ff"></rect>
+            <text x="776" y="149" text-anchor="middle" class="file-label">monthly_cash_flow_</text>
+            <text x="776" y="162" text-anchor="middle" class="file-label">lines.csv</text>
+            <rect x="700" y="180" width="152" height="40" rx="6" fill="#e9e0ff"></rect>
+            <text x="776" y="197" text-anchor="middle" class="file-label">monthly_cash_</text>
+            <text x="776" y="210" text-anchor="middle" class="file-label">summary.csv</text>
+
+            <line x1="440" y1="174" x2="476" y2="174" stroke="#3d5bd4" stroke-width="2" marker-end="url(#pipeArrow)"></line>
+            <line x1="652" y1="174" x2="688" y2="174" stroke="#3d5bd4" stroke-width="2" marker-end="url(#pipeArrow)"></line>
+            <line x1="864" y1="174" x2="916" y2="174" stroke="#c4b5fd" stroke-width="2" marker-end="url(#pipeArrowLight)"></line>
+
+            <rect x="924" y="12" width="204" height="296" rx="14" fill="url(#repGrad)"></rect>
+            <text x="1026" y="44" text-anchor="middle" class="panel-title">Reports</text>
+            <rect x="940" y="64" width="172" height="48" rx="10" fill="#f3eeff"></rect>
+            <text x="1026" y="93" text-anchor="middle" class="card-label">Tableau</text>
+            <rect x="940" y="124" width="172" height="48" rx="10" fill="#f3eeff"></rect>
+            <text x="1026" y="153" text-anchor="middle" class="card-label">Power BI</text>
+            <rect x="940" y="184" width="172" height="48" rx="10" fill="#f3eeff"></rect>
+            <text x="1026" y="213" text-anchor="middle" class="card-label">Static HTML</text>
+            <rect x="940" y="244" width="172" height="48" rx="10" fill="#f3eeff"></rect>
+            <text x="1026" y="273" text-anchor="middle" class="card-label">AI workflows</text>
+          </svg>
+        </div>
+        <p class="process-lead">Data Sources – ERP, planning tools, and operational systems provide the original records.</p>
+        <p class="process-lead">Raw Tier – Data captured by operational systems in its original format, before business rules are applied.</p>
+        <p class="process-lead">Transformed Tier – Data is validated, cleaned, standardized, and mapped to consistent business definitions. Records retain a link to their sources.</p>
+        <p class="process-lead">Reporting Tier – Transformed data is aggregated into metrics and tables designed for dashboards, analysis, and decision-making.</p>
+        <p class="process-lead">Reports – Reports can use any tools on top of the foundation data model (i.e. Tableau, Power BI, static HTML, and AI workflows).</p>
+        <p class="process-lead">These are the five raw extracts, shown as they arrive.</p>
+        <div id="sourceExtracts"></div>
+        <p class="process-lead">The SQL transform keeps eligible settled, paid, and funded events, maps them through <code>activity_mapping.csv</code>, and writes one cash-activity row per transaction. Opening cash is stored separately and is not a cash-flow event.</p>
         <div class="table-wrap">
           <table class="process-map">
             <thead>
@@ -503,39 +646,19 @@
             </thead>
             <tbody>
               <tr>
-                <td><code>cash_position.json</code></td>
-                <td>As-of snapshot</td>
-                <td><code>starting_cash_usd</code></td>
+                <td><code>activity_mapping.csv</code></td>
+                <td>Source × category</td>
+                <td>business activity, cash-flow section, reporting line</td>
               </tr>
               <tr>
-                <td><code>opex.json</code></td>
-                <td>Monthly run-rate</td>
-                <td><code>other_fixed_opex_monthly_usd</code></td>
+                <td><code>cash_transactions.csv</code></td>
+                <td>Eligible cash event</td>
+                <td><code>transaction_id</code>, <code>cash_date</code>, <code>reporting_month</code>, <code>signed_amount_usd</code></td>
               </tr>
               <tr>
-                <td><code>construction_schedule.json</code></td>
-                <td>Payment month</td>
-                <td><code>forecast_month</code>, <code>amount_usd</code></td>
-              </tr>
-              <tr>
-                <td><code>mining_production.json</code></td>
-                <td>Site-month</td>
-                <td><code>btc</code>, <code>power_cost_per_btc_usd</code>, mining opex</td>
-              </tr>
-              <tr>
-                <td><code>data_center_plan.json</code></td>
-                <td>Site plan</td>
-                <td>Full-ramp revenue, base open month, ramp fractions</td>
-              </tr>
-              <tr>
-                <td><code>financing_events.json</code></td>
-                <td>Event</td>
-                <td><code>kind</code> (debt_draw / equity_funding), month, amount</td>
-              </tr>
-              <tr>
-                <td><code>planning_defaults.json</code></td>
-                <td>Scenario</td>
-                <td>Horizon, BTC price, overrun %, delay months</td>
+                <td><code>opening_balance.csv</code></td>
+                <td>Account snapshot</td>
+                <td><code>available_balance_usd</code></td>
               </tr>
             </tbody>
           </table>
@@ -543,92 +666,67 @@
       </section>
 
       <section class="process-section" id="proc-semantic">
-        <h2><span class="sec-num">4.</span>Semantic Layer</h2>
-        <p class="process-lead">Business names and driver math sit here — not in the source systems. The Forecast tab’s Operating / Investing / Financing rows and the three scenario knobs are this layer. Category labels and colors are stored on the reporting mart because they are presentation for this report, not ERP fields.</p>
+        <h2><span class="sec-num">3.</span>Semantic Layer</h2>
+        <p class="process-lead">Business names sit in the mapping, not in the source systems. The Forecast tab’s Operating / Investing / Financing rows are this layer. Bitcoin sale proceeds are treated as operating cash receipts in a management cash flow view.</p>
         <div class="table-wrap">
           <table class="process-map">
             <thead>
               <tr>
                 <th>Category</th>
-                <th>Inflow driver</th>
-                <th>Outflow driver</th>
+                <th>Inflow</th>
+                <th>Outflow</th>
               </tr>
             </thead>
             <tbody>
               <tr>
                 <td>Operating Activities</td>
-                <td>Bitcoin sales + data center customer payments</td>
-                <td>Mining costs + other fixed operating costs</td>
+                <td>Mining cash received</td>
+                <td>Mining power paid + overhead paid</td>
               </tr>
               <tr>
                 <td>Investing Activities</td>
-                <td>Not modeled (always $0)</td>
-                <td>Construction payments × (1 + overrun %), shifted by delay</td>
+                <td>None in this actuals set</td>
+                <td>Data center buildout paid + mining equipment paid</td>
               </tr>
               <tr>
                 <td>Financing Activities</td>
-                <td>Debt draws + equity funding</td>
-                <td>Not modeled (always $0)</td>
+                <td>Construction loan drawn</td>
+                <td>None in this actuals set</td>
               </tr>
             </tbody>
           </table>
         </div>
         <p class="process-lead" style="margin-top:14px">
-          Bitcoin sales[m] = BTC produced[m] × BTC price.
-          Mining costs[m] = BTC produced[m] × power cost per BTC + other mining opex.
-          Net cash flow = total inflow − total outflow.
-          Ending cash = beginning cash + net.
-          Editable in the UI: BTC price, construction cost overrun %, construction delay. Everything else is a fixed assumption.
+          Net operating = mining receipts + power paid + overhead paid.
+          Net investing = buildout paid + equipment paid.
+          Net financing = loan draws.
+          Net change in cash = operating + investing + financing.
+          Ending cash = beginning cash + net change.
         </p>
       </section>
 
       <section class="process-section" id="proc-reporting">
-        <h2><span class="sec-num">5.</span>Reporting</h2>
-        <p class="process-lead">The reporting tier is a single mart, <code>data/reporting/cashflow-forecast.json</code>, shaped for this dashboard only: <code>forecast</code>, <code>defaultInputs</code>, <code>fixedAssumptions</code>, <code>mining</code>, <code>construction</code>, <code>dataCenter</code>, <code>otherFixedOpexMonthly</code>, <code>cashFlowCategories</code>. The Forecast tab fetches that file, recalculates on input change, and renders stacked O/I/F bars, a net cash-flow line, and the monthly detail table.</p>
+        <h2><span class="sec-num">4.</span>Reporting</h2>
+        <p class="process-lead">The reporting tier is CSV files in <code>data/reporting/</code>. The Forecast tab fetches <code>monthly_cash_summary.csv</code> and <code>monthly_cash_flow_lines.csv</code>, and drills into <code>data/transformed/cash_transactions.csv</code> by <code>reporting_month</code> and <code>reporting_line</code>.</p>
         <div class="table-wrap">
           <table class="process-map">
             <thead>
               <tr>
-                <th>Data source</th>
+                <th>Reporting file</th>
                 <th>What is kept</th>
-                <th>Reporting field</th>
+                <th>Used for</th>
               </tr>
             </thead>
             <tbody>
               <tr>
-                <td>erp_finance.json</td>
-                <td>GL 100100 operating cash</td>
-                <td><code>fixedAssumptions.startingCash</code></td>
+                <td>monthly_cash_flow_lines.csv</td>
+                <td>Signed amount by month and reporting line</td>
+                <td>Statement lines and drilldown keys</td>
               </tr>
               <tr>
-                <td>erp_finance.json</td>
-                <td>CC-GNA-001 monthly G&amp;A</td>
-                <td><code>otherFixedOpexMonthly</code></td>
-              </tr>
-              <tr>
-                <td>erp_finance.json</td>
-                <td>AP construction pay dates</td>
-                <td><code>construction.baselinePaymentsByMonth</code></td>
-              </tr>
-              <tr>
-                <td>erp_finance.json</td>
-                <td>Term loan / equity events</td>
-                <td><code>debtDrawAmount/Month</code>, <code>equityFundingAmount/Month</code></td>
-              </tr>
-              <tr>
-                <td>mining_ops.json</td>
-                <td>BTC produced, power, mining opex</td>
-                <td><code>mining.*</code></td>
-              </tr>
-              <tr>
-                <td>dc_commercial.json</td>
-                <td>Full-ramp $, April 2027 open, ramp curve</td>
-                <td><code>dcMonthlyRevenueFullRamp</code>, <code>dcBaseOpenMonth</code>, ramp fractions</td>
-              </tr>
-              <tr>
-                <td>planning.json</td>
-                <td>Horizon; BTC 84000, overrun 8, delay 0</td>
-                <td><code>forecast</code> + <code>defaultInputs</code></td>
+                <td>monthly_cash_summary.csv</td>
+                <td>Section nets, beginning and ending cash</td>
+                <td>Chart totals and cash roll-forward</td>
               </tr>
             </tbody>
           </table>
@@ -640,187 +738,129 @@
 </div>
 
 <script>
-/* Report logic. Assumptions load from the reporting-tier mart. */
+/* Report logic. Monthly actuals load from the reporting-tier CSV mart. */
 
-const DATA_URL = "data/reporting/cashflow-forecast.json";
-const FIELD_KEYS = ["btcPrice", "costOverrunPct", "delayMonths"];
-
-let DATA;
-let DEFAULT_INPUTS;
-let FIXED_ASSUMPTIONS;
-let CASH_FLOW_CATEGORIES;
-let NUM_MONTHS;
-let FORECAST_START_YEAR;
-let FORECAST_START_MONTH;
-let MONTH_LABELS;
-
-let inflowExpanded = true;
-let outflowExpanded = true;
-let lastForecast = null;
-
-function applyConfig(cfg) {
-  DATA = {
-    mining: cfg.mining,
-    construction: cfg.construction,
-    dataCenter: cfg.dataCenter,
-    otherFixedOpexMonthly: cfg.otherFixedOpexMonthly
-  };
-  DEFAULT_INPUTS = cfg.defaultInputs;
-  FIXED_ASSUMPTIONS = cfg.fixedAssumptions;
-  CASH_FLOW_CATEGORIES = cfg.cashFlowCategories;
-  NUM_MONTHS = cfg.forecast.numMonths;
-  FORECAST_START_YEAR = cfg.forecast.startYear;
-  FORECAST_START_MONTH = cfg.forecast.startMonth;
-  MONTH_LABELS = buildMonthLabels();
-}
-
-function buildMonthLabels() {
-  const labels = [];
-  for (let i = 0; i < NUM_MONTHS; i++) {
-    let m = FORECAST_START_MONTH + i;
-    let y = FORECAST_START_YEAR;
-    while (m > 12) { m -= 12; y += 1; }
-    labels.push(String(m).padStart(2, "0") + "/" + y);
+const REPORTING_DIR = "data/reporting/";
+const TRANSFORMED_DIR = "data/transformed/";
+const MONTH_NAMES = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+const CASH_FLOW_CATEGORIES = [
+  { label: "Operating Activities", color: "var(--cat-operating)", inflowKey: "operatingInflow", outflowKey: "operatingOutflow" },
+  { label: "Investing Activities", color: "var(--cat-investing)", inflowKey: "investingInflow", outflowKey: "investingOutflow" },
+  { label: "Financing Activities", color: "var(--cat-financing)", inflowKey: "financingInflow", outflowKey: "financingOutflow" }
+];
+const STATEMENT_SECTIONS = [
+  {
+    id: "operating",
+    label: "Operating Activities",
+    color: "var(--cat-operating)",
+    netKey: "netOperating",
+    lines: ["Mining cash received", "Mining power paid", "Overhead paid"]
+  },
+  {
+    id: "investing",
+    label: "Investing Activities",
+    color: "var(--cat-investing)",
+    netKey: "netInvesting",
+    lines: ["Data center buildout paid", "Mining equipment paid"]
+  },
+  {
+    id: "financing",
+    label: "Financing Activities",
+    color: "var(--cat-financing)",
+    netKey: "netFinancing",
+    lines: ["Construction loan drawn"]
   }
-  return labels;
+];
+
+let NUM_MONTHS;
+let MONTH_KEYS;
+let MONTH_LABELS;
+let TRANSACTIONS = [];
+let lastForecast = null;
+const sectionExpanded = { operating: true, investing: true, financing: true };
+
+function monthLabel(iso) {
+  const parts = String(iso).split("-");
+  return MONTH_NAMES[Number(parts[1]) - 1] + " " + parts[0];
 }
 
 function showLoadError(err) {
   const el = document.getElementById("loadError");
   el.hidden = false;
-  el.textContent = "Could not load data/reporting/cashflow-forecast.json. From the repo root run python scripts/build_report_data.py, then python -m http.server 8000, and open /cashflow-forecast.html. Browsers block fetch() from file://. " + (err && err.message ? err.message : "");
+  el.textContent = "Could not load reporting CSVs. From the repo root run python scripts/run_sql.py, then python -m http.server 8000, and open /cashflow-forecast.html. Browsers block fetch() from file://. " + (err && err.message ? err.message : "");
 }
 
-/* ============================================================
-   Validation — clamps impossible values so the chart never
-   breaks on bad input.
-   ============================================================ */
-function validateInputs(raw) {
-  const out = {};
-  const errors = {};
-
-  function numOrDefault(v, fallback) {
-    const n = Number(v);
-    return Number.isFinite(n) ? n : fallback;
-  }
-
-  let btcPrice = numOrDefault(raw.btcPrice, 0);
-  if (btcPrice < 0) { btcPrice = 0; errors.btcPrice = true; }
-  out.btcPrice = btcPrice;
-
-  let overrun = numOrDefault(raw.costOverrunPct, 0);
-  if (overrun < -100) { overrun = -100; errors.costOverrunPct = true; }
-  out.costOverrunPct = overrun;
-
-  let delay = Math.round(numOrDefault(raw.delayMonths, 0));
-  if (delay < 0) { delay = 0; errors.delayMonths = true; }
-  if (delay > 24) { delay = 24; errors.delayMonths = true; }
-  out.delayMonths = delay;
-
-  return { values: out, errors: errors };
+function col(rows, key) {
+  return rows.map(r => num(r[key]));
 }
 
-/* ============================================================
-   Forecast engine
-   ============================================================ */
-function computeForecast(inputs) {
-  const prod = DATA.mining.btcProductionByMonth;
-  const powerCostPerBtc = DATA.mining.powerCostPerBtc;
-  const otherMiningOpex = DATA.mining.otherMiningOpexMonthly;
-  const otherFixedOpex = DATA.otherFixedOpexMonthly;
+function lineSeries(lines, months, reportingLine) {
+  return months.map(month => {
+    const row = lines.find(r => r.reporting_month === month && r.reporting_line === reportingLine);
+    return row ? num(row.signed_amount_usd) : 0;
+  });
+}
 
-  const bitcoinSales = new Array(NUM_MONTHS).fill(0);
-  const miningCosts = new Array(NUM_MONTHS).fill(0);
-  for (let i = 0; i < NUM_MONTHS; i++) {
-    bitcoinSales[i] = prod[i] * inputs.btcPrice;
-    miningCosts[i] = prod[i] * powerCostPerBtc + otherMiningOpex;
-  }
+function buildForecast(summary, lines, transactions) {
+  summary = summary.slice().sort((a, b) => String(a.reporting_month).localeCompare(String(b.reporting_month)));
+  const months = summary.map(r => r.reporting_month);
+  NUM_MONTHS = months.length;
+  MONTH_KEYS = months;
+  MONTH_LABELS = months.map(monthLabel);
+  TRANSACTIONS = transactions || [];
 
-  // Construction payments, shifted by the delay. Baseline payment for
-  // month (i+1) moves to month (i+1+delay). Anything that shifts past
-  // month 12 falls outside the displayed window and is dropped (not
-  // rolled into month 12) — see README "Delay handling".
-  const constructionPayments = new Array(NUM_MONTHS).fill(0);
-  const overrunMult = 1 + inputs.costOverrunPct / 100;
-  DATA.construction.baselinePaymentsByMonth.forEach((amount, idx) => {
-    const baseMonth = idx + 1;
-    const shiftedMonth = baseMonth + inputs.delayMonths;
-    if (shiftedMonth >= 1 && shiftedMonth <= NUM_MONTHS) {
-      constructionPayments[shiftedMonth - 1] += amount * overrunMult;
-    }
+  const operatingInflow = col(summary, "mining_cash_received");
+  const operatingOutflow = summary.map(r => -(num(r.mining_power_paid) + num(r.overhead_paid)));
+  const investingInflow = months.map(() => 0);
+  const investingOutflow = summary.map(r => -(num(r.data_center_buildout_paid) + num(r.mining_equipment_paid)));
+  const financingInflow = col(summary, "construction_loan_drawn");
+  const financingOutflow = months.map(() => 0);
+  const inflow = months.map((_, i) => operatingInflow[i] + investingInflow[i] + financingInflow[i]);
+  const outflow = months.map((_, i) => operatingOutflow[i] + investingOutflow[i] + financingOutflow[i]);
+
+  const lineValues = {};
+  STATEMENT_SECTIONS.forEach(section => {
+    section.lines.forEach(name => {
+      lineValues[name] = lineSeries(lines, months, name);
+    });
   });
 
-  // Data center revenue ramp, opening shifted by the same delay.
-  const dcOpenMonth = inputs.dcBaseOpenMonth + inputs.delayMonths;
-  const rampFractions = DATA.dataCenter.rampFractionsAfterOpen;
-  const dataCenterPayments = new Array(NUM_MONTHS).fill(0);
-  for (let m = 1; m <= NUM_MONTHS; m++) {
-    if (m < dcOpenMonth) continue;
-    const k = m - dcOpenMonth;
-    const fraction = k < rampFractions.length ? rampFractions[k] : 1.0;
-    dataCenterPayments[m - 1] = inputs.dcMonthlyRevenueFullRamp * fraction;
-  }
-
-  const debtDraws = new Array(NUM_MONTHS).fill(0);
-  debtDraws[inputs.debtDrawMonth - 1] += inputs.debtDrawAmount;
-
-  const equityFunding = new Array(NUM_MONTHS).fill(0);
-  equityFunding[inputs.equityFundingMonth - 1] += inputs.equityFundingAmount;
-
-  // Group the underlying line items into the three Operating/Investing/
-  // Financing Activities categories shown on the chart and in the Monthly
-  // Detail table, on both the inflow and outflow side.
-  const operatingInflow = new Array(NUM_MONTHS).fill(0);
-  const investingInflow = new Array(NUM_MONTHS).fill(0);
-  const financingInflow = new Array(NUM_MONTHS).fill(0);
-  const operatingOutflow = new Array(NUM_MONTHS).fill(0);
-  const investingOutflow = new Array(NUM_MONTHS).fill(0);
-  const financingOutflow = new Array(NUM_MONTHS).fill(0);
-  for (let i = 0; i < NUM_MONTHS; i++) {
-    operatingInflow[i] = bitcoinSales[i] + dataCenterPayments[i];
-    financingInflow[i] = debtDraws[i] + equityFunding[i];
-    operatingOutflow[i] = miningCosts[i] + otherFixedOpex;
-    investingOutflow[i] = constructionPayments[i];
-  }
-
-  const inflow = new Array(NUM_MONTHS).fill(0);
-  const outflow = new Array(NUM_MONTHS).fill(0);
-  const net = new Array(NUM_MONTHS).fill(0);
-  const ending = new Array(NUM_MONTHS).fill(0);
-
-  let runningBegin = inputs.startingCash;
-  for (let i = 0; i < NUM_MONTHS; i++) {
-    inflow[i] = operatingInflow[i] + investingInflow[i] + financingInflow[i];
-    outflow[i] = operatingOutflow[i] + investingOutflow[i] + financingOutflow[i];
-    net[i] = inflow[i] - outflow[i];
-    ending[i] = runningBegin + net[i];
-    runningBegin = ending[i];
-  }
-
   return {
-    operatingInflow, investingInflow, financingInflow,
-    operatingOutflow, investingOutflow, financingOutflow,
-    inflow, outflow, net, ending
+    months: months,
+    operatingInflow: operatingInflow,
+    investingInflow: investingInflow,
+    financingInflow: financingInflow,
+    operatingOutflow: operatingOutflow,
+    investingOutflow: investingOutflow,
+    financingOutflow: financingOutflow,
+    inflow: inflow,
+    outflow: outflow,
+    net: col(summary, "net_change_in_cash"),
+    beginning: col(summary, "beginning_cash"),
+    ending: col(summary, "ending_cash"),
+    netOperating: col(summary, "net_operating_cash_flow"),
+    netInvesting: col(summary, "net_investing_cash_flow"),
+    netFinancing: col(summary, "net_financing_cash_flow"),
+    lineValues: lineValues
   };
 }
 
-/* ============================================================
-   Formatting
-   ============================================================ */
-// Negative amounts use accounting-style parentheses, e.g. -1510000 -> "($1.51M)".
 function fmtMoney(v) {
-  const abs = Math.abs(v);
-  let formatted;
-  if (abs >= 1e6) formatted = "$" + (abs / 1e6).toFixed(2) + "M";
-  else if (abs >= 1e3) formatted = "$" + (abs / 1e3).toFixed(2) + "k";
-  else formatted = "$" + abs.toFixed(0);
+  const formatted = "$" + (Math.abs(v) / 1e6).toFixed(2) + "M";
   return v < 0 ? "(" + formatted + ")" : formatted;
 }
 
-// Table cell helper: negative values get the cell-neg class (red text) —
-// the only color-coding the table uses.
-function fmtCell(v) {
-  return `<td${v < 0 ? ' class="cell-neg"' : ""}>${fmtMoney(v)}</td>`;
+function fmtHeatCell(v) {
+  const cls = v < 0 ? "cell-heat-neg" : "cell-heat-pos";
+  return `<td class="${cls}">${fmtMoney(v)}</td>`;
+}
+
+function fmtCell(v, click) {
+  const cls = click ? ` class="cell-click"` : "";
+  const data = click
+    ? ` data-month="${click.month}" data-line="${escapeHtml(click.line)}"`
+    : "";
+  return `<td${cls}${data}>${fmtMoney(v)}</td>`;
 }
 
 function fmtAxis(v) {
@@ -829,9 +869,6 @@ function fmtAxis(v) {
   return sign + "$" + Math.abs(m).toFixed(0) + "M";
 }
 
-/* ============================================================
-   "Nice numbers" axis ticks
-   ============================================================ */
 function niceNumber(range, round) {
   const exponent = Math.floor(Math.log10(range));
   const fraction = range / Math.pow(10, exponent);
@@ -850,27 +887,17 @@ function niceNumber(range, round) {
   return niceFraction * Math.pow(10, exponent);
 }
 
-// The max is kept at the exact data max (not rounded up to the next nice
-// number) so the y-axis top aligns with the tallest bar instead of leaving
-// empty headroom above it. The min still gets a little nice-rounded
-// padding below the lowest bar for readability.
 function niceTicks(min, max, tickCount) {
   if (min === max) { min -= 1; max += 1; }
   const range = niceNumber(max - min, false);
   const step = niceNumber(range / (tickCount - 1), true);
   const niceMin = Math.floor(min / step) * step;
   const ticks = [];
-  // Skip a step-tick that would land too close to the exact max (avoids its
-  // label crowding into the top value ticker).
   for (let t = niceMin; t < max - step * 0.3; t += step) ticks.push(Math.round(t));
   ticks.push(Math.round(max));
   return { min: niceMin, max: max, ticks };
 }
 
-/* ============================================================
-   Chart rendering (plain SVG, no external chart library —
-   keeps the file fully self-contained for offline / double-click use)
-   ============================================================ */
 function renderChart(forecast) {
   const svg = document.getElementById("chartSvg");
   const W = 1180, H = 360;
@@ -889,21 +916,16 @@ function renderChart(forecast) {
 
   const monthSlot = plotW / NUM_MONTHS;
   const barWidth = monthSlot * 0.5;
-
   let svgParts = [];
 
-  // gridlines + axis labels
   ticks.forEach(t => {
     const y = yFor(t);
     svgParts.push(`<line x1="${marginLeft}" y1="${y}" x2="${W - marginRight}" y2="${y}" stroke="${t === 0 ? '#cfd2e0' : '#eceef6'}" stroke-width="${t === 0 ? 1.5 : 1}" />`);
     svgParts.push(`<text x="${marginLeft - 10}" y="${y + 4}" text-anchor="end" font-size="11" fill="#8b90a0">${fmtAxis(t)}</text>`);
   });
 
-  // bars + month labels
   for (let i = 0; i < NUM_MONTHS; i++) {
     const x = marginLeft + i * monthSlot + (monthSlot - barWidth) / 2;
-
-    // Cash Inflow bar stacks the three categories bottom-to-top above zero.
     let cumIn = 0;
     CASH_FLOW_CATEGORIES.forEach(cat => {
       const segVal = forecast[cat.inflowKey][i];
@@ -914,8 +936,6 @@ function renderChart(forecast) {
       }
       cumIn += segVal;
     });
-
-    // Cash Outflow bar stacks the same three categories bottom-to-top below zero.
     let cumOut = 0;
     CASH_FLOW_CATEGORIES.forEach(cat => {
       const segVal = forecast[cat.outflowKey][i];
@@ -926,148 +946,173 @@ function renderChart(forecast) {
       }
       cumOut += segVal;
     });
-
-    // Value tickers: total Cash Inflow above the bar, total Cash Outflow below it.
     if (cumIn > 0) {
       svgParts.push(`<text x="${x + barWidth / 2}" y="${yFor(cumIn) - 6}" text-anchor="middle" font-size="10" font-weight="600" fill="var(--ink-soft)">${fmtMoney(cumIn)}</text>`);
     }
     if (cumOut > 0) {
       svgParts.push(`<text x="${x + barWidth / 2}" y="${yFor(-cumOut) + 14}" text-anchor="middle" font-size="10" font-weight="600" fill="var(--ink-soft)">${fmtMoney(-cumOut)}</text>`);
     }
-
     svgParts.push(`<text x="${x + barWidth / 2}" y="${H - marginBottom + 34}" text-anchor="middle" font-size="11" fill="#8b90a0">${MONTH_LABELS[i]}</text>`);
   }
 
-  // net cash flow dashed line
   const linePoints = forecast.net.map((v, i) => {
     const x = marginLeft + i * monthSlot + monthSlot / 2;
-    const y = yFor(v);
-    return `${x},${y}`;
+    return `${x},${yFor(v)}`;
   });
   svgParts.push(`<polyline points="${linePoints.join(" ")}" fill="none" stroke="var(--net-line)" stroke-width="2.5" stroke-dasharray="6,5" />`);
   forecast.net.forEach((v, i) => {
     const x = marginLeft + i * monthSlot + monthSlot / 2;
-    const y = yFor(v);
-    svgParts.push(`<circle cx="${x}" cy="${y}" r="3.5" fill="var(--net-line)"><title>${MONTH_LABELS[i]} Net Cash Flow: ${fmtMoney(v)}</title></circle>`);
+    svgParts.push(`<circle cx="${x}" cy="${yFor(v)}" r="3.5" fill="var(--net-line)"><title>${MONTH_LABELS[i]} Net Cash Flow: ${fmtMoney(v)}</title></circle>`);
   });
 
   svg.setAttribute("viewBox", `0 0 ${W} ${H}`);
   svg.innerHTML = svgParts.join("\n");
 }
 
-/* ============================================================
-   Table + summary rendering
-   ============================================================ */
-function renderDrilldownRow(forecast, rowId, label, totalValues, expanded, direction) {
-  // direction is "inflow" or "outflow" — selects the matching
-  // "<direction>Key" / "<direction>WhatItRepresents" / "<direction>Driver"
-  // properties on each entry in CASH_FLOW_CATEGORIES.
-  const keyProp = direction + "Key";
-  const whatProp = direction + "WhatItRepresents";
-  const driverProp = direction + "Driver";
-  const sign = direction === "outflow" ? -1 : 1;
-
-  const caret = expanded ? "▾" : "▸";
-  const totalCells = totalValues.map(v => fmtCell(v)).join("");
-  let html = `<tr class="row-parent row-total" id="${rowId}"><td><span class="caret">${caret}</span>${label}</td>${totalCells}</tr>`;
-
-  if (expanded) {
-    CASH_FLOW_CATEGORIES.forEach(cat => {
-      const title = `${cat[whatProp]} — driver: ${cat[driverProp]}`;
-      const cells = forecast[cat[keyProp]].map(v => fmtCell(sign * v)).join("");
-      html += `<tr class="row-sub"><td title="${title}"><span class="cat-dot" style="background:${cat.color}"></span>${cat.label}</td>${cells}</tr>`;
-    });
+function showDrilldown(month, line) {
+  const host = document.getElementById("drilldown");
+  const title = document.getElementById("drilldownTitle");
+  const body = document.getElementById("drilldownBody");
+  const rows = TRANSACTIONS.filter(r => r.reporting_month === month && r.reporting_line === line)
+    .sort((a, b) => String(a.cash_date).localeCompare(String(b.cash_date)));
+  title.textContent = monthLabel(month) + " · " + line;
+  if (!rows.length) {
+    body.innerHTML = `<tr><td colspan="4">No source transactions this month.</td></tr>`;
+  } else {
+    body.innerHTML = rows.map(r =>
+      `<tr><td>${escapeHtml(r.transaction_id)}</td><td>${escapeHtml(r.cash_date)}</td><td class="num">${fmtMoney(num(r.signed_amount_usd))}</td><td>${escapeHtml(r.source_file)}</td></tr>`
+    ).join("");
   }
-  return html;
+  host.hidden = false;
 }
 
 function renderTable(forecast) {
   const headRow = document.getElementById("tableHeadRow");
   headRow.innerHTML = "<th>&nbsp;</th>" + MONTH_LABELS.map(m => `<th>${m}</th>`).join("");
 
-  let html = renderDrilldownRow(forecast, "inflowToggleRow", "Cash Inflow", forecast.inflow, inflowExpanded, "inflow");
-  html += renderDrilldownRow(forecast, "outflowToggleRow", "Cash Outflow", forecast.outflow.map(v => -v), outflowExpanded, "outflow");
-
-  const otherRows = [
-    { label: "Net Cash Flow", values: forecast.net },
-    { label: "Ending Cash Balance", values: forecast.ending }
-  ];
-
-  html += otherRows.map(row => {
-    const cells = row.values.map(v => fmtCell(v)).join("");
-    return `<tr class="row-total"><td>${row.label}</td>${cells}</tr>`;
-  }).join("");
+  let html = `<tr class="row-total"><td>Beginning cash</td>${forecast.beginning.map(v => fmtCell(v)).join("")}</tr>`;
+  STATEMENT_SECTIONS.forEach(section => {
+    const expanded = sectionExpanded[section.id];
+    const caret = expanded ? "▾" : "▸";
+    const netCells = forecast[section.netKey].map(v => fmtCell(v)).join("");
+    html += `<tr class="row-parent row-total" data-section="${section.id}"><td><span class="caret">${caret}</span>${section.label}</td>${netCells}</tr>`;
+    if (expanded) {
+      section.lines.forEach(name => {
+        const cells = forecast.lineValues[name].map((v, i) =>
+          fmtCell(v, { month: forecast.months[i], line: name })
+        ).join("");
+        html += `<tr class="row-sub"><td><span class="cat-dot" style="background:${section.color}"></span>${name}</td>${cells}</tr>`;
+      });
+    }
+  });
+  html += `<tr class="row-total"><td>Net change in cash</td>${forecast.net.map(v => fmtHeatCell(v)).join("")}</tr>`;
+  html += `<tr class="row-total"><td>Ending cash</td>${forecast.ending.map(v => fmtHeatCell(v)).join("")}</tr>`;
 
   const body = document.getElementById("tableBody");
   body.innerHTML = html;
 
-  document.getElementById("inflowToggleRow").addEventListener("click", () => {
-    inflowExpanded = !inflowExpanded;
+  body.querySelectorAll("tr.row-parent").forEach(row => {
+    row.addEventListener("click", () => {
+      const id = row.getAttribute("data-section");
+      sectionExpanded[id] = !sectionExpanded[id];
+      renderTable(lastForecast);
+    });
+  });
+  body.querySelectorAll("td.cell-click").forEach(cell => {
+    cell.addEventListener("click", event => {
+      event.stopPropagation();
+      showDrilldown(cell.getAttribute("data-month"), cell.getAttribute("data-line"));
+    });
+  });
+}
+
+function parseCSV(text) {
+  const rows = [];
+  let row = [];
+  let cell = "";
+  let i = 0;
+  let inQuotes = false;
+  const src = text.replace(/^\uFEFF/, "");
+  while (i < src.length) {
+    const ch = src[i];
+    if (inQuotes) {
+      if (ch === '"') {
+        if (src[i + 1] === '"') { cell += '"'; i += 2; continue; }
+        inQuotes = false;
+        i += 1;
+        continue;
+      }
+      cell += ch;
+      i += 1;
+      continue;
+    }
+    if (ch === '"') { inQuotes = true; i += 1; continue; }
+    if (ch === ",") { row.push(cell); cell = ""; i += 1; continue; }
+    if (ch === "\r") { i += 1; continue; }
+    if (ch === "\n") { row.push(cell); rows.push(row); row = []; cell = ""; i += 1; continue; }
+    cell += ch;
+    i += 1;
+  }
+  if (cell.length || row.length) { row.push(cell); rows.push(row); }
+  if (!rows.length) return [];
+  const headers = rows[0];
+  return rows.slice(1).filter(r => r.some(v => String(v).trim() !== "")).map(r => {
+    const obj = {};
+    headers.forEach((h, idx) => { obj[h] = r[idx] !== undefined ? r[idx] : ""; });
+    return obj;
+  });
+}
+
+function fetchCsv(path) {
+  return fetch(path).then(res => {
+    if (!res.ok) throw new Error(path + " HTTP " + res.status);
+    return res.text().then(parseCSV);
+  });
+}
+
+function num(v) {
+  const n = Number(v);
+  return Number.isFinite(n) ? n : 0;
+}
+
+function loadReportingMart() {
+  return Promise.all([
+    fetchCsv(REPORTING_DIR + "monthly_cash_summary.csv"),
+    fetchCsv(REPORTING_DIR + "monthly_cash_flow_lines.csv"),
+    fetchCsv(TRANSFORMED_DIR + "cash_transactions.csv")
+  ]).then(([summary, lines, transactions]) => {
+    lastForecast = buildForecast(summary, lines, transactions);
+    renderChart(lastForecast);
     renderTable(lastForecast);
   });
-  document.getElementById("outflowToggleRow").addEventListener("click", () => {
-    outflowExpanded = !outflowExpanded;
-    renderTable(lastForecast);
-  });
 }
 
-/* ============================================================
-   Form <-> state wiring
-   ============================================================ */
-function getRawFormValues() {
-  const raw = {};
-  FIELD_KEYS.forEach(key => {
-    raw[key] = document.getElementById("in-" + key).value;
-  });
-  return raw;
-}
+loadReportingMart().catch(showLoadError);
 
-function setFormValues(values) {
-  FIELD_KEYS.forEach(key => {
-    document.getElementById("in-" + key).value = values[key];
-  });
-}
+const MONEY_COLS = ["usd_per_btc","usd_received","amount_paid","draw_amount","available_balance"];
+const QTY_COLS = ["btc_sold","mwh","rate_per_mwh"];
 
-function applyFieldErrorStates(errors) {
-  FIELD_KEYS.forEach(key => {
-    const fieldEl = document.querySelector(`.field[data-field="${key}"]`);
-    fieldEl.classList.toggle("invalid", !!errors[key]);
-  });
-}
-
-function recomputeAndRender() {
-  const raw = getRawFormValues();
-  const { values, errors } = validateInputs(raw);
-  applyFieldErrorStates(errors);
-  const inputs = Object.assign({}, FIXED_ASSUMPTIONS, values);
-  const forecast = computeForecast(inputs);
-  lastForecast = forecast;
-  renderChart(forecast);
-  renderTable(forecast);
-}
-
-function init() {
-  FIELD_KEYS.forEach(key => {
-    document.getElementById("in-" + key).addEventListener("input", recomputeAndRender);
-  });
-  setFormValues(DEFAULT_INPUTS);
-  recomputeAndRender();
-}
-
-fetch(DATA_URL)
-  .then(res => {
-    if (!res.ok) throw new Error("HTTP " + res.status);
-    return res.json();
-  })
-  .then(applyConfig)
-  .then(init)
-  .catch(showLoadError);
-
-const RAW_FILES = [
-  "data/raw/erp_finance.json",
-  "data/raw/mining_ops.json",
-  "data/raw/dc_commercial.json",
-  "data/raw/planning.json"
+const RAW_SOURCES = [
+  {
+    heading: "Bitcoin sales",
+    file: "data/raw/bitcoin_sales.csv"
+  },
+  {
+    heading: "Operating payments",
+    file: "data/raw/operating_payments.csv"
+  },
+  {
+    heading: "Capital payments",
+    file: "data/raw/capital_payments.csv"
+  },
+  {
+    heading: "Loan draws",
+    file: "data/raw/loan_draws.csv"
+  },
+  {
+    heading: "Bank balance",
+    file: "data/raw/bank_balance.csv"
+  }
 ];
 
 function escapeHtml(value) {
@@ -1078,22 +1123,36 @@ function escapeHtml(value) {
     .replace(/"/g, "&quot;");
 }
 
-function displayValue(value) {
-  if (value === null || value === undefined) return "";
-  if (typeof value === "boolean") return value ? "true" : "false";
-  if (typeof value === "object") return escapeHtml(JSON.stringify(value));
-  return escapeHtml(value);
+function formatUsd(value) {
+  const n = Number(value);
+  if (!Number.isFinite(n)) return "";
+  return "$" + n.toLocaleString("en-US", { maximumFractionDigits: 0 });
 }
 
-function renderKeyValueTable(obj) {
-  const rows = Object.keys(obj).map(key =>
-    `<tr><td>${escapeHtml(key)}</td><td>${displayValue(obj[key])}</td></tr>`
+function formatQty(value) {
+  if (value === "" || value === null || value === undefined) return "";
+  const n = Number(value);
+  if (!Number.isFinite(n)) return escapeHtml(value);
+  return n.toLocaleString("en-US");
+}
+
+function displayCell(col, value) {
+  if (value === null || value === undefined) return { text: "", cls: "" };
+  if (MONEY_COLS.indexOf(col) !== -1) return { text: formatUsd(value), cls: "num" };
+  if (QTY_COLS.indexOf(col) !== -1) return { text: formatQty(value), cls: "num" };
+  return { text: escapeHtml(value), cls: "" };
+}
+
+function renderRows(records, cols) {
+  return records.map(row =>
+    `<tr>${cols.map(c => {
+      const cell = displayCell(c, row[c]);
+      return `<td${cell.cls ? ' class="' + cell.cls + '"' : ""}>${cell.text}</td>`;
+    }).join("")}</tr>`
   ).join("");
-  if (!rows) return "";
-  return `<div class="table-wrap"><table class="source-table"><thead><tr><th>Field</th><th>Value</th></tr></thead><tbody>${rows}</tbody></table></div>`;
 }
 
-function renderRecordTable(title, records) {
+function renderRecordTable(records) {
   if (!records.length) return "";
   const cols = [];
   records.forEach(row => {
@@ -1101,45 +1160,20 @@ function renderRecordTable(title, records) {
       if (cols.indexOf(key) === -1) cols.push(key);
     });
   });
-  const head = cols.map(c => `<th>${escapeHtml(c)}</th>`).join("");
-  const body = records.map(row =>
-    `<tr>${cols.map(c => `<td>${displayValue(row[c])}</td>`).join("")}</tr>`
-  ).join("");
-  return `<h4>${escapeHtml(title.replace(/_/g, " "))}</h4><div class="table-wrap"><table class="source-table"><thead><tr>${head}</tr></thead><tbody>${body}</tbody></table></div>`;
+  const head = cols.map(c => `<th${MONEY_COLS.indexOf(c) !== -1 || QTY_COLS.indexOf(c) !== -1 ? ' class="num"' : ""}>${escapeHtml(c)}</th>`).join("");
+  return `<div class="table-wrap"><table class="source-table"><thead><tr>${head}</tr></thead><tbody>${renderRows(records, cols)}</tbody></table></div>`;
 }
 
-function renderExtract(file, data) {
-  const scalars = {};
-  const objects = {};
-  const arrays = {};
-  Object.keys(data).forEach(key => {
-    const value = data[key];
-    if (Array.isArray(value)) arrays[key] = value;
-    else if (value && typeof value === "object") objects[key] = value;
-    else scalars[key] = value;
-  });
-  const heading = data.source_system ? data.source_system : file;
-  let html = `<article class="source-block"><h3>${escapeHtml(heading)}</h3><p class="process-lead"><code>${escapeHtml(file)}</code></p>`;
-  html += renderKeyValueTable(scalars);
-  Object.keys(objects).forEach(key => {
-    html += `<h4>${escapeHtml(key.replace(/_/g, " "))}</h4>` + renderKeyValueTable(objects[key]);
-  });
-  Object.keys(arrays).forEach(key => {
-    html += renderRecordTable(key, arrays[key]);
-  });
-  html += "</article>";
-  return html;
+function renderSourceBlock(spec, rows) {
+  return `<article class="source-block"><details><summary>${escapeHtml(spec.heading)}</summary>${renderRecordTable(rows)}</details></article>`;
 }
 
 function loadSourceExtracts() {
   const host = document.getElementById("sourceExtracts");
-  Promise.all(RAW_FILES.map(file =>
-    fetch(file).then(res => {
-      if (!res.ok) throw new Error(file + " HTTP " + res.status);
-      return res.json().then(data => ({ file: file, data: data }));
-    })
-  )).then(items => {
-    host.innerHTML = items.map(item => renderExtract(item.file, item.data)).join("");
+  Promise.all(RAW_SOURCES.map(spec =>
+    fetchCsv(spec.file).then(rows => ({ spec: spec, rows: rows }))
+  )).then(tables => {
+    host.innerHTML = tables.map(t => renderSourceBlock(t.spec, t.rows)).join("");
   }).catch(err => {
     host.innerHTML = `<p class="load-error">Could not load source extracts. ${escapeHtml(err && err.message ? err.message : err)}</p>`;
   });
