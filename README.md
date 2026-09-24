@@ -16,43 +16,7 @@ Then open the **Data process** tab in `cashflow-forecast.html` to see the full t
 
 ## 2. Data Model
 
-```mermaid
-flowchart LR
-  subgraph ds["Data Sources"]
-    direction TB
-    ERP(ERP) ~~~ Plan(Planning tools) ~~~ Ops(Operational systems)
-  end
-  subgraph fpa["FP&A Data Model"]
-    direction LR
-    subgraph raw["Raw Tier"]
-      direction TB
-      BTC(bitcoin_sales) ~~~ OP(operating_payments) ~~~ CAP(capital_payments) ~~~ LN(loan_draws) ~~~ BK(bank_balance)
-    end
-    subgraph xf["Transformed Tier"]
-      direction TB
-      MAP(activity_mapping) ~~~ TXN(cash_transactions) ~~~ OPB(opening_balance)
-    end
-    subgraph rpt["Reporting Tier"]
-      direction TB
-      LINES(monthly_cash_flow_lines) ~~~ SUM(monthly_cash_summary)
-    end
-    raw --> xf --> rpt
-  end
-  subgraph reports["Reports"]
-    direction TB
-    Tableau(Tableau) ~~~ PBI(Power BI) ~~~ HTML(Static HTML) ~~~ AI(AI workflows)
-  end
-  ds --> fpa --> reports
-
-  classDef file fill:#ffffff,stroke:#e6e9f2,color:#1f2430
-  class ERP,Plan,Ops,BTC,OP,CAP,LN,BK,MAP,TXN,OPB,LINES,SUM,Tableau,PBI,HTML,AI file
-  style ds fill:#e8f7f2,stroke:#d3ebe1,color:#1f2430
-  style fpa fill:#e8eefb,stroke:#d7e0f5,color:#1f2430
-  style raw fill:#e8f7f2,stroke:#d3ebe1,color:#1f2430
-  style xf fill:#eef2fb,stroke:#dee5f7,color:#1f2430
-  style rpt fill:#f1eef8,stroke:#e3dcf0,color:#1f2430
-  style reports fill:#eee9f6,stroke:#e3dcf0,color:#1f2430
-```
+![FP&A data model: data sources feed the raw, transformed, and reporting tiers, which feed reports](docs/data-model.svg)
 
 Data Sources – ERP, planning tools, and operational systems provide the original records.
 
