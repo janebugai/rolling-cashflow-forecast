@@ -1,14 +1,18 @@
-# Transformed actuals
+# Transformed tier
 
-Cleaned cash-activity files built from `data/raw/`. Amounts are plain numbers (no `$` or commas). Dates are ISO `YYYY-MM-DD`. Receipts and loan draws are positive; payments are negative.
+Data is validated, cleaned, standardized, and mapped to consistent business definitions. Records retain a link to their sources.
 
-This layer records what the mock source systems say happened. It does not apply forecast scenarios. Bitcoin sale proceeds are treated as operating cash receipts in a **management cash flow view**, not a GAAP statement.
+Amounts are plain numbers (no `$` or commas). Dates are ISO `YYYY-MM-DD`. Receipts and loan draws are positive; payments are negative. Bitcoin sale proceeds are operating cash receipts in a management cash flow view, not a GAAP statement.
 
-Rebuild with `python scripts/run_sql.py` (`scripts/sql/transform_actuals.sql`).
+Rebuild with `python scripts/run_sql.py` (`scripts/sql/transform_actuals.sql`). That script reads `data/raw/` plus `activity_mapping.csv` and writes `cash_transactions.csv` and `opening_balance.csv`.
 
-## Mapping
+| File | Role | Grain |
+| --- | --- | --- |
+| `activity_mapping.csv` | Lookup used in the transform; not a cash-event output | Source × category |
+| `cash_transactions.csv` | Eligible cash events, mapped and signed | One row per transaction |
+| `opening_balance.csv` | Bank snapshot copied from raw | One account row |
 
-### `activity_mapping.csv`
+## `activity_mapping.csv`
 
 Lookup from raw source and category to business activity, cash-flow section, and reporting line. Unmapped categories fail the transform; they are not assigned to Other.
 
@@ -29,9 +33,7 @@ Lookup from raw source and category to business activity, cash-flow section, and
 | Capital payments | Mining equipment | Bitcoin mining operations | Investing | Mining equipment paid |
 | Loan draws | funded | Data center financing | Financing | Construction loan drawn |
 
-## Cash transactions
-
-### `cash_transactions.csv`
+## `cash_transactions.csv`
 
 One row per eligible cash event. Kept statuses: sales `SETTLED`, invoices `PAID`, loan draws `FUNDED`. `transaction_id`, `source_system`, and `source_file` trace each row back to a raw record. Opening cash is not included here.
 
@@ -49,11 +51,9 @@ One row per eligible cash event. Kept statuses: sales `SETTLED`, invoices `PAID`
 | cash_direction | `inflow` or `outflow` |
 | signed_amount_usd | Signed USD amount (inflows positive, outflows negative) |
 
-## Opening cash
+## `opening_balance.csv`
 
-### `opening_balance.csv`
-
-Cleaned bank snapshot. This balance is the starting point for the cash schedule, not a cash-flow transaction.
+Cleaned bank snapshot from `data/raw/bank_balance.csv`. This balance is the starting point for the cash schedule, not a cash-flow transaction.
 
 | Column | Meaning |
 | --- | --- |
