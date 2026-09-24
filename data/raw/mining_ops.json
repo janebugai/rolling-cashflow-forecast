@@ -1,0 +1,24 @@
+{
+  "source_system": "MineOS",
+  "extract_id": "OPS-HASH-202609-W4",
+  "as_of": "2026-09-24T06:00:00Z",
+  "site_id": "SITE-A",
+  "fleet": "S19-hydro-mixed",
+  "hashprice_ref_usd": null,
+  "power_cost_per_btc_usd": "26000.00",
+  "other_mining_opex_usd_per_month": 120000,
+  "production_forecast": [
+    { "period": "2026-10", "btc_produced": "40", "online_mw": 18.4, "notes": "full fleet" },
+    { "period": "2026-11", "btc_produced": "38", "online_mw": 17.5, "notes": "" },
+    { "period": "2026-12", "btc_produced": "36", "online_mw": 16.6, "notes": "" },
+    { "period": "2027-01", "btc_produced": "34", "online_mw": 15.7, "notes": "rack pull start" },
+    { "period": "2027-02", "btc_produced": "30", "online_mw": 13.8, "notes": "" },
+    { "period": "2027-03", "btc_produced": "26", "online_mw": 12.0, "notes": "" },
+    { "period": "2027-04", "btc_produced": "22", "online_mw": 10.1, "notes": "hall 1 converted" },
+    { "period": "2027-05", "btc_produced": "18", "online_mw": 8.3, "notes": "" },
+    { "period": "2027-06", "btc_produced": "14", "online_mw": 6.4, "notes": "" },
+    { "period": "2027-07", "btc_produced": "10", "online_mw": 4.6, "notes": "" },
+    { "period": "2027-08", "btc_produced": "6", "online_mw": 2.8, "notes": "" },
+    { "period": "2027-09", "btc_produced": "3", "online_mw": 1.4, "notes": "residual hash" }
+  ]
+}

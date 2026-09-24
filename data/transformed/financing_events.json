@@ -1,0 +1,14 @@
+[
+  {
+    "kind": "debt_draw",
+    "period": "2026-12",
+    "forecast_month": 3,
+    "amount_usd": 8000000
+  },
+  {
+    "kind": "equity_funding",
+    "period": "2026-10",
+    "forecast_month": 1,
+    "amount_usd": 0
+  }
+]

@@ -1,0 +1,32 @@
+[
+  {
+    "period": "2026-10",
+    "forecast_month": 1,
+    "amount_usd": 2600000
+  },
+  {
+    "period": "2026-11",
+    "forecast_month": 2,
+    "amount_usd": 3200000
+  },
+  {
+    "period": "2026-12",
+    "forecast_month": 3,
+    "amount_usd": 2800000
+  },
+  {
+    "period": "2027-01",
+    "forecast_month": 4,
+    "amount_usd": 2200000
+  },
+  {
+    "period": "2027-02",
+    "forecast_month": 5,
+    "amount_usd": 1800000
+  },
+  {
+    "period": "2027-03",
+    "forecast_month": 6,
+    "amount_usd": 1400000
+  }
+]

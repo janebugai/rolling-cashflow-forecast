@@ -1,0 +1,19 @@
+{
+  "source_system": "Internal CRM / Capacity Planner",
+  "extract_id": "COM-DC-SITEA-2026Q3",
+  "as_of": "2026-09-24T06:00:00Z",
+  "site_id": "SITE-A",
+  "product": "colocation-it-load",
+  "contracted_mw": 8,
+  "price_per_mw_month_usd": 225000,
+  "monthly_revenue_full_ramp_usd": 1800000,
+  "planned_opening": { "year": 2027, "month": 4, "label": "April 2027" },
+  "ramp_curve": [
+    { "months_after_open": 0, "utilization_pct": "25%" },
+    { "months_after_open": 1, "utilization_pct": "50%" },
+    { "months_after_open": 2, "utilization_pct": "80%" },
+    { "months_after_open": 3, "utilization_pct": "100%" }
+  ],
+  "pipeline_stage": "LOI",
+  "sales_owner": "unassigned"
+}

@@ -1,0 +1,66 @@
+{
+  "power_cost_per_btc_usd": 26000,
+  "other_mining_opex_monthly_usd": 120000,
+  "by_month": [
+    {
+      "period": "2026-10",
+      "forecast_month": 1,
+      "btc": 40
+    },
+    {
+      "period": "2026-11",
+      "forecast_month": 2,
+      "btc": 38
+    },
+    {
+      "period": "2026-12",
+      "forecast_month": 3,
+      "btc": 36
+    },
+    {
+      "period": "2027-01",
+      "forecast_month": 4,
+      "btc": 34
+    },
+    {
+      "period": "2027-02",
+      "forecast_month": 5,
+      "btc": 30
+    },
+    {
+      "period": "2027-03",
+      "forecast_month": 6,
+      "btc": 26
+    },
+    {
+      "period": "2027-04",
+      "forecast_month": 7,
+      "btc": 22
+    },
+    {
+      "period": "2027-05",
+      "forecast_month": 8,
+      "btc": 18
+    },
+    {
+      "period": "2027-06",
+      "forecast_month": 9,
+      "btc": 14
+    },
+    {
+      "period": "2027-07",
+      "forecast_month": 10,
+      "btc": 10
+    },
+    {
+      "period": "2027-08",
+      "forecast_month": 11,
+      "btc": 6
+    },
+    {
+      "period": "2027-09",
+      "forecast_month": 12,
+      "btc": 3
+    }
+  ]
+}

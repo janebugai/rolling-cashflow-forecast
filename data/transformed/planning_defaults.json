@@ -1,0 +1,8 @@
+{
+  "start_year": 2026,
+  "start_month": 10,
+  "num_months": 12,
+  "btc_price_usd": 84000,
+  "cost_overrun_pct": 8,
+  "delay_months": 0
+}
