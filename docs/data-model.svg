@@ -1,0 +1,56 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1040 300" width="1040" height="300" role="img" aria-label="Data sources feed the FP&amp;A data model, which feeds reports" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif">
+  <title>Data sources feed the FP&amp;A data model, which feeds reports</title>
+  <g>
+    <rect x="10" y="10" width="170" height="280" rx="16" ry="16" fill="#e8f7f2"/>
+    <text x="95" y="34" font-size="12" font-weight="700" text-anchor="middle" fill="#1f2430">Data Sources</text>
+    <rect x="22" y="46" width="146" height="34" rx="10" ry="10" fill="#ffffff" stroke="#eceef5"/>
+    <text x="95" y="67" font-size="12" font-weight="600" text-anchor="middle" fill="#1f2430">ERP</text>
+    <rect x="22" y="88" width="146" height="34" rx="10" ry="10" fill="#ffffff" stroke="#eceef5"/>
+    <text x="95" y="109" font-size="12" font-weight="600" text-anchor="middle" fill="#1f2430">Planning tools</text>
+    <rect x="22" y="130" width="146" height="34" rx="10" ry="10" fill="#ffffff" stroke="#eceef5"/>
+    <text x="95" y="151" font-size="12" font-weight="600" text-anchor="middle" fill="#1f2430">Operational systems</text>
+    <rect x="190" y="10" width="660" height="280" rx="16" ry="16" fill="#e8eefb"/>
+    <text x="520" y="34" font-size="12" font-weight="700" text-anchor="middle" fill="#1f2430">FP&amp;A Data Model</text>
+    <rect x="200" y="46" width="640" height="234" rx="12" ry="12" fill="#fbfbfe"/>
+    <rect x="210" y="56" width="192" height="214" rx="12" ry="12" fill="#e8f7f2"/>
+    <text x="306" y="78" font-size="12" font-weight="700" text-anchor="middle" fill="#1f2430">Raw Tier</text>
+    <rect x="218" y="88" width="176" height="30" rx="10" ry="10" fill="#ffffff" stroke="#eceef5"/>
+    <text x="306" y="107" font-size="12" font-weight="600" text-anchor="middle" fill="#1f2430">bitcoin_sales</text>
+    <rect x="218" y="126" width="176" height="30" rx="10" ry="10" fill="#ffffff" stroke="#eceef5"/>
+    <text x="306" y="145" font-size="12" font-weight="600" text-anchor="middle" fill="#1f2430">operating_payments</text>
+    <rect x="218" y="164" width="176" height="30" rx="10" ry="10" fill="#ffffff" stroke="#eceef5"/>
+    <text x="306" y="183" font-size="12" font-weight="600" text-anchor="middle" fill="#1f2430">capital_payments</text>
+    <rect x="218" y="202" width="176" height="30" rx="10" ry="10" fill="#ffffff" stroke="#eceef5"/>
+    <text x="306" y="221" font-size="12" font-weight="600" text-anchor="middle" fill="#1f2430">loan_draws</text>
+    <rect x="218" y="240" width="176" height="30" rx="10" ry="10" fill="#ffffff" stroke="#eceef5"/>
+    <text x="306" y="259" font-size="12" font-weight="600" text-anchor="middle" fill="#1f2430">bank_balance</text>
+    <path d="M407 163 H415" stroke="#b7bdd0" stroke-width="1.5" fill="none"/>
+    <path d="M414 159 l5 4 l-5 4z" fill="#b7bdd0"/>
+    <rect x="424" y="56" width="192" height="214" rx="12" ry="12" fill="#eef2fb"/>
+    <text x="520" y="78" font-size="12" font-weight="700" text-anchor="middle" fill="#1f2430">Transformed Tier</text>
+    <rect x="432" y="88" width="176" height="30" rx="10" ry="10" fill="#ffffff" stroke="#eceef5"/>
+    <text x="520" y="107" font-size="12" font-weight="600" text-anchor="middle" fill="#1f2430">activity_mapping</text>
+    <rect x="432" y="126" width="176" height="30" rx="10" ry="10" fill="#ffffff" stroke="#eceef5"/>
+    <text x="520" y="145" font-size="12" font-weight="600" text-anchor="middle" fill="#1f2430">cash_transactions</text>
+    <rect x="432" y="164" width="176" height="30" rx="10" ry="10" fill="#ffffff" stroke="#eceef5"/>
+    <text x="520" y="183" font-size="12" font-weight="600" text-anchor="middle" fill="#1f2430">opening_balance</text>
+    <path d="M621 163 H629" stroke="#b7bdd0" stroke-width="1.5" fill="none"/>
+    <path d="M628 159 l5 4 l-5 4z" fill="#b7bdd0"/>
+    <rect x="638" y="56" width="192" height="214" rx="12" ry="12" fill="#f1eef8"/>
+    <text x="734" y="78" font-size="12" font-weight="700" text-anchor="middle" fill="#1f2430">Reporting Tier</text>
+    <rect x="646" y="88" width="176" height="30" rx="10" ry="10" fill="#ffffff" stroke="#eceef5"/>
+    <text x="734" y="107" font-size="12" font-weight="600" text-anchor="middle" fill="#1f2430">monthly_cash_flow_lines</text>
+    <rect x="646" y="126" width="176" height="30" rx="10" ry="10" fill="#ffffff" stroke="#eceef5"/>
+    <text x="734" y="145" font-size="12" font-weight="600" text-anchor="middle" fill="#1f2430">monthly_cash_summary</text>
+    <rect x="860" y="10" width="170" height="280" rx="16" ry="16" fill="#eee9f6"/>
+    <text x="945" y="34" font-size="12" font-weight="700" text-anchor="middle" fill="#1f2430">Reports</text>
+    <rect x="872" y="46" width="146" height="34" rx="10" ry="10" fill="#ffffff" stroke="#eceef5"/>
+    <text x="945" y="67" font-size="12" font-weight="600" text-anchor="middle" fill="#1f2430">Tableau</text>
+    <rect x="872" y="88" width="146" height="34" rx="10" ry="10" fill="#ffffff" stroke="#eceef5"/>
+    <text x="945" y="109" font-size="12" font-weight="600" text-anchor="middle" fill="#1f2430">Power BI</text>
+    <rect x="872" y="130" width="146" height="34" rx="10" ry="10" fill="#ffffff" stroke="#eceef5"/>
+    <text x="945" y="151" font-size="12" font-weight="600" text-anchor="middle" fill="#1f2430">Static HTML</text>
+    <rect x="872" y="172" width="146" height="34" rx="10" ry="10" fill="#ffffff" stroke="#eceef5"/>
+    <text x="945" y="193" font-size="12" font-weight="600" text-anchor="middle" fill="#1f2430">AI workflows</text>
+  </g>
+</svg>
