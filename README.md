@@ -93,7 +93,7 @@ Business names sit in the mapping, not in the source systems. The Forecast tabâ€
 
 ## 4. Reporting
 
-The reporting tier is CSV files in `data/reporting/`. The Forecast tab fetches `monthly_cash_summary.csv` and `monthly_cash_flow_lines.csv`, and drills into `data/transformed/cash_transactions.csv` by `reporting_month` and `reporting_line`.
+The reporting tier is CSV files in `data/reporting/`. The Forecast tab fetches `monthly_cash_summary.csv` and `monthly_cash_flow_lines.csv`, and drills into `data/transformed/cash_transactions.csv` by `reporting_month` and `reporting_line`. Column details are in `data/reporting/README.md`.
 
 | Reporting file | What is kept | Used for |
 | --- | --- | --- |

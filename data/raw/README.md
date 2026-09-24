@@ -1,12 +1,20 @@
-# Raw extracts
+# Raw tier
 
-Fictional source-system files used by this cash-flow forecast demo. Amounts are plain numbers (no `$` or commas). Dates are ISO `YYYY-MM-DD`.
+Data captured by operational systems in its original format, before business rules are applied.
 
-## Treasury / exchange
+These files are fictional extracts. Amounts are plain numbers (no `$` or commas). Dates are ISO `YYYY-MM-DD`. They are not rebuilt by SQL; edit them here, then run `python scripts/run_sql.py` to refresh transformed and reporting files.
 
-### `bitcoin_sales.csv`
+| File | Source system | Grain |
+| --- | --- | --- |
+| `bitcoin_sales.csv` | Treasury / exchange | Settled sale |
+| `operating_payments.csv` | Accounts payable | Paid invoice |
+| `capital_payments.csv` | Capital projects / AP | Paid invoice |
+| `loan_draws.csv` | Treasury / loan system | Funded draw |
+| `bank_balance.csv` | Bank export | Account snapshot |
 
-Exchange settlement export of Bitcoin sold for USD.
+## `bitcoin_sales.csv`
+
+Exchange settlement export of Bitcoin sold for USD. The transform keeps rows with status `SETTLED`.
 
 | Column | Meaning |
 | --- | --- |
@@ -18,24 +26,9 @@ Exchange settlement export of Bitcoin sold for USD.
 | usd_received | Cash received (`btc_sold × usd_per_btc`) |
 | status | Settlement status (`SETTLED`) |
 
-### `loan_draws.csv`
+## `operating_payments.csv`
 
-Treasury / loan-system export of construction-facility draws.
-
-| Column | Meaning |
-| --- | --- |
-| draw_id | Unique draw identifier |
-| funding_date | Date cash was funded |
-| facility_id | Loan facility |
-| lender | Counterparty bank |
-| draw_amount | Cash drawn (USD) |
-| status | Funding status (`FUNDED`) |
-
-## Accounts payable
-
-### `operating_payments.csv`
-
-AP export of paid operating invoices. Two invoices per month: Mining power and Overhead. Power usage (`mwh`, `rate_per_mwh`) is blank on Overhead rows.
+AP export of paid operating invoices. Two invoices per month: Mining power and Overhead. Power usage (`mwh`, `rate_per_mwh`) is blank on Overhead rows. The transform keeps rows with status `PAID`.
 
 | Column | Meaning |
 | --- | --- |
@@ -48,9 +41,9 @@ AP export of paid operating invoices. Two invoices per month: Mining power and O
 | amount_paid | Cash paid (USD) |
 | status | Payment status (`PAID`) |
 
-### `capital_payments.csv`
+## `capital_payments.csv`
 
-Capital-projects / AP export of paid project invoices.
+Capital-projects / AP export of paid project invoices. The transform keeps rows with status `PAID`.
 
 | Column | Meaning |
 | --- | --- |
@@ -62,11 +55,22 @@ Capital-projects / AP export of paid project invoices.
 | amount_paid | Cash paid (USD) |
 | status | Payment status (`PAID`) |
 
-## Bank export
+## `loan_draws.csv`
 
-### `bank_balance.csv`
+Treasury / loan-system export of construction-facility draws. The transform keeps rows with status `FUNDED`.
 
-Bank export of available cash.
+| Column | Meaning |
+| --- | --- |
+| draw_id | Unique draw identifier |
+| funding_date | Date cash was funded |
+| facility_id | Loan facility |
+| lender | Counterparty bank |
+| draw_amount | Cash drawn (USD) |
+| status | Funding status (`FUNDED`) |
+
+## `bank_balance.csv`
+
+Bank export of available cash. This snapshot is opening cash for the forecast, not a cash-flow event. The transform copies it to `data/transformed/opening_balance.csv`.
 
 | Column | Meaning |
 | --- | --- |
