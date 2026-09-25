@@ -127,7 +127,7 @@
   }
 
   table.detail-table th, table.detail-table td {
-    padding: 13px 14px;
+    padding: 8.5px 14px;
     text-align: right;
     white-space: nowrap;
     border-bottom: 1px solid var(--border);
@@ -150,6 +150,18 @@
 
   table.detail-table thead th:first-child { background: #fafafd; }
 
+  table.detail-table thead th .fcst-mark {
+    display: block;
+    margin-top: 2px;
+    font-size: 10px;
+    font-weight: 600;
+    color: var(--ink-soft);
+  }
+
+  table.detail-table thead th.th-forecast {
+    background: #e8ebf4;
+  }
+
   table.detail-table tbody tr:last-child td { border-bottom: none; }
 
   table.detail-table tr.row-parent td:first-child {
@@ -159,10 +171,6 @@
 
   table.detail-table tr.row-parent:hover td:first-child { color: var(--ink); }
 
-  table.detail-table td.cell-heat-pos {
-    background: var(--pos-bg);
-    color: var(--pos-ink);
-  }
   table.detail-table td.cell-heat-neg {
     background: var(--neg-bg);
     color: var(--neg-ink);
@@ -176,10 +184,27 @@
   }
   table.detail-table td.cell-click:hover { color: var(--blue-line); }
 
-  .drilldown { margin-top: 18px; }
-  .drilldown h3 {
-    font-size: 15px;
-    margin: 0 0 10px 0;
+  .txn-tip {
+    position: fixed;
+    z-index: 30;
+    background: #fff;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    box-shadow: 0 8px 24px rgba(20, 24, 40, 0.12);
+    padding: 10px 12px 8px;
+    pointer-events: auto;
+    max-width: min(720px, calc(100vw - 16px));
+  }
+
+  .txn-tip h3 {
+    font-size: 13px;
+    margin: 0 0 8px 0;
+  }
+
+  .txn-tip .txn-empty {
+    margin: 0;
+    font-size: 12px;
+    color: var(--ink-soft);
   }
 
   .caret {
@@ -190,6 +215,22 @@
     font-size: 10px;
   }
 
+  table.detail-table tr.row-activity td {
+    background: #f7f8fc;
+    font-weight: 500;
+    color: var(--ink-soft);
+  }
+
+  table.detail-table tr.row-activity td:first-child {
+    background: #f7f8fc;
+    padding-left: 28px;
+    cursor: pointer;
+    user-select: none;
+    font-weight: 600;
+  }
+
+  table.detail-table tr.row-activity:hover td:first-child { color: var(--ink); }
+
   table.detail-table tr.row-sub td {
     background: #fbfbff;
     font-weight: 400;
@@ -198,7 +239,7 @@
 
   table.detail-table tr.row-sub td:first-child {
     background: #fbfbff;
-    padding-left: 30px;
+    padding-left: 52px;
     font-weight: 500;
   }
 
@@ -208,6 +249,7 @@
     height: 8px;
     border-radius: 50%;
     margin-right: 6px;
+    vertical-align: middle;
   }
 
   .load-error {
@@ -215,6 +257,14 @@
     font-size: 14px;
     margin: 0 0 16px 0;
   }
+
+  .validate-status {
+    font-size: 13px;
+    margin: -4px 0 12px 0;
+    color: var(--ink-soft);
+  }
+
+  .validate-status.is-fail { color: var(--red-ink); }
 
   .tabs {
     display: inline-flex;
@@ -284,7 +334,7 @@
   }
   .pipe-board {
     display: grid;
-    grid-template-columns: minmax(140px, 0.7fr) minmax(360px, 3fr) minmax(140px, 0.7fr);
+    grid-template-columns: minmax(160px, 1fr) minmax(320px, 2.6fr) minmax(160px, 1fr);
     gap: 10px;
     align-items: stretch;
   }
@@ -299,6 +349,7 @@
   .pipe-panel-model { background: #e8eefb; }
   .pipe-panel-out { background: #eee9f6; }
   .pipe-panel-title,
+  .pipe-box-title,
   .pipe-col h3 {
     margin: 0 0 10px 0;
     text-align: center;
@@ -307,8 +358,16 @@
     color: var(--ink);
     font-family: inherit;
   }
-  .pipe-stack,
-  .pipe-files {
+  .pipe-blurb {
+    margin: 0;
+    text-align: center;
+    font-size: 12px;
+    font-weight: 600;
+    font-family: inherit;
+    color: var(--ink);
+    line-height: 1.45;
+  }
+  .pipe-stack {
     list-style: none;
     margin: 0;
     padding: 0;
@@ -317,8 +376,7 @@
     gap: 8px;
     flex: 1;
   }
-  .pipe-stack li,
-  .pipe-files li {
+  .pipe-stack li {
     background: #ffffff;
     border-radius: 10px;
     padding: 10px 8px;
@@ -330,6 +388,47 @@
     line-height: 1.35;
     box-shadow: 0 1px 2px rgba(20, 24, 40, 0.04);
   }
+  .pipe-model {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    min-width: 0;
+  }
+  .pipe-box {
+    background: #fbfbfe;
+    border-radius: 12px;
+    padding: 12px 10px;
+    min-width: 0;
+  }
+  .pipe-sem-row {
+    list-style: none;
+    margin: 10px 0 0 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+  }
+  .pipe-sem-row li {
+    border-radius: 10px;
+    padding: 10px 8px;
+    text-align: center;
+    font-size: 12px;
+    font-weight: 700;
+    font-family: inherit;
+    color: var(--ink);
+    line-height: 1.35;
+  }
+  .pipe-sem-row li:nth-child(1) { background: #e8f7f2; }
+  .pipe-sem-row li:nth-child(2) { background: #eef2fb; }
+  .pipe-sem-row li:nth-child(3) { background: #f1eef8; }
+  .pipe-sem-row li span {
+    display: block;
+    margin-top: 4px;
+    font-size: 11px;
+    font-weight: 600;
+    line-height: 1.4;
+  }
   .pipe-inner {
     flex: 1;
     background: #fbfbfe;
@@ -340,6 +439,12 @@
     gap: 0;
     align-items: stretch;
     min-width: 0;
+  }
+  .pipe-box .pipe-inner {
+    flex: none;
+    background: transparent;
+    padding: 0;
+    margin-top: 10px;
   }
   .pipe-col {
     min-width: 0;
@@ -362,6 +467,7 @@
   @media (max-width: 720px) {
     .pipe-board { grid-template-columns: 1fr; }
     .pipe-inner { grid-template-columns: 1fr; }
+    .pipe-sem-row { grid-template-columns: 1fr; }
     .pipe-h-arrow { transform: rotate(90deg); padding: 6px 0; }
   }
   .process-lead {
@@ -423,7 +529,6 @@
   }
 
   table.process-map td:first-child { font-weight: 600; white-space: nowrap; }
-  table.process-map code { font-size: 12px; }
 
   table.source-table {
     border-collapse: collapse;
@@ -449,6 +554,7 @@
     header.dash-header h1 { font-size: 17px; }
   }
 </style>
+<link rel="stylesheet" href="walkthrough.css" />
 </head>
 <body>
 <div class="page">
@@ -461,7 +567,7 @@
     <p class="load-error" id="loadError" hidden></p>
 
     <div class="tabs" role="tablist" aria-label="Report views">
-      <button class="tab" type="button" role="tab" id="tab-process" aria-controls="panel-process" aria-selected="true">Data process</button>
+      <button class="tab" type="button" role="tab" id="tab-process" aria-controls="panel-process" aria-selected="true">Data Flow</button>
       <button class="tab" type="button" role="tab" id="tab-forecast" aria-controls="panel-forecast" aria-selected="false">Forecast</button>
     </div>
 
@@ -469,7 +575,7 @@
 
     <section class="chart-section">
       <div class="chart-wrap">
-        <svg class="chart-svg" id="chartSvg" viewBox="0 0 1180 360" xmlns="http://www.w3.org/2000/svg"></svg>
+        <svg class="chart-svg" id="chartSvg" viewBox="0 0 1180 270" xmlns="http://www.w3.org/2000/svg"></svg>
       </div>
       <div class="legend">
         <span class="item"><span class="swatch" style="background:var(--cat-operating)"></span>Operating Activities</span>
@@ -481,27 +587,12 @@
 
     <section class="table-section">
       <h2>Monthly Detail</h2>
+      <p id="validateStatus" class="validate-status" hidden></p>
       <div class="table-wrap">
         <table class="detail-table">
           <thead><tr id="tableHeadRow"><th>&nbsp;</th></tr></thead>
           <tbody id="tableBody"></tbody>
         </table>
-      </div>
-      <div id="drilldown" class="drilldown" hidden>
-        <h3 id="drilldownTitle">Source transactions</h3>
-        <div class="table-wrap">
-          <table class="source-table">
-            <thead>
-              <tr>
-                <th>transaction_id</th>
-                <th>cash_date</th>
-                <th class="num">signed_amount_usd</th>
-                <th>source_file</th>
-              </tr>
-            </thead>
-            <tbody id="drilldownBody"></tbody>
-          </table>
-        </div>
       </div>
     </section>
 
@@ -512,7 +603,7 @@
         <li>Overview</li>
         <li>Data Model</li>
         <li>Semantic Layer</li>
-        <li>Reporting</li>
+        <li>Data Governance</li>
       </ol>
 
       <section class="process-section" id="proc-overview">
@@ -522,57 +613,55 @@
 
       <section class="process-section" id="proc-model">
         <h2><span class="sec-num">2.</span>Data Model</h2>
-        <p class="process-lead">Data from ERP, planning tools, and operational systems flows through three tiers: <strong>Raw Tier</strong> retains the original records and their history to support data lineage; <strong>Transformed Tier</strong> validates, cleans, and standardizes the data while maintaining source traceability; and <strong>Reporting Tier</strong> organizes it into purpose-specific metrics and tables, including plans, forecasts, actuals, and related analysis. This shared foundation supports Tableau, Power BI, static HTML reports, and AI workflows. Please visit <a href="https://github.com/janebugai/rolling-cashflow-forecast/tree/main/data" target="_blank" rel="noopener">data directory on GitHub</a> for a mock-up data model</p>
+        <p class="process-lead">Data from Structured Data (ERP, Vena, etc), Unstructured Data (pdf, wiki pages etc), and Other Internal Sources flows through three tiers: <strong>Raw Tier</strong> retains the original records and their history to support data lineage; <strong>Transformed Tier</strong> validates, cleans, and standardizes the data while maintaining source traceability; and <strong>Reporting Tier</strong> organizes it into purpose-specific metrics and tables, including plans, forecasts, actuals, and related analysis. This shared foundation supports BI tools and dashboards (Tableau, Power BI, Sigma, etc.) and LLM applications. Please visit <a href="https://github.com/janebugai/rolling-cashflow-forecast/tree/main/data" target="_blank" rel="noopener">data directory on GitHub</a> for a mock-up data model</p>
         <div class="pipeline" role="img" aria-labelledby="pipelineTitle">
-          <p id="pipelineTitle" class="pipeline-sr">Data sources feed the FP&amp;A data model, which feeds reports</p>
+          <p id="pipelineTitle" class="pipeline-sr">Data sources feed the FP&amp;A data model, which feeds output</p>
           <div class="pipe-board">
             <div class="pipe-panel pipe-panel-src">
               <p class="pipe-panel-title">Data Sources</p>
               <ul class="pipe-stack">
-                <li>ERP</li>
-                <li>Planning tools</li>
-                <li>Operational systems</li>
+                <li>Structured Data<br>(ERP, Vena, etc)</li>
+                <li>Unstructured Data<br>(pdf, wiki pages etc)</li>
+                <li>Other Internal Sources</li>
               </ul>
             </div>
             <div class="pipe-panel pipe-panel-model">
               <p class="pipe-panel-title">FP&amp;A Data Model</p>
-              <div class="pipe-inner">
-                <div class="pipe-col pipe-col-raw">
-                  <h3>Raw Tier</h3>
-                  <ul class="pipe-files">
-                    <li>bitcoin_sales</li>
-                    <li>operating_payments</li>
-                    <li>capital_payments</li>
-                    <li>loan_draws</li>
-                    <li>bank_balance</li>
+              <div class="pipe-model">
+                <div class="pipe-box">
+                  <p class="pipe-box-title">Semantic Layer</p>
+                  <ul class="pipe-sem-row">
+                    <li>Business Entities<span>Customers, vendors, invoices, payments, departments, and legal entities</span></li>
+                    <li>Metrics and KPIs<span>i.e. Monthly cash outflow = qualifying cash payments made during the month. Forecast accuracy is measured using an agreed calculation and compared with a target.</span></li>
+                    <li>Security and Access Control<span>Business managers see their own department’s expenses. Accountants see company-wide totals; individual salary details are restricted to authorized users.</span></li>
                   </ul>
                 </div>
-                <div class="pipe-h-arrow" aria-hidden="true">→</div>
-                <div class="pipe-col pipe-col-xf">
-                  <h3>Transformed Tier</h3>
-                  <ul class="pipe-files">
-                    <li>activity_mapping</li>
-                    <li>cash_transactions</li>
-                    <li>opening_balance</li>
-                  </ul>
-                </div>
-                <div class="pipe-h-arrow" aria-hidden="true">→</div>
-                <div class="pipe-col pipe-col-rpt">
-                  <h3>Reporting Tier</h3>
-                  <ul class="pipe-files">
-                    <li>monthly_cash_flow_lines</li>
-                    <li>monthly_cash_summary</li>
-                  </ul>
+                <div class="pipe-box">
+                  <p class="pipe-box-title">Dimensional Models</p>
+                  <div class="pipe-inner">
+                    <div class="pipe-col pipe-col-raw">
+                      <h3>Raw Tier</h3>
+                      <p class="pipe-blurb">Retains the original records and their history to support data lineage</p>
+                    </div>
+                    <div class="pipe-h-arrow" aria-hidden="true">→</div>
+                    <div class="pipe-col pipe-col-xf">
+                      <h3>Transformed Tier</h3>
+                      <p class="pipe-blurb">Validates, cleans, and standardizes the data while maintaining source traceability</p>
+                    </div>
+                    <div class="pipe-h-arrow" aria-hidden="true">→</div>
+                    <div class="pipe-col pipe-col-rpt">
+                      <h3>Reporting Tier</h3>
+                      <p class="pipe-blurb">Organizes data into purpose-specific metrics and tables, including plans, forecasts, actuals, and related analysis</p>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
             <div class="pipe-panel pipe-panel-out">
-              <p class="pipe-panel-title">Reports</p>
+              <p class="pipe-panel-title">Output</p>
               <ul class="pipe-stack">
-                <li>Tableau</li>
-                <li>Power BI</li>
-                <li>Static HTML</li>
-                <li>AI workflows</li>
+                <li>BI Tools and Dashboard<br>(Tableau, Power BI, Sigma, etc)</li>
+                <li>LLM Applications</li>
               </ul>
             </div>
           </div>
@@ -612,70 +701,31 @@
       </section>
 
       <section class="process-section" id="proc-reporting">
-        <h2><span class="sec-num">4.</span>Reporting</h2>
-        <p class="process-lead">The reporting layer turns the shared definitions into the tables that reports actually read: one row per reporting line per month, and a monthly summary carrying the section nets and the cash roll-forward. It is built for a rolling twelve-month view refreshed after each close, so treasury, FP&amp;A, and operations all work from the same numbers at the level of detail each one needs.</p>
-        <div class="table-wrap">
-          <table class="process-map">
-            <thead>
-              <tr>
-                <th>Report</th>
-                <th>Audience</th>
-                <th>Question it answers</th>
-                <th>Built with</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>Rolling twelve-month cash flow</td>
-                <td>Treasury and finance leadership</td>
-                <td>Where is cash heading over the next year?</td>
-                <td><code>monthly_cash_summary.csv</code></td>
-              </tr>
-              <tr>
-                <td>Monthly cash flow detail</td>
-                <td>FP&amp;A</td>
-                <td>Which lines moved, and by how much?</td>
-                <td><code>monthly_cash_flow_lines.csv</code></td>
-              </tr>
-              <tr>
-                <td>Payment-level review</td>
-                <td>Operations</td>
-                <td>Which transactions sit behind a line?</td>
-                <td><code>cash_transactions.csv</code> drilldown</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-        <p class="process-lead" style="margin-top:14px">Reports carry no business logic of their own. Every figure arrives precomputed from <code>data/reporting/</code>, so a chart and a spreadsheet built on the same file cannot disagree, and a definition changes in one place rather than in each report. Amounts are signed once, with inflows positive and outflows negative, and months are stored as month starts so periods line up across files.</p>
-        <p class="process-lead">Each number stays traceable back to a transaction. A bar in the chart is a section net, which resolves to statement lines in <code>monthly_cash_flow_lines.csv</code>, which join to individual <code>transaction_id</code> values in <code>data/transformed/cash_transactions.csv</code> on <code>reporting_month</code> and <code>reporting_line</code>. The Forecast tab works that path end to end: expand a section, then click a monthly figure to list the source transactions behind it. Column-level detail for both reporting files is in <code>data/reporting/README.md</code>.</p>
-        <div class="table-wrap">
-          <table class="process-map">
-            <thead>
-              <tr>
-                <th>Reporting file</th>
-                <th>What is kept</th>
-                <th>Used for</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>monthly_cash_flow_lines.csv</td>
-                <td>Signed amount by month and reporting line</td>
-                <td>Statement lines and drilldown keys</td>
-              </tr>
-              <tr>
-                <td>monthly_cash_summary.csv</td>
-                <td>Section nets, beginning and ending cash</td>
-                <td>Chart totals and cash roll-forward</td>
-              </tr>
-            </tbody>
-          </table>
+        <h2><span class="sec-num">4.</span>Data Governance</h2>
+        <p class="process-lead">Follow two source payments from the original record through shared rules and quality checks. Finance owns definitions; Operations resolves source-payment questions; Technology maintains the pipeline and checks. Amounts and totals are read from the sample files.</p>
+        <div class="walkthrough" id="governance-walkthrough">
+          <p class="process-lead wt-loading" id="wt-loading">Loading the sample payment…</p>
+          <div id="wt-app" hidden>
+            <div class="wt-steps" role="tablist" aria-label="Data governance steps">
+              <button type="button" class="wt-step" role="tab" id="wt-tab-1" aria-controls="wt-panel-1" aria-selected="true">1. Original record</button>
+              <button type="button" class="wt-step" role="tab" id="wt-tab-2" aria-controls="wt-panel-2" aria-selected="false" tabindex="-1">2. Shared rules</button>
+              <button type="button" class="wt-step" role="tab" id="wt-tab-3" aria-controls="wt-panel-3" aria-selected="false" tabindex="-1">3. Quality checks</button>
+              <button type="button" class="wt-step" role="tab" id="wt-tab-4" aria-controls="wt-panel-4" aria-selected="false" tabindex="-1">4. Governance</button>
+            </div>
+            <div>
+              <div class="wt-panel" role="tabpanel" id="wt-panel-1" aria-labelledby="wt-tab-1"></div>
+              <div class="wt-panel" role="tabpanel" id="wt-panel-2" aria-labelledby="wt-tab-2" hidden></div>
+              <div class="wt-panel" role="tabpanel" id="wt-panel-3" aria-labelledby="wt-tab-3" hidden></div>
+              <div class="wt-panel" role="tabpanel" id="wt-panel-4" aria-labelledby="wt-tab-4" hidden></div>
+            </div>
+          </div>
         </div>
       </section>
     </div>
 
   </div>
 </div>
+<div id="txnTip" class="txn-tip" hidden></div>
 
 <script>
 /* Report logic. Monthly actuals load from the reporting-tier CSV mart. */
@@ -691,33 +741,45 @@ const CASH_FLOW_CATEGORIES = [
 const STATEMENT_SECTIONS = [
   {
     id: "operating",
-    label: "Operating Activities",
+    label: "Operating",
     color: "var(--cat-operating)",
     netKey: "netOperating",
-    lines: ["Mining cash received", "Mining power paid", "Overhead paid"]
+    activities: [
+      { id: "operating-mining", label: "Bitcoin mining operations", lines: ["Mining cash received", "Mining power paid"] },
+      { id: "operating-corporate", label: "Corporate operations", lines: ["Overhead paid"] }
+    ]
   },
   {
     id: "investing",
-    label: "Investing Activities",
+    label: "Investing",
     color: "var(--cat-investing)",
     netKey: "netInvesting",
-    lines: ["Data center buildout paid", "Mining equipment paid"]
+    activities: [
+      { id: "investing-mining", label: "Bitcoin mining operations", lines: ["Mining equipment paid"] },
+      { id: "investing-datacenter", label: "Data center expansion", lines: ["Data center buildout paid"] }
+    ]
   },
   {
     id: "financing",
-    label: "Financing Activities",
+    label: "Financing",
     color: "var(--cat-financing)",
     netKey: "netFinancing",
-    lines: ["Construction loan drawn"]
+    activities: [
+      { id: "financing-datacenter", label: "Data center financing", lines: ["Construction loan drawn"] }
+    ]
   }
 ];
 
 let NUM_MONTHS;
-let MONTH_KEYS;
 let MONTH_LABELS;
 let TRANSACTIONS = [];
 let lastForecast = null;
-const sectionExpanded = { operating: true, investing: true, financing: true };
+const sectionExpanded = { operating: true, investing: false, financing: false };
+const activityExpanded = {};
+STATEMENT_SECTIONS.forEach(section => {
+  section.activities.forEach(activity => { activityExpanded[activity.id] = false; });
+});
+activityExpanded["operating-corporate"] = true;
 
 function monthLabel(iso) {
   const parts = String(iso).split("-");
@@ -745,7 +807,6 @@ function buildForecast(summary, lines, transactions) {
   summary = summary.slice().sort((a, b) => String(a.reporting_month).localeCompare(String(b.reporting_month)));
   const months = summary.map(r => r.reporting_month);
   NUM_MONTHS = months.length;
-  MONTH_KEYS = months;
   MONTH_LABELS = months.map(monthLabel);
   TRANSACTIONS = transactions || [];
 
@@ -759,9 +820,15 @@ function buildForecast(summary, lines, transactions) {
   const outflow = months.map((_, i) => operatingOutflow[i] + investingOutflow[i] + financingOutflow[i]);
 
   const lineValues = {};
+  const activityValues = {};
   STATEMENT_SECTIONS.forEach(section => {
-    section.lines.forEach(name => {
-      lineValues[name] = lineSeries(lines, months, name);
+    section.activities.forEach(activity => {
+      activity.lines.forEach(name => {
+        lineValues[name] = lineSeries(lines, months, name);
+      });
+      activityValues[activity.id] = months.map((_, i) =>
+        activity.lines.reduce((sum, name) => sum + lineValues[name][i], 0)
+      );
     });
   });
 
@@ -781,7 +848,9 @@ function buildForecast(summary, lines, transactions) {
     netOperating: col(summary, "net_operating_cash_flow"),
     netInvesting: col(summary, "net_investing_cash_flow"),
     netFinancing: col(summary, "net_financing_cash_flow"),
-    lineValues: lineValues
+    lineValues: lineValues,
+    activityValues: activityValues,
+    isForecast: summary.map(r => r.amount_type === "Forecast")
   };
 }
 
@@ -791,8 +860,8 @@ function fmtMoney(v) {
 }
 
 function fmtHeatCell(v) {
-  const cls = v < 0 ? "cell-heat-neg" : "cell-heat-pos";
-  return `<td class="${cls}">${fmtMoney(v)}</td>`;
+  const cls = v < 0 ? ` class="cell-heat-neg"` : "";
+  return `<td${cls}>${fmtMoney(v)}</td>`;
 }
 
 function fmtCell(v, click) {
@@ -838,10 +907,73 @@ function niceTicks(min, max, tickCount) {
   return { min: niceMin, max: max, ticks };
 }
 
+function validateAggregates(forecast, summary, lines, transactions) {
+  const failures = [];
+  function txnSum(pred) {
+    return transactions.reduce((sum, row) => pred(row) ? sum + num(row.signed_amount_usd) : sum, 0);
+  }
+  function same(left, right) {
+    return Math.round(left) === Math.round(right);
+  }
+  lines.forEach(line => {
+    const reported = num(line.signed_amount_usd);
+    const total = txnSum(row => row.reporting_month === line.reporting_month && row.reporting_line === line.reporting_line);
+    if (!same(reported, total)) {
+      failures.push(monthLabel(line.reporting_month) + " · " + line.reporting_line + " is " + fmtMoney(reported) + "; its transactions sum to " + fmtMoney(total) + ".");
+    }
+  });
+  STATEMENT_SECTIONS.forEach(section => {
+    section.activities.forEach(activity => {
+      forecast.months.forEach((month, i) => {
+        const reported = forecast.activityValues[activity.id][i];
+        const total = txnSum(row =>
+          row.reporting_month === month
+          && row.cash_flow_section === section.label
+          && row.business_activity === activity.label
+        );
+        if (!same(reported, total)) {
+          failures.push(monthLabel(month) + " · " + section.label + " · " + activity.label + " is " + fmtMoney(reported) + "; its transactions sum to " + fmtMoney(total) + ".");
+        }
+      });
+    });
+  });
+  summary.forEach(row => {
+    const month = row.reporting_month;
+    const checks = [
+      ["Operating", num(row.net_operating_cash_flow), row => row.reporting_month === month && row.cash_flow_section === "Operating"],
+      ["Investing", num(row.net_investing_cash_flow), row => row.reporting_month === month && row.cash_flow_section === "Investing"],
+      ["Financing", num(row.net_financing_cash_flow), row => row.reporting_month === month && row.cash_flow_section === "Financing"],
+      ["Net change in cash", num(row.net_change_in_cash), row => row.reporting_month === month]
+    ];
+    checks.forEach(check => {
+      const total = txnSum(check[2]);
+      if (!same(check[1], total)) {
+        failures.push(monthLabel(month) + " · " + check[0] + " is " + fmtMoney(check[1]) + "; its transactions sum to " + fmtMoney(total) + ".");
+      }
+    });
+  });
+  return failures;
+}
+
+function showValidation(failures) {
+  const el = document.getElementById("validateStatus");
+  if (!failures.length) {
+    el.hidden = false;
+    el.classList.remove("is-fail");
+    el.textContent = "Click a reporting line to drill down to the transactions behind it.";
+    return;
+  }
+  const shown = failures.slice(0, 4);
+  const extra = failures.length - shown.length;
+  el.hidden = false;
+  el.classList.add("is-fail");
+  el.textContent = "Validation failed. " + shown.join(" ") + (extra > 0 ? " " + extra + " more mismatches." : "");
+}
+
 function renderChart(forecast) {
   const svg = document.getElementById("chartSvg");
-  const W = 1180, H = 360;
-  const marginLeft = 68, marginRight = 20, marginTop = 26, marginBottom = 50;
+  const W = 1180, H = 270;
+  const marginLeft = 68, marginRight = 20, marginTop = 26, marginBottom = 64;
   const plotW = W - marginLeft - marginRight;
   const plotH = H - marginTop - marginBottom;
 
@@ -892,7 +1024,10 @@ function renderChart(forecast) {
     if (cumOut > 0) {
       svgParts.push(`<text x="${x + barWidth / 2}" y="${yFor(-cumOut) + 14}" text-anchor="middle" font-size="10" font-weight="600" fill="var(--ink-soft)">${fmtMoney(-cumOut)}</text>`);
     }
-    svgParts.push(`<text x="${x + barWidth / 2}" y="${H - marginBottom + 34}" text-anchor="middle" font-size="11" fill="#8b90a0">${MONTH_LABELS[i]}</text>`);
+    svgParts.push(`<text x="${x + barWidth / 2}" y="${H - marginBottom + 28}" text-anchor="middle" font-size="11" fill="#8b90a0">${MONTH_LABELS[i]}</text>`);
+    if (forecast.isForecast[i]) {
+      svgParts.push(`<text x="${x + barWidth / 2}" y="${H - marginBottom + 42}" text-anchor="middle" font-size="10" fill="#8b90a0">Forecast</text>`);
+    }
   }
 
   const linePoints = forecast.net.map((v, i) => {
@@ -909,41 +1044,79 @@ function renderChart(forecast) {
   svg.innerHTML = svgParts.join("\n");
 }
 
-function showDrilldown(month, line) {
-  const host = document.getElementById("drilldown");
-  const title = document.getElementById("drilldownTitle");
-  const body = document.getElementById("drilldownBody");
-  const rows = TRANSACTIONS.filter(r => r.reporting_month === month && r.reporting_line === line)
+let openTxnCell = null;
+
+function hideTxnTip() {
+  document.getElementById("txnTip").hidden = true;
+  openTxnCell = null;
+}
+
+document.addEventListener("click", event => {
+  if (!openTxnCell) return;
+  if (event.target.closest("#txnTip") || event.target.closest("td.cell-click")) return;
+  hideTxnTip();
+});
+
+function transactionsForCell(month, line) {
+  return TRANSACTIONS.filter(r => r.reporting_month === month && r.reporting_line === line)
     .sort((a, b) => String(a.cash_date).localeCompare(String(b.cash_date)));
-  title.textContent = monthLabel(month) + " · " + line;
+}
+
+function showTxnTip(cell) {
+  const tip = document.getElementById("txnTip");
+  const month = cell.getAttribute("data-month");
+  const line = cell.getAttribute("data-line");
+  const rows = transactionsForCell(month, line);
+  const title = monthLabel(month) + " · " + line;
+  let body;
   if (!rows.length) {
-    body.innerHTML = `<tr><td colspan="4">No source transactions this month.</td></tr>`;
+    body = `<p class="txn-empty">No source transactions this month.</p>`;
   } else {
-    body.innerHTML = rows.map(r =>
-      `<tr><td>${escapeHtml(r.transaction_id)}</td><td>${escapeHtml(r.cash_date)}</td><td class="num">${fmtMoney(num(r.signed_amount_usd))}</td><td>${escapeHtml(r.source_file)}</td></tr>`
-    ).join("");
+    body = `<table class="source-table"><thead><tr><th>transaction_id</th><th>vendor</th><th>cash_date</th><th class="num">signed_amount_usd</th><th>source_file</th></tr></thead><tbody>`
+      + rows.map(r => `<tr><td>${escapeHtml(r.transaction_id)}</td><td>${escapeHtml(r.vendor)}</td><td>${escapeHtml(r.cash_date)}</td><td class="num">${fmtMoney(num(r.signed_amount_usd))}</td><td>${escapeHtml(r.source_file)}</td></tr>`).join("")
+      + `</tbody></table>`;
   }
-  host.hidden = false;
+  tip.innerHTML = `<h3>${escapeHtml(title)}</h3>${body}`;
+  tip.hidden = false;
+  const rect = cell.getBoundingClientRect();
+  const tipRect = tip.getBoundingClientRect();
+  let top = rect.bottom + 8;
+  if (top + tipRect.height > window.innerHeight - 8) top = rect.top - tipRect.height - 8;
+  let left = Math.min(rect.left, window.innerWidth - tipRect.width - 8);
+  tip.style.top = Math.max(8, top) + "px";
+  tip.style.left = Math.max(8, left) + "px";
 }
 
 function renderTable(forecast) {
+  hideTxnTip();
   const headRow = document.getElementById("tableHeadRow");
-  headRow.innerHTML = "<th>&nbsp;</th>" + MONTH_LABELS.map(m => `<th>${m}</th>`).join("");
+  headRow.innerHTML = "<th>Row Labels</th>" + MONTH_LABELS.map((label, i) => {
+    const forecastMonth = forecast.isForecast[i];
+    const mark = forecastMonth ? "Forecast" : "Actuals";
+    const cls = forecastMonth ? ` class="th-forecast"` : "";
+    return `<th${cls}>${label}<span class="fcst-mark">${mark}</span></th>`;
+  }).join("");
 
   let html = `<tr class="row-total"><td>Beginning cash</td>${forecast.beginning.map(v => fmtCell(v)).join("")}</tr>`;
   STATEMENT_SECTIONS.forEach(section => {
     const expanded = sectionExpanded[section.id];
     const caret = expanded ? "▾" : "▸";
     const netCells = forecast[section.netKey].map(v => fmtCell(v)).join("");
-    html += `<tr class="row-parent row-total" data-section="${section.id}"><td><span class="caret">${caret}</span>${section.label}</td>${netCells}</tr>`;
-    if (expanded) {
-      section.lines.forEach(name => {
+    html += `<tr class="row-parent row-total" data-section="${section.id}"><td><span class="caret">${caret}</span><span class="cat-dot" style="background:${section.color}"></span>${section.label}</td>${netCells}</tr>`;
+    if (!expanded) return;
+    section.activities.forEach(activity => {
+      const activityOpen = activityExpanded[activity.id] !== false;
+      const activityCaret = activityOpen ? "▾" : "▸";
+      const activityCells = forecast.activityValues[activity.id].map(v => fmtCell(v)).join("");
+      html += `<tr class="row-activity" data-activity="${activity.id}"><td><span class="caret">${activityCaret}</span>${escapeHtml(activity.label)}</td>${activityCells}</tr>`;
+      if (!activityOpen) return;
+      activity.lines.forEach(name => {
         const cells = forecast.lineValues[name].map((v, i) =>
           fmtCell(v, { month: forecast.months[i], line: name })
         ).join("");
-        html += `<tr class="row-sub"><td><span class="cat-dot" style="background:${section.color}"></span>${name}</td>${cells}</tr>`;
+        html += `<tr class="row-sub"><td>${escapeHtml(name)}</td>${cells}</tr>`;
       });
-    }
+    });
   });
   html += `<tr class="row-total"><td>Net change in cash</td>${forecast.net.map(v => fmtHeatCell(v)).join("")}</tr>`;
   html += `<tr class="row-total"><td>Ending cash</td>${forecast.ending.map(v => fmtHeatCell(v)).join("")}</tr>`;
@@ -958,10 +1131,21 @@ function renderTable(forecast) {
       renderTable(lastForecast);
     });
   });
+  body.querySelectorAll("tr.row-activity").forEach(row => {
+    row.addEventListener("click", () => {
+      const id = row.getAttribute("data-activity");
+      activityExpanded[id] = !activityExpanded[id];
+      renderTable(lastForecast);
+    });
+  });
   body.querySelectorAll("td.cell-click").forEach(cell => {
-    cell.addEventListener("click", event => {
-      event.stopPropagation();
-      showDrilldown(cell.getAttribute("data-month"), cell.getAttribute("data-line"));
+    cell.addEventListener("click", () => {
+      if (openTxnCell === cell) {
+        hideTxnTip();
+        return;
+      }
+      showTxnTip(cell);
+      openTxnCell = cell;
     });
   });
 }
@@ -1004,7 +1188,7 @@ function parseCSV(text) {
 }
 
 function fetchCsv(path) {
-  return fetch(path).then(res => {
+  return fetch(path, { cache: "no-store" }).then(res => {
     if (!res.ok) throw new Error(path + " HTTP " + res.status);
     return res.text().then(parseCSV);
   });
@@ -1019,9 +1203,12 @@ function loadReportingMart() {
   return Promise.all([
     fetchCsv(REPORTING_DIR + "monthly_cash_summary.csv"),
     fetchCsv(REPORTING_DIR + "monthly_cash_flow_lines.csv"),
-    fetchCsv(TRANSFORMED_DIR + "cash_transactions.csv")
-  ]).then(([summary, lines, transactions]) => {
+    fetchCsv(TRANSFORMED_DIR + "cash_transactions.csv"),
+    fetchCsv(TRANSFORMED_DIR + "forecast_transactions.csv")
+  ]).then(([summary, lines, actuals, forecastTxns]) => {
+    const transactions = actuals.concat(forecastTxns);
     lastForecast = buildForecast(summary, lines, transactions);
+    showValidation(validateAggregates(lastForecast, summary, lines, transactions));
     renderChart(lastForecast);
     renderTable(lastForecast);
   });
@@ -1037,9 +1224,10 @@ function escapeHtml(value) {
     .replace(/"/g, "&quot;");
 }
 
+let selectTab = function () {};
 (function initTabs() {
-  const tabs = Array.from(document.querySelectorAll("[role='tab']"));
-  function selectTab(selected) {
+  const tabs = Array.from(document.querySelectorAll(".tabs [role='tab']"));
+  selectTab = function (selected) {
     tabs.forEach(tab => {
       const on = tab === selected;
       tab.setAttribute("aria-selected", on ? "true" : "false");
@@ -1055,6 +1243,9 @@ function escapeHtml(value) {
     tab.addEventListener("click", () => selectTab(tab));
   });
 })();
+
+document.querySelector("#panel-forecast .table-wrap").addEventListener("scroll", hideTxnTip);
 </script>
+<script src="walkthrough.js"></script>
 </body>
 </html>

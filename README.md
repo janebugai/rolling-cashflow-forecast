@@ -4,7 +4,7 @@
 
 This report is a picture of cash going in and out of one fictional site as it moves from Bitcoin mining to a data center. The numbers are examples, not a live company feed. Raw extracts cover Bitcoin sales, operating bills, capital payments, loan draws, and the bank balance. Those pieces are tidied so months and dollars line up, then named the way a cash-flow statement does (day-to-day operations, building the facility, money from lenders). The Forecast tab shows that management cash flow view — not a GAAP statement — with a chart, monthly table, and drilldown to source transaction IDs.
 
-Then open the **Data process** tab in `cashflow-forecast.html` to see the full tables. Column details are in `data/raw/README.md`.
+Then open the **Data Flow** tab in `cashflow-forecast.html` to see the full tables. Column details are in `data/raw/README.md`.
 
 | System | Files | Grain | Payload |
 | --- | --- | --- | --- |
@@ -16,9 +16,9 @@ Then open the **Data process** tab in `cashflow-forecast.html` to see the full t
 
 ## 2. Data Model
 
-![FP&A data model: data sources feed the raw, transformed, and reporting tiers, which feed reports](docs/data-model.svg)
+![FP&A data model: data sources feed the raw, transformed, and reporting tiers, which feed output](chart/data-model.svg)
 
-Data Sources – ERP, planning tools, and operational systems provide the original records.
+Data Sources – Structured Data (ERP, Vena, etc), Unstructured Data (pdf, wiki pages etc), and Other Internal Sources provide the original records.
 
 Raw Tier – Data captured by operational systems in its original format, before business rules are applied.
 
@@ -26,7 +26,7 @@ Transformed Tier – Data is validated, cleaned, standardized, and mapped to con
 
 Reporting Tier – Transformed data is aggregated into metrics and tables designed for dashboards, analysis, and decision-making.
 
-Reports – Reports can use any tools on top of the foundation data model (i.e. Tableau, Power BI, static HTML, and AI workflows).
+Output – Output can use BI tools and dashboards (Tableau, Power BI, Sigma, etc.) and LLM applications on top of the foundation data model.
 
 The SQL transform keeps eligible settled, paid, and funded events, maps them through `activity_mapping.csv`, and writes one cash-activity row per transaction. Opening cash is stored separately and is not a cash-flow event. Column details are in `data/transformed/README.md`.
 
@@ -41,6 +41,8 @@ Rebuild with DuckDB SQL (`scripts/sql/`):
 ```
 python scripts/run_sql.py
 ```
+
+That runs three scripts: actuals for January–September, the October–December forecast, then the monthly report. The forecast is calculated in SQL. The browser only displays it.
 
 ## 3. Semantic Layer
 
@@ -58,7 +60,9 @@ The **Finance team** can use this dimension to summarize monthly cash flow by ca
 
 **The semantic layer also provides essential business context for AI.** It gives AI workflows access to approved definitions, relationships, and calculation rules—for example, what counts as a cash inflow and which periods contain actuals versus forecasts. Without this context, AI may misinterpret fields, apply inconsistent calculations, or invent definitions and unsupported figures. Connecting AI workflows to shared models and requiring answers to use queried results helps keep responses consistent with reporting tools. Validation and traceability to source data remain necessary to verify accuracy.
 
-## 4. Reporting
+## 4. Data Governance
+
+The Data Flow tab walks through payment `INV-PWR-2026-01` in five selectable steps: the original Accounts Payable record, the shared mapping, quality checks with two what-if simulations, the January operating cash-flow lines, and Finance versus Operations views. Displayed amounts are read from the sample files. The simulations describe how the existing SQL rejects a repeated transaction ID or an unmapped category; they do not change the files or run the pipeline. “View this payment in the report” opens the Forecast tab on that payment’s reporting-line drilldown.
 
 The reporting layer turns the shared definitions into the tables that reports actually read: one row per reporting line per month, and a monthly summary carrying the section nets and the cash roll-forward. It is built for a rolling twelve-month view refreshed after each close, so treasury, FP&A, and operations all work from the same numbers at the level of detail each one needs.
 

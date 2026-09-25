@@ -1,4 +1,4 @@
-"""Run the DuckDB SQL pipeline: transform actuals, then build monthly reporting CSVs.
+"""Run the DuckDB SQL pipeline: transform actuals, calculate the forecast, then build monthly reporting CSVs.
 
 Usage (from repo root):
     python scripts/run_sql.py
@@ -24,6 +24,7 @@ def run_sql(name: str) -> None:
 
 def main() -> None:
     run_sql("transform_actuals.sql")
+    run_sql("build_forecast.sql")
     run_sql("build_monthly_report.sql")
 
 
