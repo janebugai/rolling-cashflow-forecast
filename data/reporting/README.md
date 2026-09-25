@@ -2,16 +2,16 @@
 
 Transformed data is aggregated into metrics and tables designed for dashboards, analysis, and decision-making.
 
-These files are the foundation for the Forecast tab and for other tools (Tableau, Power BI, static HTML, AI workflows). Amounts are signed USD (inflows positive, outflows negative). Dates are month starts (`YYYY-MM-01`).
+These files are the foundation for the Forecast tab and for other tools (BI tools and dashboards such as Tableau, Power BI, and Sigma, and LLM applications). Amounts are signed USD (inflows positive, outflows negative). Dates are month starts (`YYYY-MM-01`).
 
-Rebuild with `python scripts/run_sql.py` (`scripts/sql/build_monthly_report.sql`). That script reads only `data/transformed/`; it does not re-map raw extracts.
+Rebuild with `python scripts/run_sql.py`. `scripts/sql/build_monthly_report.sql` reads `cash_transactions.csv` and `forecast_transactions.csv`. It does not re-map raw extracts. A month is `Forecast` when it falls after the nine actual months in `data/forecast/forecast_9_plus_3.csv`.
 
 | File | What is kept | Used for |
 | --- | --- | --- |
 | `monthly_cash_flow_lines.csv` | Signed amount by month and reporting line | Statement lines and drilldown keys |
 | `monthly_cash_summary.csv` | Section nets, beginning and ending cash | Chart totals and cash roll-forward |
 
-The dashboard fetches these two files, then drills into `data/transformed/cash_transactions.csv` by `reporting_month` and `reporting_line`.
+The dashboard fetches these two files, then drills into `data/transformed/cash_transactions.csv` and `forecast_transactions.csv` by `reporting_month` and `reporting_line`.
 
 ## `monthly_cash_flow_lines.csv`
 
@@ -23,8 +23,9 @@ One row per reporting line per month. Months with no activity still appear with 
 | cash_flow_section | `Operating`, `Investing`, or `Financing` |
 | business_activity | Mapped business process |
 | reporting_line | Line on the management cash flow view |
-| signed_amount_usd | Sum of transformed events for that line and month |
+| signed_amount_usd | Sum of actual and forecast events for that line and month |
 | display_order | Statement order (1–6) |
+| amount_type | `Actual` or `Forecast` |
 
 | display_order | cash_flow_section | reporting_line |
 | --- | --- | --- |
@@ -42,6 +43,7 @@ One row per month. Beginning cash in January is the opening bank snapshot. Later
 | Column | Meaning |
 | --- | --- |
 | reporting_month | First day of the month |
+| amount_type | `Actual` for January–September, `Forecast` for October–December |
 | mining_cash_received | Operating inflow |
 | mining_power_paid | Operating outflow |
 | overhead_paid | Operating outflow |

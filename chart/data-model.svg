@@ -1,0 +1,74 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1106 500" width="1106" height="500" role="img" aria-label="Data sources feed the FP&amp;A data model, which feeds output" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif">
+  <title>Data sources feed the FP&amp;A data model, which feeds output</title>
+  <g>
+    <rect x="10" y="10" width="236" height="480" rx="16" ry="16" fill="#e8f7f2"/>
+    <text x="128" y="34" font-size="12" font-weight="700" text-anchor="middle" fill="#1f2430">Data Sources</text>
+    <rect x="22" y="46" width="212" height="44" rx="10" ry="10" fill="#ffffff" stroke="#eceef5"/>
+    <text x="128" y="65" font-size="11" font-weight="600" text-anchor="middle" fill="#1f2430">Structured Data</text>
+    <text x="128" y="79" font-size="11" font-weight="600" text-anchor="middle" fill="#1f2430">(ERP, Vena, etc)</text>
+    <rect x="22" y="98" width="212" height="44" rx="10" ry="10" fill="#ffffff" stroke="#eceef5"/>
+    <text x="128" y="117" font-size="11" font-weight="600" text-anchor="middle" fill="#1f2430">Unstructured Data</text>
+    <text x="128" y="131" font-size="11" font-weight="600" text-anchor="middle" fill="#1f2430">(pdf, wiki pages etc)</text>
+    <rect x="22" y="150" width="212" height="44" rx="10" ry="10" fill="#ffffff" stroke="#eceef5"/>
+    <text x="128" y="169" font-size="11" font-weight="600" text-anchor="middle" fill="#1f2430">Other Internal</text>
+    <text x="128" y="183" font-size="11" font-weight="600" text-anchor="middle" fill="#1f2430">Sources</text>
+    <rect x="256" y="10" width="594" height="480" rx="16" ry="16" fill="#e8eefb"/>
+    <text x="553" y="34" font-size="12" font-weight="700" text-anchor="middle" fill="#1f2430">FP&amp;A Data Model</text>
+    <rect x="266" y="46" width="574" height="154" rx="12" ry="12" fill="#fbfbfe"/>
+    <text x="553" y="66" font-size="12" font-weight="700" text-anchor="middle" fill="#1f2430">Semantic Layer</text>
+    <rect x="278" y="78" width="178" height="110" rx="10" ry="10" fill="#e8f7f2"/>
+    <text x="367" y="96" font-size="11" font-weight="700" text-anchor="middle" fill="#1f2430">Business Entities</text>
+    <text x="367" y="116" font-size="10" font-weight="600" text-anchor="middle" fill="#1f2430">Customers, vendors, invoices,</text>
+    <text x="367" y="128" font-size="10" font-weight="600" text-anchor="middle" fill="#1f2430">payments, departments, and</text>
+    <text x="367" y="140" font-size="10" font-weight="600" text-anchor="middle" fill="#1f2430">legal entities</text>
+    <rect x="464" y="78" width="178" height="110" rx="10" ry="10" fill="#eef2fb"/>
+    <text x="553" y="96" font-size="11" font-weight="700" text-anchor="middle" fill="#1f2430">Metrics and KPIs</text>
+    <text x="553" y="116" font-size="10" font-weight="600" text-anchor="middle" fill="#1f2430">i.e. Monthly cash outflow =</text>
+    <text x="553" y="128" font-size="10" font-weight="600" text-anchor="middle" fill="#1f2430">qualifying cash payments made</text>
+    <text x="553" y="140" font-size="10" font-weight="600" text-anchor="middle" fill="#1f2430">during the month. Forecast</text>
+    <text x="553" y="152" font-size="10" font-weight="600" text-anchor="middle" fill="#1f2430">accuracy is measured using an</text>
+    <text x="553" y="164" font-size="10" font-weight="600" text-anchor="middle" fill="#1f2430">agreed calculation and compared</text>
+    <text x="553" y="176" font-size="10" font-weight="600" text-anchor="middle" fill="#1f2430">with a target.</text>
+    <rect x="650" y="78" width="178" height="110" rx="10" ry="10" fill="#f1eef8"/>
+    <text x="739" y="96" font-size="11" font-weight="700" text-anchor="middle" fill="#1f2430">Security and Access Control</text>
+    <text x="739" y="116" font-size="10" font-weight="600" text-anchor="middle" fill="#1f2430">Business managers see their own</text>
+    <text x="739" y="128" font-size="10" font-weight="600" text-anchor="middle" fill="#1f2430">department’s expenses.</text>
+    <text x="739" y="140" font-size="10" font-weight="600" text-anchor="middle" fill="#1f2430">Accountants see company-wide</text>
+    <text x="739" y="152" font-size="10" font-weight="600" text-anchor="middle" fill="#1f2430">totals; individual salary</text>
+    <text x="739" y="164" font-size="10" font-weight="600" text-anchor="middle" fill="#1f2430">details are restricted to</text>
+    <text x="739" y="176" font-size="10" font-weight="600" text-anchor="middle" fill="#1f2430">authorized users.</text>
+    <rect x="266" y="208" width="574" height="272" rx="12" ry="12" fill="#fbfbfe"/>
+    <text x="553" y="230" font-size="12" font-weight="700" text-anchor="middle" fill="#1f2430">Dimensional Models</text>
+    <rect x="276" y="242" width="170" height="226" rx="12" ry="12" fill="#e8f7f2"/>
+    <text x="361" y="264" font-size="12" font-weight="700" text-anchor="middle" fill="#1f2430">Raw Tier</text>
+    <text x="361" y="284" font-size="11" font-weight="600" text-anchor="middle" fill="#1f2430">Retains the original</text>
+    <text x="361" y="299" font-size="11" font-weight="600" text-anchor="middle" fill="#1f2430">records and their</text>
+    <text x="361" y="314" font-size="11" font-weight="600" text-anchor="middle" fill="#1f2430">history to support data</text>
+    <text x="361" y="329" font-size="11" font-weight="600" text-anchor="middle" fill="#1f2430">lineage</text>
+    <path d="M451 355 H459" stroke="#b7bdd0" stroke-width="1.5" fill="none"/>
+    <path d="M458 351 l5 4 l-5 4z" fill="#b7bdd0"/>
+    <rect x="468" y="242" width="170" height="226" rx="12" ry="12" fill="#eef2fb"/>
+    <text x="553" y="264" font-size="12" font-weight="700" text-anchor="middle" fill="#1f2430">Transformed Tier</text>
+    <text x="553" y="284" font-size="11" font-weight="600" text-anchor="middle" fill="#1f2430">Validates, cleans, and</text>
+    <text x="553" y="299" font-size="11" font-weight="600" text-anchor="middle" fill="#1f2430">standardizes the data</text>
+    <text x="553" y="314" font-size="11" font-weight="600" text-anchor="middle" fill="#1f2430">while maintaining source</text>
+    <text x="553" y="329" font-size="11" font-weight="600" text-anchor="middle" fill="#1f2430">traceability</text>
+    <path d="M643 355 H651" stroke="#b7bdd0" stroke-width="1.5" fill="none"/>
+    <path d="M650 351 l5 4 l-5 4z" fill="#b7bdd0"/>
+    <rect x="660" y="242" width="170" height="226" rx="12" ry="12" fill="#f1eef8"/>
+    <text x="745" y="264" font-size="12" font-weight="700" text-anchor="middle" fill="#1f2430">Reporting Tier</text>
+    <text x="745" y="284" font-size="11" font-weight="600" text-anchor="middle" fill="#1f2430">Organizes data into</text>
+    <text x="745" y="299" font-size="11" font-weight="600" text-anchor="middle" fill="#1f2430">purpose-specific metrics</text>
+    <text x="745" y="314" font-size="11" font-weight="600" text-anchor="middle" fill="#1f2430">and tables, including</text>
+    <text x="745" y="329" font-size="11" font-weight="600" text-anchor="middle" fill="#1f2430">plans, forecasts,</text>
+    <text x="745" y="344" font-size="11" font-weight="600" text-anchor="middle" fill="#1f2430">actuals, and related</text>
+    <text x="745" y="359" font-size="11" font-weight="600" text-anchor="middle" fill="#1f2430">analysis</text>
+    <rect x="860" y="10" width="236" height="480" rx="16" ry="16" fill="#eee9f6"/>
+    <text x="978" y="34" font-size="12" font-weight="700" text-anchor="middle" fill="#1f2430">Output</text>
+    <rect x="872" y="46" width="212" height="44" rx="10" ry="10" fill="#ffffff" stroke="#eceef5"/>
+    <text x="978" y="65" font-size="11" font-weight="600" text-anchor="middle" fill="#1f2430">BI Tools and Dashboard</text>
+    <text x="978" y="79" font-size="11" font-weight="600" text-anchor="middle" fill="#1f2430">(Tableau, Power BI, Sigma, etc)</text>
+    <rect x="872" y="98" width="212" height="34" rx="10" ry="10" fill="#ffffff" stroke="#eceef5"/>
+    <text x="978" y="119" font-size="12" font-weight="600" text-anchor="middle" fill="#1f2430">LLM Applications</text>
+  </g>
+</svg>

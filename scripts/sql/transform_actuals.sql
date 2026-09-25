@@ -1,10 +1,27 @@
 -- Transform raw extracts into cleaned cash-activity actuals.
 -- DuckDB dialect; reads/writes CSV.
+-- January–September stay actuals. Later months are calculated in build_forecast.sql.
 --
 -- Usage (from repo root):
 --     python scripts/run_sql.py
 --   or DuckDB CLI:
 --     duckdb < scripts/sql/transform_actuals.sql
+
+CREATE OR REPLACE TEMP TABLE scenario AS
+SELECT
+    trim(scenario) AS scenario,
+    fiscal_year::INTEGER AS fiscal_year,
+    actual_months::INTEGER AS actual_months,
+    forecast_months::INTEGER AS forecast_months
+FROM read_csv_auto('data/forecast/forecast_9_plus_3.csv', header = true);
+
+SELECT CASE
+    WHEN (SELECT count(*) FROM scenario) <> 1
+        OR (SELECT scenario FROM scenario) <> '9+3'
+        OR (SELECT actual_months + forecast_months FROM scenario) <> 12
+    THEN error('forecast_9_plus_3.csv must contain one 9+3 row whose months add to 12')
+    ELSE 'ok'
+END;
 
 CREATE OR REPLACE TEMP TABLE mapping AS
 SELECT
@@ -22,6 +39,7 @@ SELECT
     'bitcoin_sales.csv' AS source_file,
     'Bitcoin sales' AS source,
     lower(trim(status)) AS source_category,
+    '' AS vendor,
     settlement_date::DATE AS cash_date,
     'inflow' AS cash_direction,
     usd_received::DOUBLE AS unsigned_amount_usd
@@ -36,6 +54,7 @@ SELECT
     'operating_payments.csv',
     'Operating payments',
     trim(cost_category),
+    trim(vendor),
     payment_date::DATE,
     'outflow',
     amount_paid::DOUBLE
@@ -50,6 +69,7 @@ SELECT
     'capital_payments.csv',
     'Capital payments',
     trim(spend_category),
+    trim(vendor),
     payment_date::DATE,
     'outflow',
     amount_paid::DOUBLE
@@ -64,6 +84,7 @@ SELECT
     'loan_draws.csv',
     'Loan draws',
     lower(trim(status)),
+    trim(lender),
     funding_date::DATE,
     'inflow',
     draw_amount::DOUBLE
@@ -76,6 +97,7 @@ SELECT
     s.source_system,
     s.source_file,
     s.source_category,
+    s.vendor,
     s.cash_date,
     date_trunc('month', s.cash_date)::DATE AS reporting_month,
     m.business_activity,
@@ -96,6 +118,25 @@ SELECT CASE
     THEN error('Unmapped category found. Add it to activity_mapping.csv; unmapped activity is not assigned to Other.')
     WHEN (SELECT count(*) FROM mapped) <> (SELECT count(DISTINCT transaction_id) FROM mapped)
     THEN error('Transformed transaction_id values are not unique.')
+    WHEN EXISTS (
+        SELECT 1 FROM mapped
+        WHERE source_file IN ('operating_payments.csv', 'capital_payments.csv', 'loan_draws.csv')
+          AND trim(coalesce(vendor, '')) = ''
+    )
+    THEN error('A payment or loan draw is missing its vendor')
+    ELSE 'ok'
+END;
+
+CREATE OR REPLACE TEMP TABLE actuals AS
+SELECT mapped.*
+FROM mapped
+CROSS JOIN scenario
+WHERE year(mapped.cash_date) = scenario.fiscal_year
+    AND month(mapped.cash_date) <= scenario.actual_months;
+
+SELECT CASE
+    WHEN (SELECT count(*) FROM mapped) <> (SELECT count(*) FROM actuals)
+    THEN error('A source event falls outside the 9 actual months. Remove it from data/raw/; October–December are calculated, not typed as actuals.')
     ELSE 'ok'
 END;
 
@@ -105,6 +146,7 @@ COPY (
         source_system,
         source_file,
         source_category,
+        vendor,
         strftime(cash_date, '%Y-%m-%d') AS cash_date,
         strftime(reporting_month, '%Y-%m-%d') AS reporting_month,
         business_activity,
@@ -112,7 +154,7 @@ COPY (
         reporting_line,
         cash_direction,
         CAST(signed_amount_usd AS BIGINT) AS signed_amount_usd
-    FROM mapped
+    FROM actuals
     ORDER BY cash_date, transaction_id
 ) TO 'data/transformed/cash_transactions.csv' (HEADER, DELIMITER ',');
 
@@ -132,15 +174,15 @@ COPY (
 ) TO 'data/transformed/opening_balance.csv' (HEADER, DELIMITER ',');
 
 SELECT CASE
-    WHEN (SELECT sum(signed_amount_usd) FILTER (WHERE cash_flow_section = 'Operating' AND cash_direction = 'inflow') FROM mapped) <> 5000000
-    THEN error('Annual operating inflows != 5000000')
-    WHEN (SELECT sum(signed_amount_usd) FILTER (WHERE cash_flow_section = 'Operating' AND cash_direction = 'outflow') FROM mapped) <> -4000000
-    THEN error('Annual operating outflows != -4000000')
-    WHEN (SELECT sum(signed_amount_usd) FILTER (WHERE cash_flow_section = 'Investing' AND cash_direction = 'outflow') FROM mapped) <> -4500000
-    THEN error('Annual investing outflows != -4500000')
-    WHEN (SELECT sum(signed_amount_usd) FILTER (WHERE cash_flow_section = 'Financing' AND cash_direction = 'inflow') FROM mapped) <> 2500000
-    THEN error('Annual financing inflows != 2500000')
-    WHEN (SELECT sum(signed_amount_usd) FROM mapped) <> -1000000
-    THEN error('Total change in cash != -1000000')
+    WHEN (SELECT sum(signed_amount_usd) FILTER (WHERE cash_flow_section = 'Operating' AND cash_direction = 'inflow') FROM actuals) <> 3500000
+    THEN error('Nine-month operating inflows != 3500000')
+    WHEN (SELECT sum(signed_amount_usd) FILTER (WHERE cash_flow_section = 'Operating' AND cash_direction = 'outflow') FROM actuals) <> -3000000
+    THEN error('Nine-month operating outflows != -3000000')
+    WHEN (SELECT sum(signed_amount_usd) FILTER (WHERE cash_flow_section = 'Investing' AND cash_direction = 'outflow') FROM actuals) <> -3500000
+    THEN error('Nine-month investing outflows != -3500000')
+    WHEN (SELECT sum(signed_amount_usd) FILTER (WHERE cash_flow_section = 'Financing' AND cash_direction = 'inflow') FROM actuals) <> 2000000
+    THEN error('Nine-month financing inflows != 2000000')
+    WHEN (SELECT sum(signed_amount_usd) FROM actuals) <> -1000000
+    THEN error('Nine-month change in cash != -1000000')
     ELSE 'OK  transform_actuals.sql'
 END;

@@ -4,12 +4,13 @@ Data is validated, cleaned, standardized, and mapped to consistent business defi
 
 Amounts are plain numbers (no `$` or commas). Dates are ISO `YYYY-MM-DD`. Receipts and loan draws are positive; payments are negative. Bitcoin sale proceeds are operating cash receipts in a management cash flow view, not a GAAP statement.
 
-Rebuild with `python scripts/run_sql.py` (`scripts/sql/transform_actuals.sql`). That script reads `data/raw/` plus `activity_mapping.csv` and writes `cash_transactions.csv` and `opening_balance.csv`.
+Rebuild with `python scripts/run_sql.py`. `scripts/sql/transform_actuals.sql` reads `data/raw/` plus `activity_mapping.csv` and writes `cash_transactions.csv` and `opening_balance.csv` for the nine actual months. `scripts/sql/build_forecast.sql` then writes `forecast_transactions.csv` for October–December.
 
 | File | Role | Grain |
 | --- | --- | --- |
 | `activity_mapping.csv` | Lookup used in the transform; not a cash-event output | Source × category |
-| `cash_transactions.csv` | Eligible cash events, mapped and signed | One row per transaction |
+| `cash_transactions.csv` | Eligible cash events, mapped and signed | One row per actual transaction |
+| `forecast_transactions.csv` | Calculated October–December events | One row per reporting line per forecast month |
 | `opening_balance.csv` | Bank snapshot copied from raw | One account row |
 
 ## `activity_mapping.csv`
@@ -43,6 +44,7 @@ One row per eligible cash event. Kept statuses: sales `SETTLED`, invoices `PAID`
 | source_system | Source-system label |
 | source_file | Raw file name |
 | source_category | Category used to join `activity_mapping.csv` |
+| vendor | Payee on payment rows. Loan draws use the lender. Bitcoin sales have no vendor. |
 | cash_date | Date cash moved |
 | reporting_month | First day of the month that contains `cash_date` |
 | business_activity | Mapped business process |
@@ -50,6 +52,10 @@ One row per eligible cash event. Kept statuses: sales `SETTLED`, invoices `PAID`
 | reporting_line | Mapped reporting line |
 | cash_direction | `inflow` or `outflow` |
 | signed_amount_usd | Signed USD amount (inflows positive, outflows negative) |
+
+## `forecast_transactions.csv`
+
+Same columns as `cash_transactions.csv`. One row per reporting line for October, November, and December, including zeros. `source_system` is `Forecast`. `source_file` is `forecast_9_plus_3.csv`, or `plan_schedule.csv` when that file sets the amount. Recurring operating lines are the trailing three actual months, rounded to whole dollars. Data center buildout repeats September. Mining equipment and the construction loan stay zero unless `data/forecast/plan_schedule.csv` names that line and month.
 
 ## `opening_balance.csv`
 

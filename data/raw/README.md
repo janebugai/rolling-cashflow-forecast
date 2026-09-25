@@ -4,6 +4,8 @@ Data captured by operational systems in its original format, before business rul
 
 These files are fictional extracts. Amounts are plain numbers (no `$` or commas). Dates are ISO `YYYY-MM-DD`. They are not rebuilt by SQL; edit them here, then run `python scripts/run_sql.py` to refresh transformed and reporting files.
 
+Actual cash events run through September 2026. October–December are not typed here as settled, paid, or funded rows. `data/forecast/forecast_9_plus_3.csv` marks those three months as forecast, and `scripts/sql/build_forecast.sql` calculates them.
+
 | File | Source system | Grain |
 | --- | --- | --- |
 | `bitcoin_sales.csv` | Treasury / exchange | Settled sale |
