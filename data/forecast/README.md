@@ -1,8 +1,8 @@
-# Forecast inputs
+# Forecast
 
-These files set the 9+3 split and any planned amounts that should replace a calculated driver. They are not rebuilt by SQL. Edit them here, then run `python scripts/run_sql.py`.
+Plans, forecasts, and actuals are organized together for the reporting view. These files mark which periods are actual and which are forecast, and any planned amount that should replace a calculated driver. They are not rebuilt by SQL. Edit them here, then run `python scripts/run_sql.py`.
 
-January–September stay actual source events. October–December are calculated in `scripts/sql/build_forecast.sql` and written to `data/transformed/forecast_transactions.csv`. Amounts are plain signed USD (inflows positive, outflows negative). Dates are ISO `YYYY-MM-DD`.
+January–September stay actual source events. October–December are calculated in `scripts/sql/build_forecast.sql` and written to `data/transformed/forecast_transactions.csv`. The Forecast tab shows the result as a management cash flow view — not a GAAP statement — with a chart, monthly table, and drilldown to source transaction IDs. Amounts are plain signed USD (inflows positive, outflows negative). Dates are ISO `YYYY-MM-DD`.
 
 | File | Role | Grain |
 | --- | --- | --- |
