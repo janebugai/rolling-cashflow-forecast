@@ -77,7 +77,67 @@
 
   /* --- chart --- */
   .chart-section {
-    margin-bottom: 8px;
+    margin-bottom: 12px;
+  }
+
+  .forecast-layout {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .mining-assumption {
+    display: flex;
+    width: 100%;
+    margin: -10px 0 0 0;
+    padding: 0;
+    background: none;
+  }
+
+  .mining-fields {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    width: 100%;
+    gap: 4px;
+    padding: 8px 12px;
+    background: var(--panel-bg);
+    border-radius: 10px;
+  }
+
+  .mining-scenario {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--ink);
+  }
+
+  .mining-controls {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 8px 12px;
+  }
+
+  .mining-assumption label {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 6px;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--ink);
+  }
+
+  .mining-assumption input {
+    width: 110px;
+    padding: 4px 8px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    font: inherit;
+    font-size: 14px;
+    font-weight: 400;
+    color: var(--ink);
   }
 
   .chart-wrap {
@@ -97,7 +157,7 @@
     flex-wrap: wrap;
     gap: 18px;
     justify-content: center;
-    margin-top: 6px;
+    margin-top: 2px;
     font-size: 12px;
     color: var(--ink-soft);
   }
@@ -108,9 +168,17 @@
   .legend .swatch.line { width: 18px; height: 0; border-top: 2px dashed var(--net-line); }
 
   /* --- table --- */
+  .table-heading {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 4px 16px;
+    margin: 0 0 8px 0;
+  }
+
   .table-section h2 {
     font-size: 17px;
-    margin: 24px 0 12px 0;
+    margin: 0;
   }
 
   .table-wrap {
@@ -260,7 +328,7 @@
 
   .validate-status {
     font-size: 13px;
-    margin: -4px 0 12px 0;
+    margin: 0;
     color: var(--ink-soft);
   }
 
@@ -584,9 +652,24 @@
 
     <div id="panel-forecast" role="tabpanel" aria-labelledby="tab-forecast" hidden>
 
+    <div class="forecast-layout">
+    <form class="mining-assumption" id="miningAssumption">
+      <div class="mining-fields">
+        <span class="mining-scenario">Scenario Modeling</span>
+        <div class="mining-controls">
+          <label>BTC Sold:
+            <input id="miningBtc" type="number" min="0" step="1" value="4" inputmode="numeric">
+          </label>
+          <label>BTC Price:
+            <input id="miningPrice" type="number" min="0" step="1" value="100000" inputmode="decimal">
+          </label>
+        </div>
+      </div>
+    </form>
+
     <section class="chart-section">
       <div class="chart-wrap">
-        <svg class="chart-svg" id="chartSvg" viewBox="0 0 1180 270" xmlns="http://www.w3.org/2000/svg"></svg>
+        <svg class="chart-svg" id="chartSvg" viewBox="0 0 1180 211" xmlns="http://www.w3.org/2000/svg"></svg>
       </div>
       <div class="legend">
         <span class="item"><span class="swatch" style="background:var(--cat-operating)"></span>Operating Activities</span>
@@ -595,10 +678,13 @@
         <span class="item"><span class="swatch line"></span>Net Cash Flow</span>
       </div>
     </section>
+    </div>
 
     <section class="table-section">
-      <h2>Monthly Detail</h2>
-      <p id="validateStatus" class="validate-status" hidden></p>
+      <div class="table-heading">
+        <h2>Monthly Detail</h2>
+        <p id="validateStatus" class="validate-status" hidden></p>
+      </div>
       <div class="table-wrap">
         <table class="detail-table">
           <thead><tr id="tableHeadRow"><th>&nbsp;</th></tr></thead>
@@ -790,9 +876,20 @@ const STATEMENT_SECTIONS = [
   }
 ];
 
+const MINING_LINE = "Mining cash received";
+const POWER_LINE = "Mining power paid";
+const OVERHEAD_LINE = "Overhead paid";
+const OVERHEAD_MONTHLY_INCREASE = 10000;
+const BUILDOUT_LINE = "Data center buildout paid";
+const BUILDOUT_MONTHLY_GROWTH = 1.06;
+const RAW_DIR = "data/raw/";
+
+let powerCostPerBtc = 0;
+
 let NUM_MONTHS;
 let MONTH_LABELS;
 let TRANSACTIONS = [];
+let baseForecast = null;
 let lastForecast = null;
 const sectionExpanded = { operating: true, investing: false, financing: false };
 const activityExpanded = {};
@@ -800,6 +897,7 @@ STATEMENT_SECTIONS.forEach(section => {
   section.activities.forEach(activity => { activityExpanded[activity.id] = false; });
 });
 activityExpanded["operating-corporate"] = true;
+activityExpanded["operating-mining"] = true;
 
 function monthLabel(iso) {
   const parts = String(iso).split("-");
@@ -875,6 +973,176 @@ function buildForecast(summary, lines, transactions) {
   };
 }
 
+function cloneSeriesMap(source) {
+  const copy = {};
+  Object.keys(source).forEach(key => { copy[key] = source[key].slice(); });
+  return copy;
+}
+
+function cloneForecast(forecast) {
+  return {
+    months: forecast.months.slice(),
+    operatingInflow: forecast.operatingInflow.slice(),
+    investingInflow: forecast.investingInflow.slice(),
+    financingInflow: forecast.financingInflow.slice(),
+    operatingOutflow: forecast.operatingOutflow.slice(),
+    investingOutflow: forecast.investingOutflow.slice(),
+    financingOutflow: forecast.financingOutflow.slice(),
+    inflow: forecast.inflow.slice(),
+    outflow: forecast.outflow.slice(),
+    net: forecast.net.slice(),
+    beginning: forecast.beginning.slice(),
+    ending: forecast.ending.slice(),
+    netOperating: forecast.netOperating.slice(),
+    netInvesting: forecast.netInvesting.slice(),
+    netFinancing: forecast.netFinancing.slice(),
+    lineValues: cloneSeriesMap(forecast.lineValues),
+    activityValues: cloneSeriesMap(forecast.activityValues),
+    isForecast: forecast.isForecast.slice()
+  };
+}
+
+function readMiningInputs() {
+  const btcText = document.getElementById("miningBtc").value.trim();
+  const priceText = document.getElementById("miningPrice").value.trim();
+  if (btcText === "" || priceText === "") return null;
+  const btc = Math.round(Number(btcText));
+  const price = Number(priceText);
+  if (!Number.isFinite(btc) || !Number.isFinite(price) || btc < 0 || price < 0) return null;
+  return { btc: btc, price: price };
+}
+
+function applyOperatingDelta(view, i, delta, direction, activityId) {
+  view.activityValues[activityId][i] += delta;
+  view.netOperating[i] += delta;
+  view.net[i] += delta;
+  if (direction === "inflow") {
+    view.operatingInflow[i] += delta;
+    view.inflow[i] += delta;
+    return;
+  }
+  view.operatingOutflow[i] -= delta;
+  view.outflow[i] -= delta;
+}
+
+function forecastStepAt(isForecast, index) {
+  let step = 0;
+  for (let i = 0; i < index; i++) if (isForecast[i]) step += 1;
+  return step;
+}
+
+function forecastOverhead(baseSigned, step) {
+  return -(Math.abs(baseSigned) + (step + 1) * OVERHEAD_MONTHLY_INCREASE);
+}
+
+function forecastBuildout(baseSigned, step) {
+  return -Math.round(Math.abs(baseSigned) * Math.pow(BUILDOUT_MONTHLY_GROWTH, step + 1));
+}
+
+function applyInvestingDelta(view, i, delta, activityId) {
+  view.activityValues[activityId][i] += delta;
+  view.netInvesting[i] += delta;
+  view.net[i] += delta;
+  view.investingOutflow[i] -= delta;
+  view.outflow[i] -= delta;
+}
+
+function forecastMiningPower(btc) {
+  return -Math.round(powerCostPerBtc * btc);
+}
+
+function applyMiningAssumption(forecast, assumption) {
+  const view = cloneForecast(forecast);
+  const overheadBase = view.lineValues[OVERHEAD_LINE].find((_, i) => view.isForecast[i]);
+  view.isForecast.forEach((isForecast, i) => {
+    if (!isForecast || overheadBase === undefined) return;
+    const overhead = forecastOverhead(overheadBase, forecastStepAt(view.isForecast, i));
+    const overheadDelta = overhead - view.lineValues[OVERHEAD_LINE][i];
+    view.lineValues[OVERHEAD_LINE][i] = overhead;
+    applyOperatingDelta(view, i, overheadDelta, "outflow", "operating-corporate");
+  });
+  const buildoutBase = view.lineValues[BUILDOUT_LINE].find((_, i) => view.isForecast[i]);
+  view.isForecast.forEach((isForecast, i) => {
+    if (!isForecast || buildoutBase === undefined) return;
+    const buildout = forecastBuildout(buildoutBase, forecastStepAt(view.isForecast, i));
+    const buildoutDelta = buildout - view.lineValues[BUILDOUT_LINE][i];
+    view.lineValues[BUILDOUT_LINE][i] = buildout;
+    applyInvestingDelta(view, i, buildoutDelta, "investing-datacenter");
+  });
+  if (assumption) {
+    const miningCash = Math.round(assumption.btc * assumption.price);
+    const miningPower = forecastMiningPower(assumption.btc);
+    view.isForecast.forEach((isForecast, i) => {
+      if (!isForecast) return;
+      const cashDelta = miningCash - view.lineValues[MINING_LINE][i];
+      view.lineValues[MINING_LINE][i] = miningCash;
+      applyOperatingDelta(view, i, cashDelta, "inflow", "operating-mining");
+      const powerDelta = miningPower - view.lineValues[POWER_LINE][i];
+      view.lineValues[POWER_LINE][i] = miningPower;
+      applyOperatingDelta(view, i, powerDelta, "outflow", "operating-mining");
+    });
+  }
+  view.ending.forEach((_, i) => {
+    if (!view.isForecast[i]) return;
+    if (i > 0) view.beginning[i] = view.ending[i - 1];
+    view.ending[i] = view.beginning[i] + view.net[i];
+  });
+  return view;
+}
+
+function setPowerCostPerBtc(transactions, sales) {
+  const actualMonths = Array.from(new Set(transactions.map(row => row.reporting_month))).sort();
+  const recent = new Set(actualMonths.slice(-3).map(month => String(month).slice(0, 7)));
+  const power = transactions.reduce((sum, row) => {
+    if (row.reporting_line !== POWER_LINE || !recent.has(String(row.reporting_month).slice(0, 7))) return sum;
+    return sum + Math.abs(num(row.signed_amount_usd));
+  }, 0);
+  const btc = sales.reduce((sum, row) => {
+    if (String(row.status).toUpperCase() !== "SETTLED" || !recent.has(String(row.settlement_date).slice(0, 7))) return sum;
+    return sum + num(row.btc_sold);
+  }, 0);
+  powerCostPerBtc = btc > 0 ? power / btc : 0;
+}
+
+function forecastLineNote(name, i, assumption, value) {
+  if (!baseForecast || !baseForecast.isForecast[i]) return "";
+  if (name === OVERHEAD_LINE) {
+    const base = baseForecast.lineValues[OVERHEAD_LINE][i];
+    const step = forecastStepAt(baseForecast.isForecast, i);
+    const overhead = forecastOverhead(base, step);
+    if (base === overhead) return "";
+    return fmtMoney(Math.abs(base)) + " + " + (step + 1) + " × $0.01M = " + fmtMoney(value);
+  }
+  if (name === BUILDOUT_LINE) {
+    const base = baseForecast.lineValues[BUILDOUT_LINE][i];
+    const step = forecastStepAt(baseForecast.isForecast, i);
+    const buildout = forecastBuildout(base, step);
+    if (base === buildout) return "";
+    return fmtMoney(Math.abs(base)) + " × 1.06^" + (step + 1) + " = " + fmtMoney(value);
+  }
+  if (!assumption) return "";
+  if (name === MINING_LINE) {
+    const miningCash = Math.round(assumption.btc * assumption.price);
+    if (baseForecast.lineValues[MINING_LINE][i] === miningCash) return "";
+    return assumption.btc + " BTC × $" + assumption.price.toLocaleString("en-US") + " = " + fmtMoney(value);
+  }
+  if (name === POWER_LINE) {
+    const miningPower = forecastMiningPower(assumption.btc);
+    if (baseForecast.lineValues[POWER_LINE][i] === miningPower) return "";
+    const unitCost = Math.round(powerCostPerBtc);
+    return assumption.btc + " BTC × $" + unitCost.toLocaleString("en-US") + " power cost per BTC = " + fmtMoney(value);
+  }
+  return "";
+}
+
+function refreshMiningForecast() {
+  if (!baseForecast) return;
+  const assumption = readMiningInputs();
+  lastForecast = applyMiningAssumption(baseForecast, assumption);
+  renderChart(lastForecast);
+  renderTable(lastForecast);
+}
+
 function fmtMoney(v) {
   const formatted = "$" + (Math.abs(v) / 1e6).toFixed(2) + "M";
   return v < 0 ? "(" + formatted + ")" : formatted;
@@ -889,6 +1157,7 @@ function fmtCell(v, click) {
   const cls = click ? ` class="cell-click"` : "";
   const data = click
     ? ` data-month="${click.month}" data-line="${escapeHtml(click.line)}"`
+      + (click.assumption ? ` data-assumption="${escapeHtml(click.assumption)}"` : "")
     : "";
   return `<td${cls}${data}>${fmtMoney(v)}</td>`;
 }
@@ -993,8 +1262,8 @@ function showValidation(failures) {
 
 function renderChart(forecast) {
   const svg = document.getElementById("chartSvg");
-  const H = 270;
-  const marginLeft = 68, marginRight = 20, marginTop = 26, marginBottom = 64;
+  const H = 211;
+  const marginLeft = 68, marginRight = 20, marginTop = 26, marginBottom = 32;
   const W = marginLeft + marginRight + NUM_MONTHS * 90;
   const plotW = W - marginLeft - marginRight;
   const plotH = H - marginTop - marginBottom;
@@ -1046,10 +1315,7 @@ function renderChart(forecast) {
     if (cumOut > 0) {
       svgParts.push(`<text x="${x + barWidth / 2}" y="${yFor(-cumOut) + 14}" text-anchor="middle" font-size="10" font-weight="600" fill="var(--ink-soft)">${fmtMoney(-cumOut)}</text>`);
     }
-    svgParts.push(`<text x="${x + barWidth / 2}" y="${H - marginBottom + 28}" text-anchor="middle" font-size="11" fill="#8b90a0">${MONTH_LABELS[i]}</text>`);
-    if (forecast.isForecast[i]) {
-      svgParts.push(`<text x="${x + barWidth / 2}" y="${H - marginBottom + 42}" text-anchor="middle" font-size="10" fill="#8b90a0">Forecast</text>`);
-    }
+    svgParts.push(`<text x="${x + barWidth / 2}" y="${H - marginBottom + 16}" text-anchor="middle" font-size="11" fill="#8b90a0">${MONTH_LABELS[i]}</text>`);
   }
 
   const linePoints = forecast.net.map((v, i) => {
@@ -1089,10 +1355,13 @@ function showTxnTip(cell) {
   const tip = document.getElementById("txnTip");
   const month = cell.getAttribute("data-month");
   const line = cell.getAttribute("data-line");
+  const assumption = cell.getAttribute("data-assumption");
   const rows = transactionsForCell(month, line);
   const title = monthLabel(month) + " · " + line;
   let body;
-  if (!rows.length) {
+  if (assumption) {
+    body = `<p class="txn-empty">${escapeHtml(assumption)}</p>`;
+  } else if (!rows.length) {
     body = `<p class="txn-empty">No source transactions this month.</p>`;
   } else {
     body = `<table class="source-table"><thead><tr><th>transaction_id</th><th>vendor</th><th>cash_date</th><th class="num">signed_amount_usd</th><th>source_file</th></tr></thead><tbody>`
@@ -1133,10 +1402,11 @@ function renderTable(forecast) {
       const activityCells = forecast.activityValues[activity.id].map(v => fmtCell(v)).join("");
       html += `<tr class="row-activity" data-activity="${activity.id}"><td><span class="caret">${activityCaret}</span>${escapeHtml(activity.label)}</td>${activityCells}</tr>`;
       if (!activityOpen) return;
+      const assumption = readMiningInputs();
       activity.lines.forEach(name => {
-        const cells = forecast.lineValues[name].map((v, i) =>
-          fmtCell(v, { month: forecast.months[i], line: name })
-        ).join("");
+        const cells = forecast.lineValues[name].map((v, i) => {
+          return fmtCell(v, { month: forecast.months[i], line: name, assumption: forecastLineNote(name, i, assumption, v) });
+        }).join("");
         html += `<tr class="row-sub"><td>${escapeHtml(name)}</td>${cells}</tr>`;
       });
     });
@@ -1229,15 +1499,16 @@ function loadReportingMart() {
     fetchCsv(REPORTING_DIR + "actual_cash_flow_lines.csv"),
     fetchCsv(REPORTING_DIR + "forecast_cash_flow_lines.csv"),
     fetchCsv(TRANSFORMED_DIR + "cash_transactions.csv"),
-    fetchCsv(TRANSFORMED_DIR + "forecast_transactions.csv")
-  ]).then(([actualSummary, forecastSummary, actualLines, forecastLines, actuals, forecastTxns]) => {
+    fetchCsv(TRANSFORMED_DIR + "forecast_transactions.csv"),
+    fetchCsv(RAW_DIR + "bitcoin_sales.csv")
+  ]).then(([actualSummary, forecastSummary, actualLines, forecastLines, actuals, forecastTxns, sales]) => {
     const summary = actualSummary.concat(forecastSummary);
     const lines = actualLines.concat(forecastLines);
     const transactions = actuals.concat(forecastTxns);
-    lastForecast = buildForecast(summary, lines, transactions);
-    showValidation(validateAggregates(lastForecast, summary, lines, transactions));
-    renderChart(lastForecast);
-    renderTable(lastForecast);
+    setPowerCostPerBtc(actuals, sales);
+    baseForecast = buildForecast(summary, lines, transactions);
+    showValidation(validateAggregates(baseForecast, summary, lines, transactions));
+    refreshMiningForecast();
   });
 }
 
@@ -1272,6 +1543,9 @@ let selectTab = function () {};
 })();
 
 document.querySelector("#panel-forecast .table-wrap").addEventListener("scroll", hideTxnTip);
+
+document.getElementById("miningAssumption").addEventListener("submit", event => event.preventDefault());
+document.getElementById("miningAssumption").addEventListener("input", refreshMiningForecast);
 </script>
 <script src="walkthrough.js"></script>
 </body>
