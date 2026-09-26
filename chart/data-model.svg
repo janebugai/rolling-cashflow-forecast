@@ -59,16 +59,17 @@
     <text x="745" y="264" font-size="12" font-weight="700" text-anchor="middle" fill="#1f2430">Reporting Tier</text>
     <text x="745" y="284" font-size="11" font-weight="600" text-anchor="middle" fill="#1f2430">Organizes data into</text>
     <text x="745" y="299" font-size="11" font-weight="600" text-anchor="middle" fill="#1f2430">purpose-specific metrics</text>
-    <text x="745" y="314" font-size="11" font-weight="600" text-anchor="middle" fill="#1f2430">and tables, including</text>
-    <text x="745" y="329" font-size="11" font-weight="600" text-anchor="middle" fill="#1f2430">plans, forecasts,</text>
-    <text x="745" y="344" font-size="11" font-weight="600" text-anchor="middle" fill="#1f2430">actuals, and related</text>
-    <text x="745" y="359" font-size="11" font-weight="600" text-anchor="middle" fill="#1f2430">analysis</text>
+    <text x="745" y="314" font-size="11" font-weight="600" text-anchor="middle" fill="#1f2430">and tables, with actuals</text>
+    <text x="745" y="329" font-size="11" font-weight="600" text-anchor="middle" fill="#1f2430">and forecast kept as</text>
+    <text x="745" y="344" font-size="11" font-weight="600" text-anchor="middle" fill="#1f2430">separate files</text>
     <rect x="860" y="10" width="236" height="480" rx="16" ry="16" fill="#eee9f6"/>
     <text x="978" y="34" font-size="12" font-weight="700" text-anchor="middle" fill="#1f2430">Output</text>
     <rect x="872" y="46" width="212" height="44" rx="10" ry="10" fill="#ffffff" stroke="#eceef5"/>
     <text x="978" y="65" font-size="11" font-weight="600" text-anchor="middle" fill="#1f2430">BI Tools and Dashboard</text>
     <text x="978" y="79" font-size="11" font-weight="600" text-anchor="middle" fill="#1f2430">(Tableau, Power BI, Sigma, etc)</text>
     <rect x="872" y="98" width="212" height="34" rx="10" ry="10" fill="#ffffff" stroke="#eceef5"/>
-    <text x="978" y="119" font-size="12" font-weight="600" text-anchor="middle" fill="#1f2430">LLM Applications</text>
+    <text x="978" y="119" font-size="12" font-weight="600" text-anchor="middle" fill="#1f2430">Static Reports</text>
+    <rect x="872" y="140" width="212" height="34" rx="10" ry="10" fill="#ffffff" stroke="#eceef5"/>
+    <text x="978" y="161" font-size="12" font-weight="600" text-anchor="middle" fill="#1f2430">LLM Applications</text>
   </g>
 </svg>

@@ -13,13 +13,14 @@ SELECT
     fiscal_year::INTEGER AS fiscal_year,
     actual_months::INTEGER AS actual_months,
     forecast_months::INTEGER AS forecast_months
-FROM read_csv_auto('data/forecast/forecast_9_plus_3.csv', header = true);
+FROM read_csv_auto('data/reporting/forecast_scenario.csv', header = true);
 
 SELECT CASE
     WHEN (SELECT count(*) FROM scenario) <> 1
-        OR (SELECT scenario FROM scenario) <> '9+3'
-        OR (SELECT actual_months + forecast_months FROM scenario) <> 12
-    THEN error('forecast_9_plus_3.csv must contain one 9+3 row whose months add to 12')
+        OR (SELECT scenario FROM scenario) <> '9+12'
+        OR (SELECT actual_months FROM scenario) <> 9
+        OR (SELECT forecast_months FROM scenario) <> 12
+    THEN error('forecast_scenario.csv must contain one 9+12 row: 9 actual months and 12 forecast months through September 2027')
     ELSE 'ok'
 END;
 
@@ -136,7 +137,7 @@ WHERE year(mapped.cash_date) = scenario.fiscal_year
 
 SELECT CASE
     WHEN (SELECT count(*) FROM mapped) <> (SELECT count(*) FROM actuals)
-    THEN error('A source event falls outside the 9 actual months. Remove it from data/raw/; October–December are calculated, not typed as actuals.')
+    THEN error('A source event falls outside the 9 actual months. Remove it from data/raw/; October 2026–September 2027 are calculated, not typed as actuals.')
     ELSE 'ok'
 END;
 

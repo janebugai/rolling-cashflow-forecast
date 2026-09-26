@@ -1,19 +1,73 @@
 transaction_id,source_system,source_file,source_category,vendor,cash_date,reporting_month,business_activity,cash_flow_section,reporting_line,cash_direction,signed_amount_usd
-FCST-DC-2026-10,Forecast,forecast_9_plus_3.csv,Data center buildout paid,"",2026-10-01,2026-10-01,Data center expansion,Investing,Data center buildout paid,outflow,-600000
-FCST-DRAW-2026-10,Forecast,forecast_9_plus_3.csv,Construction loan drawn,"",2026-10-01,2026-10-01,Data center financing,Financing,Construction loan drawn,inflow,0
-FCST-EQ-2026-10,Forecast,forecast_9_plus_3.csv,Mining equipment paid,"",2026-10-01,2026-10-01,Bitcoin mining operations,Investing,Mining equipment paid,outflow,0
-FCST-OH-2026-10,Forecast,forecast_9_plus_3.csv,Overhead paid,"",2026-10-01,2026-10-01,Corporate operations,Operating,Overhead paid,outflow,-66667
-FCST-PWR-2026-10,Forecast,forecast_9_plus_3.csv,Mining power paid,"",2026-10-01,2026-10-01,Bitcoin mining operations,Operating,Mining power paid,outflow,-266667
-FCST-SALE-2026-10,Forecast,forecast_9_plus_3.csv,Mining cash received,"",2026-10-01,2026-10-01,Bitcoin mining operations,Operating,Mining cash received,inflow,433333
-FCST-DC-2026-11,Forecast,forecast_9_plus_3.csv,Data center buildout paid,"",2026-11-01,2026-11-01,Data center expansion,Investing,Data center buildout paid,outflow,-600000
-FCST-DRAW-2026-11,Forecast,forecast_9_plus_3.csv,Construction loan drawn,"",2026-11-01,2026-11-01,Data center financing,Financing,Construction loan drawn,inflow,0
-FCST-EQ-2026-11,Forecast,forecast_9_plus_3.csv,Mining equipment paid,"",2026-11-01,2026-11-01,Bitcoin mining operations,Investing,Mining equipment paid,outflow,0
-FCST-OH-2026-11,Forecast,forecast_9_plus_3.csv,Overhead paid,"",2026-11-01,2026-11-01,Corporate operations,Operating,Overhead paid,outflow,-66667
-FCST-PWR-2026-11,Forecast,forecast_9_plus_3.csv,Mining power paid,"",2026-11-01,2026-11-01,Bitcoin mining operations,Operating,Mining power paid,outflow,-266667
-FCST-SALE-2026-11,Forecast,forecast_9_plus_3.csv,Mining cash received,"",2026-11-01,2026-11-01,Bitcoin mining operations,Operating,Mining cash received,inflow,433333
-FCST-DC-2026-12,Forecast,forecast_9_plus_3.csv,Data center buildout paid,"",2026-12-01,2026-12-01,Data center expansion,Investing,Data center buildout paid,outflow,-600000
-FCST-DRAW-2026-12,Forecast,forecast_9_plus_3.csv,Construction loan drawn,"",2026-12-01,2026-12-01,Data center financing,Financing,Construction loan drawn,inflow,0
-FCST-EQ-2026-12,Forecast,forecast_9_plus_3.csv,Mining equipment paid,"",2026-12-01,2026-12-01,Bitcoin mining operations,Investing,Mining equipment paid,outflow,0
-FCST-OH-2026-12,Forecast,forecast_9_plus_3.csv,Overhead paid,"",2026-12-01,2026-12-01,Corporate operations,Operating,Overhead paid,outflow,-66667
-FCST-PWR-2026-12,Forecast,forecast_9_plus_3.csv,Mining power paid,"",2026-12-01,2026-12-01,Bitcoin mining operations,Operating,Mining power paid,outflow,-266667
-FCST-SALE-2026-12,Forecast,forecast_9_plus_3.csv,Mining cash received,"",2026-12-01,2026-12-01,Bitcoin mining operations,Operating,Mining cash received,inflow,433333
+FCST-DC-2026-10,Forecast,forecast_scenario.csv,Data center buildout paid,"",2026-10-01,2026-10-01,Data center expansion,Investing,Data center buildout paid,outflow,-600000
+FCST-DRAW-2026-10,Forecast,forecast_scenario.csv,Construction loan drawn,"",2026-10-01,2026-10-01,Data center financing,Financing,Construction loan drawn,inflow,0
+FCST-EQ-2026-10,Forecast,forecast_scenario.csv,Mining equipment paid,"",2026-10-01,2026-10-01,Bitcoin mining operations,Investing,Mining equipment paid,outflow,0
+FCST-OH-2026-10,Forecast,forecast_scenario.csv,Overhead paid,"",2026-10-01,2026-10-01,Corporate operations,Operating,Overhead paid,outflow,-66667
+FCST-PWR-2026-10,Forecast,forecast_scenario.csv,Mining power paid,"",2026-10-01,2026-10-01,Bitcoin mining operations,Operating,Mining power paid,outflow,-266667
+FCST-SALE-2026-10,Forecast,forecast_scenario.csv,Mining cash received,"",2026-10-01,2026-10-01,Bitcoin mining operations,Operating,Mining cash received,inflow,433333
+FCST-DC-2026-11,Forecast,forecast_scenario.csv,Data center buildout paid,"",2026-11-01,2026-11-01,Data center expansion,Investing,Data center buildout paid,outflow,-600000
+FCST-DRAW-2026-11,Forecast,forecast_scenario.csv,Construction loan drawn,"",2026-11-01,2026-11-01,Data center financing,Financing,Construction loan drawn,inflow,0
+FCST-EQ-2026-11,Forecast,forecast_scenario.csv,Mining equipment paid,"",2026-11-01,2026-11-01,Bitcoin mining operations,Investing,Mining equipment paid,outflow,0
+FCST-OH-2026-11,Forecast,forecast_scenario.csv,Overhead paid,"",2026-11-01,2026-11-01,Corporate operations,Operating,Overhead paid,outflow,-66667
+FCST-PWR-2026-11,Forecast,forecast_scenario.csv,Mining power paid,"",2026-11-01,2026-11-01,Bitcoin mining operations,Operating,Mining power paid,outflow,-266667
+FCST-SALE-2026-11,Forecast,forecast_scenario.csv,Mining cash received,"",2026-11-01,2026-11-01,Bitcoin mining operations,Operating,Mining cash received,inflow,433333
+FCST-DC-2026-12,Forecast,forecast_scenario.csv,Data center buildout paid,"",2026-12-01,2026-12-01,Data center expansion,Investing,Data center buildout paid,outflow,-600000
+FCST-DRAW-2026-12,Forecast,forecast_scenario.csv,Construction loan drawn,"",2026-12-01,2026-12-01,Data center financing,Financing,Construction loan drawn,inflow,0
+FCST-EQ-2026-12,Forecast,forecast_scenario.csv,Mining equipment paid,"",2026-12-01,2026-12-01,Bitcoin mining operations,Investing,Mining equipment paid,outflow,0
+FCST-OH-2026-12,Forecast,forecast_scenario.csv,Overhead paid,"",2026-12-01,2026-12-01,Corporate operations,Operating,Overhead paid,outflow,-66667
+FCST-PWR-2026-12,Forecast,forecast_scenario.csv,Mining power paid,"",2026-12-01,2026-12-01,Bitcoin mining operations,Operating,Mining power paid,outflow,-266667
+FCST-SALE-2026-12,Forecast,forecast_scenario.csv,Mining cash received,"",2026-12-01,2026-12-01,Bitcoin mining operations,Operating,Mining cash received,inflow,433333
+FCST-DC-2027-01,Forecast,forecast_scenario.csv,Data center buildout paid,"",2027-01-01,2027-01-01,Data center expansion,Investing,Data center buildout paid,outflow,-600000
+FCST-DRAW-2027-01,Forecast,forecast_scenario.csv,Construction loan drawn,"",2027-01-01,2027-01-01,Data center financing,Financing,Construction loan drawn,inflow,0
+FCST-EQ-2027-01,Forecast,forecast_scenario.csv,Mining equipment paid,"",2027-01-01,2027-01-01,Bitcoin mining operations,Investing,Mining equipment paid,outflow,0
+FCST-OH-2027-01,Forecast,forecast_scenario.csv,Overhead paid,"",2027-01-01,2027-01-01,Corporate operations,Operating,Overhead paid,outflow,-66667
+FCST-PWR-2027-01,Forecast,forecast_scenario.csv,Mining power paid,"",2027-01-01,2027-01-01,Bitcoin mining operations,Operating,Mining power paid,outflow,-266667
+FCST-SALE-2027-01,Forecast,forecast_scenario.csv,Mining cash received,"",2027-01-01,2027-01-01,Bitcoin mining operations,Operating,Mining cash received,inflow,433333
+FCST-DC-2027-02,Forecast,forecast_scenario.csv,Data center buildout paid,"",2027-02-01,2027-02-01,Data center expansion,Investing,Data center buildout paid,outflow,-600000
+FCST-DRAW-2027-02,Forecast,forecast_scenario.csv,Construction loan drawn,"",2027-02-01,2027-02-01,Data center financing,Financing,Construction loan drawn,inflow,0
+FCST-EQ-2027-02,Forecast,forecast_scenario.csv,Mining equipment paid,"",2027-02-01,2027-02-01,Bitcoin mining operations,Investing,Mining equipment paid,outflow,0
+FCST-OH-2027-02,Forecast,forecast_scenario.csv,Overhead paid,"",2027-02-01,2027-02-01,Corporate operations,Operating,Overhead paid,outflow,-66667
+FCST-PWR-2027-02,Forecast,forecast_scenario.csv,Mining power paid,"",2027-02-01,2027-02-01,Bitcoin mining operations,Operating,Mining power paid,outflow,-266667
+FCST-SALE-2027-02,Forecast,forecast_scenario.csv,Mining cash received,"",2027-02-01,2027-02-01,Bitcoin mining operations,Operating,Mining cash received,inflow,433333
+FCST-DC-2027-03,Forecast,forecast_scenario.csv,Data center buildout paid,"",2027-03-01,2027-03-01,Data center expansion,Investing,Data center buildout paid,outflow,-600000
+FCST-DRAW-2027-03,Forecast,forecast_scenario.csv,Construction loan drawn,"",2027-03-01,2027-03-01,Data center financing,Financing,Construction loan drawn,inflow,0
+FCST-EQ-2027-03,Forecast,forecast_scenario.csv,Mining equipment paid,"",2027-03-01,2027-03-01,Bitcoin mining operations,Investing,Mining equipment paid,outflow,0
+FCST-OH-2027-03,Forecast,forecast_scenario.csv,Overhead paid,"",2027-03-01,2027-03-01,Corporate operations,Operating,Overhead paid,outflow,-66667
+FCST-PWR-2027-03,Forecast,forecast_scenario.csv,Mining power paid,"",2027-03-01,2027-03-01,Bitcoin mining operations,Operating,Mining power paid,outflow,-266667
+FCST-SALE-2027-03,Forecast,forecast_scenario.csv,Mining cash received,"",2027-03-01,2027-03-01,Bitcoin mining operations,Operating,Mining cash received,inflow,433333
+FCST-DC-2027-04,Forecast,forecast_scenario.csv,Data center buildout paid,"",2027-04-01,2027-04-01,Data center expansion,Investing,Data center buildout paid,outflow,-600000
+FCST-DRAW-2027-04,Forecast,forecast_scenario.csv,Construction loan drawn,"",2027-04-01,2027-04-01,Data center financing,Financing,Construction loan drawn,inflow,0
+FCST-EQ-2027-04,Forecast,forecast_scenario.csv,Mining equipment paid,"",2027-04-01,2027-04-01,Bitcoin mining operations,Investing,Mining equipment paid,outflow,0
+FCST-OH-2027-04,Forecast,forecast_scenario.csv,Overhead paid,"",2027-04-01,2027-04-01,Corporate operations,Operating,Overhead paid,outflow,-66667
+FCST-PWR-2027-04,Forecast,forecast_scenario.csv,Mining power paid,"",2027-04-01,2027-04-01,Bitcoin mining operations,Operating,Mining power paid,outflow,-266667
+FCST-SALE-2027-04,Forecast,forecast_scenario.csv,Mining cash received,"",2027-04-01,2027-04-01,Bitcoin mining operations,Operating,Mining cash received,inflow,433333
+FCST-DC-2027-05,Forecast,forecast_scenario.csv,Data center buildout paid,"",2027-05-01,2027-05-01,Data center expansion,Investing,Data center buildout paid,outflow,-600000
+FCST-DRAW-2027-05,Forecast,forecast_scenario.csv,Construction loan drawn,"",2027-05-01,2027-05-01,Data center financing,Financing,Construction loan drawn,inflow,0
+FCST-EQ-2027-05,Forecast,forecast_scenario.csv,Mining equipment paid,"",2027-05-01,2027-05-01,Bitcoin mining operations,Investing,Mining equipment paid,outflow,0
+FCST-OH-2027-05,Forecast,forecast_scenario.csv,Overhead paid,"",2027-05-01,2027-05-01,Corporate operations,Operating,Overhead paid,outflow,-66667
+FCST-PWR-2027-05,Forecast,forecast_scenario.csv,Mining power paid,"",2027-05-01,2027-05-01,Bitcoin mining operations,Operating,Mining power paid,outflow,-266667
+FCST-SALE-2027-05,Forecast,forecast_scenario.csv,Mining cash received,"",2027-05-01,2027-05-01,Bitcoin mining operations,Operating,Mining cash received,inflow,433333
+FCST-DC-2027-06,Forecast,forecast_scenario.csv,Data center buildout paid,"",2027-06-01,2027-06-01,Data center expansion,Investing,Data center buildout paid,outflow,-600000
+FCST-DRAW-2027-06,Forecast,forecast_scenario.csv,Construction loan drawn,"",2027-06-01,2027-06-01,Data center financing,Financing,Construction loan drawn,inflow,0
+FCST-EQ-2027-06,Forecast,forecast_scenario.csv,Mining equipment paid,"",2027-06-01,2027-06-01,Bitcoin mining operations,Investing,Mining equipment paid,outflow,0
+FCST-OH-2027-06,Forecast,forecast_scenario.csv,Overhead paid,"",2027-06-01,2027-06-01,Corporate operations,Operating,Overhead paid,outflow,-66667
+FCST-PWR-2027-06,Forecast,forecast_scenario.csv,Mining power paid,"",2027-06-01,2027-06-01,Bitcoin mining operations,Operating,Mining power paid,outflow,-266667
+FCST-SALE-2027-06,Forecast,forecast_scenario.csv,Mining cash received,"",2027-06-01,2027-06-01,Bitcoin mining operations,Operating,Mining cash received,inflow,433333
+FCST-DC-2027-07,Forecast,forecast_scenario.csv,Data center buildout paid,"",2027-07-01,2027-07-01,Data center expansion,Investing,Data center buildout paid,outflow,-600000
+FCST-DRAW-2027-07,Forecast,forecast_scenario.csv,Construction loan drawn,"",2027-07-01,2027-07-01,Data center financing,Financing,Construction loan drawn,inflow,0
+FCST-EQ-2027-07,Forecast,forecast_scenario.csv,Mining equipment paid,"",2027-07-01,2027-07-01,Bitcoin mining operations,Investing,Mining equipment paid,outflow,0
+FCST-OH-2027-07,Forecast,forecast_scenario.csv,Overhead paid,"",2027-07-01,2027-07-01,Corporate operations,Operating,Overhead paid,outflow,-66667
+FCST-PWR-2027-07,Forecast,forecast_scenario.csv,Mining power paid,"",2027-07-01,2027-07-01,Bitcoin mining operations,Operating,Mining power paid,outflow,-266667
+FCST-SALE-2027-07,Forecast,forecast_scenario.csv,Mining cash received,"",2027-07-01,2027-07-01,Bitcoin mining operations,Operating,Mining cash received,inflow,433333
+FCST-DC-2027-08,Forecast,forecast_scenario.csv,Data center buildout paid,"",2027-08-01,2027-08-01,Data center expansion,Investing,Data center buildout paid,outflow,-600000
+FCST-DRAW-2027-08,Forecast,forecast_scenario.csv,Construction loan drawn,"",2027-08-01,2027-08-01,Data center financing,Financing,Construction loan drawn,inflow,0
+FCST-EQ-2027-08,Forecast,forecast_scenario.csv,Mining equipment paid,"",2027-08-01,2027-08-01,Bitcoin mining operations,Investing,Mining equipment paid,outflow,0
+FCST-OH-2027-08,Forecast,forecast_scenario.csv,Overhead paid,"",2027-08-01,2027-08-01,Corporate operations,Operating,Overhead paid,outflow,-66667
+FCST-PWR-2027-08,Forecast,forecast_scenario.csv,Mining power paid,"",2027-08-01,2027-08-01,Bitcoin mining operations,Operating,Mining power paid,outflow,-266667
+FCST-SALE-2027-08,Forecast,forecast_scenario.csv,Mining cash received,"",2027-08-01,2027-08-01,Bitcoin mining operations,Operating,Mining cash received,inflow,433333
+FCST-DC-2027-09,Forecast,forecast_scenario.csv,Data center buildout paid,"",2027-09-01,2027-09-01,Data center expansion,Investing,Data center buildout paid,outflow,-600000
+FCST-DRAW-2027-09,Forecast,forecast_scenario.csv,Construction loan drawn,"",2027-09-01,2027-09-01,Data center financing,Financing,Construction loan drawn,inflow,0
+FCST-EQ-2027-09,Forecast,forecast_scenario.csv,Mining equipment paid,"",2027-09-01,2027-09-01,Bitcoin mining operations,Investing,Mining equipment paid,outflow,0
+FCST-OH-2027-09,Forecast,forecast_scenario.csv,Overhead paid,"",2027-09-01,2027-09-01,Corporate operations,Operating,Overhead paid,outflow,-66667
+FCST-PWR-2027-09,Forecast,forecast_scenario.csv,Mining power paid,"",2027-09-01,2027-09-01,Bitcoin mining operations,Operating,Mining power paid,outflow,-266667
+FCST-SALE-2027-09,Forecast,forecast_scenario.csv,Mining cash received,"",2027-09-01,2027-09-01,Bitcoin mining operations,Operating,Mining cash received,inflow,433333

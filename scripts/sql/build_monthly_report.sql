@@ -8,8 +8,11 @@
 --     duckdb < scripts/sql/build_monthly_report.sql
 
 CREATE OR REPLACE TEMP TABLE scenario AS
-SELECT actual_months::INTEGER AS actual_months
-FROM read_csv_auto('data/forecast/forecast_9_plus_3.csv', header = true);
+SELECT
+    fiscal_year::INTEGER AS fiscal_year,
+    actual_months::INTEGER AS actual_months,
+    forecast_months::INTEGER AS forecast_months
+FROM read_csv_auto('data/reporting/forecast_scenario.csv', header = true);
 
 CREATE OR REPLACE TEMP TABLE cash_transactions AS
 SELECT
@@ -39,8 +42,11 @@ SELECT CASE
     THEN error('opening_balance.csv must contain exactly one row')
     WHEN (SELECT available_balance_usd FROM opening_balance) <> 2000000
     THEN error('Opening cash != 2000000')
-    WHEN (SELECT count(DISTINCT year(reporting_month)) FROM cash_transactions) <> 1
-    THEN error('Expected one activity year in cash_transactions.csv')
+    WHEN (SELECT max(reporting_month) FROM cash_transactions) <> (
+        SELECT (make_date(fiscal_year, actual_months, 1) + forecast_months * INTERVAL 1 MONTH)::DATE
+        FROM scenario
+    )
+    THEN error('Forecast does not run through September 2027')
     ELSE 'ok'
 END;
 
@@ -56,9 +62,9 @@ SELECT * FROM (
 ) AS d(display_order, cash_flow_section, business_activity, reporting_line);
 
 CREATE OR REPLACE TEMP TABLE months AS
-SELECT date_trunc('month', make_date(y.yr, gs.month, 1))::DATE AS reporting_month
-FROM (SELECT year(min(reporting_month)) AS yr FROM cash_transactions) y
-CROSS JOIN generate_series(1, 12, 1) AS gs(month);
+SELECT (make_date(s.fiscal_year, 1, 1) + (gs.step - 1) * INTERVAL 1 MONTH)::DATE AS reporting_month
+FROM scenario s
+CROSS JOIN generate_series(1, (SELECT actual_months + forecast_months FROM scenario), 1) AS gs(step);
 
 CREATE OR REPLACE TEMP TABLE monthly_lines AS
 SELECT
@@ -69,7 +75,7 @@ SELECT
     CAST(coalesce(sum(t.signed_amount_usd), 0) AS BIGINT) AS signed_amount_usd,
     d.display_order,
     CASE
-        WHEN month(m.reporting_month) > (SELECT actual_months FROM scenario) THEN 'Forecast'
+        WHEN m.reporting_month > make_date((SELECT fiscal_year FROM scenario), (SELECT actual_months FROM scenario), 1) THEN 'Forecast'
         ELSE 'Actual'
     END AS amount_type
 FROM months m
@@ -99,8 +105,23 @@ COPY (
         display_order,
         amount_type
     FROM monthly_lines
+    WHERE amount_type = 'Actual'
     ORDER BY reporting_month, display_order
-) TO 'data/reporting/monthly_cash_flow_lines.csv' (HEADER, DELIMITER ',');
+) TO 'data/reporting/actual_cash_flow_lines.csv' (HEADER, DELIMITER ',');
+
+COPY (
+    SELECT
+        strftime(reporting_month, '%Y-%m-%d') AS reporting_month,
+        cash_flow_section,
+        business_activity,
+        reporting_line,
+        signed_amount_usd,
+        display_order,
+        amount_type
+    FROM monthly_lines
+    WHERE amount_type = 'Forecast'
+    ORDER BY reporting_month, display_order
+) TO 'data/reporting/forecast_cash_flow_lines.csv' (HEADER, DELIMITER ',');
 
 CREATE OR REPLACE TEMP TABLE monthly_summary AS
 WITH pivoted AS (
@@ -175,8 +196,30 @@ COPY (
         beginning_cash,
         ending_cash
     FROM monthly_summary
+    WHERE amount_type = 'Actual'
     ORDER BY reporting_month
-) TO 'data/reporting/monthly_cash_summary.csv' (HEADER, DELIMITER ',');
+) TO 'data/reporting/actual_cash_summary.csv' (HEADER, DELIMITER ',');
+
+COPY (
+    SELECT
+        strftime(reporting_month, '%Y-%m-%d') AS reporting_month,
+        amount_type,
+        mining_cash_received,
+        mining_power_paid,
+        overhead_paid,
+        net_operating_cash_flow,
+        data_center_buildout_paid,
+        mining_equipment_paid,
+        net_investing_cash_flow,
+        construction_loan_drawn,
+        net_financing_cash_flow,
+        net_change_in_cash,
+        beginning_cash,
+        ending_cash
+    FROM monthly_summary
+    WHERE amount_type = 'Forecast'
+    ORDER BY reporting_month
+) TO 'data/reporting/forecast_cash_summary.csv' (HEADER, DELIMITER ',');
 
 SELECT CASE
     WHEN EXISTS (
@@ -238,10 +281,10 @@ SELECT CASE
            OR s.net_change_in_cash <> coalesce(t.total_sum, 0)
     )
     THEN error('A section total or net change does not equal the sum of its transactions')
-    WHEN (SELECT count(*) FROM monthly_summary) <> 12
-    THEN error('Expected 12 monthly summary rows')
-    WHEN (SELECT count(*) FROM monthly_lines) <> 72
-    THEN error('Expected 72 line rows')
+    WHEN (SELECT count(*) FROM monthly_summary) <> 21
+    THEN error('Expected 21 monthly summary rows')
+    WHEN (SELECT count(*) FROM monthly_lines) <> 126
+    THEN error('Expected 126 line rows')
     WHEN EXISTS (
         SELECT 1 FROM monthly_summary
         WHERE beginning_cash + net_change_in_cash <> ending_cash
@@ -249,12 +292,14 @@ SELECT CASE
     THEN error('beginning_cash + net_change_in_cash != ending_cash')
     WHEN (SELECT count(*) FROM monthly_summary WHERE amount_type = 'Actual') <> 9
     THEN error('Expected 9 Actual months')
-    WHEN (SELECT count(*) FROM monthly_summary WHERE amount_type = 'Forecast') <> 3
-    THEN error('Expected 3 Forecast months')
-    WHEN (SELECT sum(net_change_in_cash) FROM monthly_summary) <> -2500003
-    THEN error('Annual change in cash != -2500003')
-    WHEN (SELECT ending_cash FROM monthly_summary ORDER BY reporting_month DESC LIMIT 1) <> -500003
-    THEN error('December ending cash != -500003')
+    WHEN (SELECT count(*) FROM monthly_summary WHERE amount_type = 'Forecast') <> 12
+    THEN error('Expected 12 Forecast months')
+    WHEN (SELECT max(reporting_month) FROM monthly_summary) <> DATE '2027-09-01'
+    THEN error('Last reporting month is not September 2027')
+    WHEN (SELECT sum(net_change_in_cash) FROM monthly_summary) <> -7000012
+    THEN error('Change in cash through September 2027 != -7000012')
+    WHEN (SELECT ending_cash FROM monthly_summary ORDER BY reporting_month DESC LIMIT 1) <> -5000012
+    THEN error('September 2027 ending cash != -5000012')
     WHEN EXISTS (
         SELECT 1
         FROM monthly_summary
@@ -269,6 +314,6 @@ SELECT CASE
                 OR net_change_in_cash <> -500001
             )
     )
-    THEN error('A forecast month does not match the 9+3 drivers')
+    THEN error('A forecast month does not match the 9+12 drivers')
     ELSE 'OK  build_monthly_report.sql'
 END;

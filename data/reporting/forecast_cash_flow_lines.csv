@@ -1,0 +1,73 @@
+reporting_month,cash_flow_section,business_activity,reporting_line,signed_amount_usd,display_order,amount_type
+2026-10-01,Operating,Bitcoin mining operations,Mining cash received,433333,1,Forecast
+2026-10-01,Operating,Bitcoin mining operations,Mining power paid,-266667,2,Forecast
+2026-10-01,Operating,Corporate operations,Overhead paid,-66667,3,Forecast
+2026-10-01,Investing,Data center expansion,Data center buildout paid,-600000,4,Forecast
+2026-10-01,Investing,Bitcoin mining operations,Mining equipment paid,0,5,Forecast
+2026-10-01,Financing,Data center financing,Construction loan drawn,0,6,Forecast
+2026-11-01,Operating,Bitcoin mining operations,Mining cash received,433333,1,Forecast
+2026-11-01,Operating,Bitcoin mining operations,Mining power paid,-266667,2,Forecast
+2026-11-01,Operating,Corporate operations,Overhead paid,-66667,3,Forecast
+2026-11-01,Investing,Data center expansion,Data center buildout paid,-600000,4,Forecast
+2026-11-01,Investing,Bitcoin mining operations,Mining equipment paid,0,5,Forecast
+2026-11-01,Financing,Data center financing,Construction loan drawn,0,6,Forecast
+2026-12-01,Operating,Bitcoin mining operations,Mining cash received,433333,1,Forecast
+2026-12-01,Operating,Bitcoin mining operations,Mining power paid,-266667,2,Forecast
+2026-12-01,Operating,Corporate operations,Overhead paid,-66667,3,Forecast
+2026-12-01,Investing,Data center expansion,Data center buildout paid,-600000,4,Forecast
+2026-12-01,Investing,Bitcoin mining operations,Mining equipment paid,0,5,Forecast
+2026-12-01,Financing,Data center financing,Construction loan drawn,0,6,Forecast
+2027-01-01,Operating,Bitcoin mining operations,Mining cash received,433333,1,Forecast
+2027-01-01,Operating,Bitcoin mining operations,Mining power paid,-266667,2,Forecast
+2027-01-01,Operating,Corporate operations,Overhead paid,-66667,3,Forecast
+2027-01-01,Investing,Data center expansion,Data center buildout paid,-600000,4,Forecast
+2027-01-01,Investing,Bitcoin mining operations,Mining equipment paid,0,5,Forecast
+2027-01-01,Financing,Data center financing,Construction loan drawn,0,6,Forecast
+2027-02-01,Operating,Bitcoin mining operations,Mining cash received,433333,1,Forecast
+2027-02-01,Operating,Bitcoin mining operations,Mining power paid,-266667,2,Forecast
+2027-02-01,Operating,Corporate operations,Overhead paid,-66667,3,Forecast
+2027-02-01,Investing,Data center expansion,Data center buildout paid,-600000,4,Forecast
+2027-02-01,Investing,Bitcoin mining operations,Mining equipment paid,0,5,Forecast
+2027-02-01,Financing,Data center financing,Construction loan drawn,0,6,Forecast
+2027-03-01,Operating,Bitcoin mining operations,Mining cash received,433333,1,Forecast
+2027-03-01,Operating,Bitcoin mining operations,Mining power paid,-266667,2,Forecast
+2027-03-01,Operating,Corporate operations,Overhead paid,-66667,3,Forecast
+2027-03-01,Investing,Data center expansion,Data center buildout paid,-600000,4,Forecast
+2027-03-01,Investing,Bitcoin mining operations,Mining equipment paid,0,5,Forecast
+2027-03-01,Financing,Data center financing,Construction loan drawn,0,6,Forecast
+2027-04-01,Operating,Bitcoin mining operations,Mining cash received,433333,1,Forecast
+2027-04-01,Operating,Bitcoin mining operations,Mining power paid,-266667,2,Forecast
+2027-04-01,Operating,Corporate operations,Overhead paid,-66667,3,Forecast
+2027-04-01,Investing,Data center expansion,Data center buildout paid,-600000,4,Forecast
+2027-04-01,Investing,Bitcoin mining operations,Mining equipment paid,0,5,Forecast
+2027-04-01,Financing,Data center financing,Construction loan drawn,0,6,Forecast
+2027-05-01,Operating,Bitcoin mining operations,Mining cash received,433333,1,Forecast
+2027-05-01,Operating,Bitcoin mining operations,Mining power paid,-266667,2,Forecast
+2027-05-01,Operating,Corporate operations,Overhead paid,-66667,3,Forecast
+2027-05-01,Investing,Data center expansion,Data center buildout paid,-600000,4,Forecast
+2027-05-01,Investing,Bitcoin mining operations,Mining equipment paid,0,5,Forecast
+2027-05-01,Financing,Data center financing,Construction loan drawn,0,6,Forecast
+2027-06-01,Operating,Bitcoin mining operations,Mining cash received,433333,1,Forecast
+2027-06-01,Operating,Bitcoin mining operations,Mining power paid,-266667,2,Forecast
+2027-06-01,Operating,Corporate operations,Overhead paid,-66667,3,Forecast
+2027-06-01,Investing,Data center expansion,Data center buildout paid,-600000,4,Forecast
+2027-06-01,Investing,Bitcoin mining operations,Mining equipment paid,0,5,Forecast
+2027-06-01,Financing,Data center financing,Construction loan drawn,0,6,Forecast
+2027-07-01,Operating,Bitcoin mining operations,Mining cash received,433333,1,Forecast
+2027-07-01,Operating,Bitcoin mining operations,Mining power paid,-266667,2,Forecast
+2027-07-01,Operating,Corporate operations,Overhead paid,-66667,3,Forecast
+2027-07-01,Investing,Data center expansion,Data center buildout paid,-600000,4,Forecast
+2027-07-01,Investing,Bitcoin mining operations,Mining equipment paid,0,5,Forecast
+2027-07-01,Financing,Data center financing,Construction loan drawn,0,6,Forecast
+2027-08-01,Operating,Bitcoin mining operations,Mining cash received,433333,1,Forecast
+2027-08-01,Operating,Bitcoin mining operations,Mining power paid,-266667,2,Forecast
+2027-08-01,Operating,Corporate operations,Overhead paid,-66667,3,Forecast
+2027-08-01,Investing,Data center expansion,Data center buildout paid,-600000,4,Forecast
+2027-08-01,Investing,Bitcoin mining operations,Mining equipment paid,0,5,Forecast
+2027-08-01,Financing,Data center financing,Construction loan drawn,0,6,Forecast
+2027-09-01,Operating,Bitcoin mining operations,Mining cash received,433333,1,Forecast
+2027-09-01,Operating,Bitcoin mining operations,Mining power paid,-266667,2,Forecast
+2027-09-01,Operating,Corporate operations,Overhead paid,-66667,3,Forecast
+2027-09-01,Investing,Data center expansion,Data center buildout paid,-600000,4,Forecast
+2027-09-01,Investing,Bitcoin mining operations,Mining equipment paid,0,5,Forecast
+2027-09-01,Financing,Data center financing,Construction loan drawn,0,6,Forecast
