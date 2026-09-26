@@ -2,47 +2,43 @@
 
 ## 1. Overview
 
-This report is a picture of cash going in and out of one fictional site as it moves from Bitcoin mining to a data center. The numbers are examples, not a live company feed. Raw extracts cover Bitcoin sales, operating bills, capital payments, loan draws, and the bank balance. Those pieces are tidied so months and dollars line up, then named the way a cash-flow statement does (day-to-day operations, building the facility, money from lenders). The Forecast tab shows that management cash flow view — not a GAAP statement — with a chart, monthly table, and drilldown to source transaction IDs.
+This project demonstrates how fragmented financial data can become a **consistent, traceable cash-flow forecast** for a fictional business transitioning from Bitcoin mining to a data center. The dashboard includes a **Data Flow** tab explaining how the numbers are prepared and checked, followed by a **Forecast** tab showing the financial results.
 
-Then open the **Data Flow** tab in `cashflow-forecast.html` to see the full tables. Column details are in `data/raw/README.md`.
+- **Data sources:** Bitcoin sales, operating payments, capital expenditures, loan draws, and bank balances.
+- **Data model:** Raw records are cleaned, validated, standardized, and organized into reporting tables.
+- **Shared definitions:** A semantic layer standardizes cash-flow categories and calculations, allowing teams to use consistent business logic for their analytics while retaining the flexibility to create their own reports.
+- **Governance and transparency:** Users can trace reported figures to individual transactions and explore how duplicate records and unmapped categories are handled.
+- **Forecasting:** SQL combines January–September actuals with October–December forecasts to calculate monthly cash movements and balances.
 
-| System | Files | Grain | Payload |
-| --- | --- | --- | --- |
-| Treasury / exchange | `bitcoin_sales.csv` | Settled sale | BTC sold, USD received |
-| Accounts payable | `operating_payments.csv` | Paid invoice | Mining power and overhead cash paid |
-| Capital projects / AP | `capital_payments.csv` | Paid invoice | Data center buildout and mining equipment |
-| Treasury / loan system | `loan_draws.csv` | Funded draw | Construction-loan draws |
-| Bank export | `bank_balance.csv` | Account snapshot | Opening available cash |
+**This project presents a general concept to illustrate the approach. It is not a detailed architectural design, which would typically specify technology choices, engineering methodologies, and implementation details.**
 
 ## 2. Data Model
 
-![FP&A data model: data sources feed the raw, transformed, and reporting tiers, which feed output](chart/data-model.svg)
+Financial data flows from source systems through a cloud-based data pipeline with three tiers: the **Raw Tier** preserves original records and their history to support data lineage; the **Transformed Tier** validates, cleans, and standardizes the data while maintaining traceability to its sources; and the **Reporting Tier** organizes the data into purpose-specific metrics and tables, with actuals and forecasts stored in separate files. This shared, governed data foundation supports both BI tools and LLM applications. Visit the [data directory on GitHub](https://github.com/janebugai/rolling-cashflow-forecast/tree/main/data) to explore the mock-up data model.
 
-Data Sources – Structured Data (ERP, Vena, etc), Unstructured Data (pdf, wiki pages etc), and Other Internal Sources provide the original records.
+![FP&A data model: data sources feed the semantic layer and dimensional models, which feed output](chart/data-model.svg)
 
-Raw Tier – Data captured by operational systems in its original format, before business rules are applied.
+**Data Sources** — Structured Data (ERP, Vena, etc.), Unstructured Data (pdf, wiki pages, etc.), and Other Internal Sources.
 
-Transformed Tier – Data is validated, cleaned, standardized, and mapped to consistent business definitions. Records retain a link to their sources.
+**FP&A Data Model**
 
-Reporting Tier – Transformed data is aggregated into metrics and tables. Actuals and forecast are separate files in `data/reporting/`.
+Semantic Layer
 
-Output – Output can use BI tools and dashboards (Tableau, Power BI, Sigma, etc.) and LLM applications on top of the foundation data model.
+| | |
+| --- | --- |
+| Business Entities | Customers, vendors, invoices, payments, departments, and legal entities |
+| Metrics and KPIs | Monthly cash outflow = qualifying cash payments made during the month. Forecast accuracy is measured using an agreed calculation and compared with a target. |
+| Security and Access Control | Business managers see their own department’s expenses. Accountants see company-wide totals; individual salary details are restricted to authorized users. |
 
-The SQL transform keeps eligible settled, paid, and funded events, maps them through `activity_mapping.csv`, and writes one cash-activity row per transaction. Opening cash is stored separately and is not a cash-flow event. Column details are in `data/transformed/README.md`.
+Dimensional Models
 
-| Table | Grain | Keys / measures |
-| --- | --- | --- |
-| `data/transformed/activity_mapping.csv` | Source × category | business activity, cash-flow section, reporting line |
-| `data/transformed/cash_transactions.csv` | Eligible cash event | `transaction_id`, `cash_date`, `reporting_month`, `signed_amount_usd` |
-| `data/transformed/opening_balance.csv` | Account snapshot | `available_balance_usd` |
+| Tier | What it keeps |
+| --- | --- |
+| Raw Tier | Retains the original records and their history to support data lineage |
+| Transformed Tier | Validates, cleans, and standardizes the data while maintaining source traceability |
+| Reporting Tier | Organizes data into purpose-specific metrics and tables, with actuals and forecast kept as separate files |
 
-Rebuild with DuckDB SQL (`scripts/sql/`):
-
-```
-python scripts/run_sql.py
-```
-
-That runs three scripts: actuals for January–September 2026, the forecast through September 2027, then the monthly report. The forecast is calculated in SQL. The browser only displays it.
+**Output** — BI Tools and Dashboard (Tableau, Power BI, Sigma, etc.), Static Reports, and LLM Applications.
 
 ## 3. Semantic Layer
 
@@ -62,26 +58,12 @@ The **Finance team** can use this dimension to summarize monthly cash flow by ca
 
 ## 4. Data Governance
 
-The Data Flow tab walks through payment `INV-PWR-2026-01` in five selectable steps: the original Accounts Payable record, the shared mapping, quality checks with two what-if simulations, the January operating cash-flow lines, and Finance versus Operations views. Displayed amounts are read from the sample files. The simulations describe how the existing SQL rejects a repeated transaction ID or an unmapped category; they do not change the files or run the pipeline. “View this payment in the report” opens the Forecast tab on that payment’s reporting-line drilldown.
+Follow two source payments, `PAY-MIN-EQ-2026-02` and `INV-PWR-2026-02`, from the original record through shared rules and quality checks. Finance owns definitions; Operations resolves source-payment questions; Technology maintains the pipeline and checks. Amounts and totals are read from the sample files.
 
-The reporting layer turns the shared definitions into the tables that reports actually read: one row per reporting line per month, and a monthly summary carrying the section nets and the cash roll-forward. It runs from January 2026 through September 2027 and is refreshed after each close, so treasury, FP&A, and operations all work from the same numbers at the level of detail each one needs.
-
-| Report | Audience | Question it answers | Built with |
-| --- | --- | --- | --- |
-| Rolling cash flow through September 2027 | Treasury and finance leadership | Where is cash heading through next September? | `actual_cash_summary.csv` and `forecast_cash_summary.csv` |
-| Monthly cash flow detail | FP&A | Which lines moved, and by how much? | `actual_cash_flow_lines.csv` and `forecast_cash_flow_lines.csv` |
-| Payment-level review | Operations | Which transactions sit behind a line? | `cash_transactions.csv` drilldown |
-
-Reports carry no business logic of their own. Every figure arrives precomputed from `data/reporting/`, so a chart and a spreadsheet built on the same file cannot disagree, and a definition changes in one place rather than in each report. Amounts are signed once, with inflows positive and outflows negative, and months are stored as month starts so periods line up across files.
-
-Each number stays traceable back to a transaction. A bar in the chart is a section net, which resolves to statement lines in the actual or forecast line file, which join to individual `transaction_id` values in `data/transformed/cash_transactions.csv` or `forecast_transactions.csv` on `reporting_month` and `reporting_line`. The Forecast tab works that path end to end: expand a section, then click a monthly figure to list the source transactions behind it. Column-level detail is in `data/reporting/README.md`.
-
-| Reporting file | What is kept | Used for |
-| --- | --- | --- |
-| `actual_cash_flow_lines.csv` | Signed amount by actual month and reporting line | Statement lines and drilldown keys |
-| `forecast_cash_flow_lines.csv` | Signed amount by forecast month and reporting line | Statement lines and drilldown keys |
-| `actual_cash_summary.csv` | Actual section nets, beginning and ending cash | Chart totals and cash roll-forward |
-| `forecast_cash_summary.csv` | Forecast section nets, beginning and ending cash | Chart totals and cash roll-forward |
+1. **Original record.** Original details are kept so Finance can always trace a reported number back to its source. The step shows each payment’s ID, vendor, payment date, source category, amount, and status.
+2. **Shared rules.** Finance approves the rules; Technology maintains their implementation. Each original record is shown next to its shared classification: reporting month, transaction type, cash-flow category, business activity, and reporting line.
+3. **Quality checks.** The sample payments pass checks that transaction IDs are present and unique, that each payment matches the shared mapping, and that the transactions behind its monthly reporting line sum to the reported amount. Two examples show how the same checks treat a problem. They are not in the sample files: a duplicate record is rejected, and an unmapped category is rejected.
+4. **Governance.** Finance defines how cash flows are classified, such as Operating and Investing, while Operations reviews payments by business activity, such as Bitcoin mining operations, and resolves questions about the source data. Technology maintains the pipeline and validation checks that support both teams. This shared foundation lets each team analyze the data from its own perspective while arriving at consistent numbers when using the same scope and reporting period.
 
 Serve the folder and open the dashboard:
 
