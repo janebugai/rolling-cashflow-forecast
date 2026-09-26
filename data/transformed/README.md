@@ -4,13 +4,13 @@ Data is validated, cleaned, standardized, and mapped to consistent business defi
 
 Amounts are plain numbers (no `$` or commas). Dates are ISO `YYYY-MM-DD`. Receipts and loan draws are positive; payments are negative. Bitcoin sale proceeds are operating cash receipts in a management cash flow view, not a GAAP statement.
 
-Rebuild with `python scripts/run_sql.py`. `scripts/sql/transform_actuals.sql` reads `data/raw/` plus `activity_mapping.csv` and writes `cash_transactions.csv` and `opening_balance.csv` for the nine actual months. `scripts/sql/build_forecast.sql` then writes `forecast_transactions.csv` for October–December.
+Rebuild with `python scripts/run_sql.py`. `scripts/sql/transform_actuals.sql` reads `data/raw/` plus `activity_mapping.csv` and writes `cash_transactions.csv` and `opening_balance.csv` for the nine actual months. `scripts/sql/build_forecast.sql` then writes `forecast_transactions.csv` for October 2026–September 2027.
 
 | File | Role | Grain |
 | --- | --- | --- |
 | `activity_mapping.csv` | Lookup used in the transform; not a cash-event output | Source × category |
 | `cash_transactions.csv` | Eligible cash events, mapped and signed | One row per actual transaction |
-| `forecast_transactions.csv` | Calculated October–December events | One row per reporting line per forecast month |
+| `forecast_transactions.csv` | Calculated October 2026–September 2027 events | One row per reporting line per forecast month |
 | `opening_balance.csv` | Bank snapshot copied from raw | One account row |
 
 ## `activity_mapping.csv`
@@ -55,7 +55,7 @@ One row per eligible cash event. Kept statuses: sales `SETTLED`, invoices `PAID`
 
 ## `forecast_transactions.csv`
 
-Same columns as `cash_transactions.csv`. One row per reporting line for October, November, and December, including zeros. `source_system` is `Forecast`. `source_file` is `forecast_9_plus_3.csv`, or `plan_schedule.csv` when that file sets the amount. Recurring operating lines are the trailing three actual months, rounded to whole dollars. Data center buildout repeats September. Mining equipment and the construction loan stay zero unless `data/forecast/plan_schedule.csv` names that line and month.
+Same columns as `cash_transactions.csv`. One row per reporting line for each month from October 2026 through September 2027, including zeros. `source_system` is `Forecast`. `source_file` is `forecast_scenario.csv`, or `plan_schedule.csv` when that file sets the amount. Recurring operating lines are the trailing three actual months, rounded to whole dollars. Data center buildout repeats September. Mining equipment and the construction loan stay zero unless `data/reporting/plan_schedule.csv` names that line and month.
 
 ## `opening_balance.csv`
 

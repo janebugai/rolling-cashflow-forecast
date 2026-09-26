@@ -136,6 +136,21 @@
   border: 1px solid #f0dca3;
 }
 
+.wt-example {
+  background: #eef2fb;
+  color: #24356b;
+}
+
+table.source-table thead tr:first-child th.wt-rules-head {
+  text-align: center;
+  background: #e8f7f2;
+}
+
+table.source-table.wt-rules-result th,
+table.source-table.wt-rules-result td {
+  white-space: normal;
+}
+
 .wt-check-title {
   margin: 0;
   font-size: 14px;
@@ -179,30 +194,6 @@ table.source-table.wt-record-table td {
 
 table.source-table.wt-record-table td {
   background: #fff;
-}
-
-table.source-table.wt-rules-table {
-  width: 100%;
-  min-width: 1180px;
-  table-layout: fixed;
-  font-size: 13px;
-}
-
-table.source-table.wt-rules-table th,
-table.source-table.wt-rules-table td {
-  white-space: normal;
-  overflow-wrap: normal;
-  word-break: normal;
-  padding: 10px 8px;
-}
-
-table.source-table.wt-rules-table thead tr:first-child th {
-  text-align: center;
-  background: #fff;
-}
-
-table.source-table.wt-rules-table thead tr:first-child th.wt-rules-head {
-  background: #e8f7f2;
 }
 
 .wt-record-table td:first-child {

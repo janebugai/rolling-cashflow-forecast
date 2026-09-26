@@ -479,6 +479,17 @@
 
   .process-lead:last-child { margin-bottom: 0; }
 
+  .process-points {
+    margin: 0 0 10px 0;
+    padding-left: 22px;
+    font-size: 14px;
+    color: #3d4457;
+    line-height: 1.5;
+  }
+
+  .process-points li { margin: 0 0 6px 0; }
+  .process-points li:last-child { margin-bottom: 0; }
+
   .process-lead a {
     color: var(--blue-line);
     text-decoration: none;
@@ -561,7 +572,7 @@
   <div class="dashboard-card">
 
     <header class="dash-header">
-      <h1>12-Months Rolling Cashflow Forecast</h1>
+      <h1>Rolling Cashflow Forecast through September 2027</h1>
       <span class="illustrative-badge">Imaginary Datacenter Company</span>
     </header>
     <p class="load-error" id="loadError" hidden></p>
@@ -608,12 +619,20 @@
 
       <section class="process-section" id="proc-overview">
         <h2><span class="sec-num">1.</span>Overview</h2>
-        <p class="process-lead">This report is a picture of cash going in and out of one fictional site as it moves from Bitcoin mining to a data center. The numbers are examples, not a live company feed. Raw extracts cover Bitcoin sales, operating bills, capital payments, loan draws, and the bank balance. Those pieces are tidied so months and dollars line up, then named the way a cash-flow statement does (day-to-day operations, building the facility, money from lenders). The Forecast tab shows that management cash flow view — not a GAAP statement — with a chart, monthly table, and drilldown to source transaction IDs.</p>
+        <p class="process-lead">This project demonstrates how fragmented financial data can become a <strong>consistent, traceable cash-flow forecast</strong> for a fictional business transitioning from Bitcoin mining to a data center. The dashboard includes a <strong>Data Flow tab</strong> explaining how the numbers are prepared and checked, followed by a <strong>Forecast tab</strong> showing the financial results.</p>
+        <ul class="process-points">
+          <li><strong>Data sources:</strong> Bitcoin sales, operating payments, capital expenditures, loan draws, and bank balances.</li>
+          <li><strong>Data model:</strong> Raw records are cleaned, validated, standardized, and organized into reporting tables.</li>
+          <li><strong>Shared definitions:</strong> A semantic layer standardizes cash-flow categories and calculations, allowing teams to use consistent business logic for their analytics while retaining the flexibility to create their own reports.</li>
+          <li><strong>Governance and transparency:</strong> Users can trace reported figures to individual transactions and explore how duplicate records and unmapped categories are handled.</li>
+          <li><strong>Forecasting:</strong> SQL combines January–September actuals with October–December forecasts to calculate monthly cash movements and balances.</li>
+        </ul>
+        <p class="process-lead"><strong>This project presents a general concept to illustrate the approach. It is not a detailed architectural design, which would typically specify technology choices, engineering methodologies, and implementation details.</strong></p>
       </section>
 
       <section class="process-section" id="proc-model">
         <h2><span class="sec-num">2.</span>Data Model</h2>
-        <p class="process-lead">Data from Structured Data (ERP, Vena, etc), Unstructured Data (pdf, wiki pages etc), and Other Internal Sources flows through three tiers: <strong>Raw Tier</strong> retains the original records and their history to support data lineage; <strong>Transformed Tier</strong> validates, cleans, and standardizes the data while maintaining source traceability; and <strong>Reporting Tier</strong> organizes it into purpose-specific metrics and tables, including plans, forecasts, actuals, and related analysis. This shared foundation supports BI tools and dashboards (Tableau, Power BI, Sigma, etc.) and LLM applications. Please visit <a href="https://github.com/janebugai/rolling-cashflow-forecast/tree/main/data" target="_blank" rel="noopener">data directory on GitHub</a> for a mock-up data model</p>
+        <p class="process-lead">Financial data flows from source systems through a cloud-based data pipeline with three tiers: the <strong>Raw Tier</strong> preserves original records and their history to support data lineage; the <strong>Transformed Tier</strong> validates, cleans, and standardizes the data while maintaining traceability to its sources; and the <strong>Reporting Tier</strong> organizes the data into purpose-specific metrics and tables, with actuals and forecasts stored in separate files. This shared, governed data foundation supports both BI tools and LLM applications. Visit the <a href="https://github.com/janebugai/rolling-cashflow-forecast/tree/main/data" target="_blank" rel="noopener">data directory on GitHub</a> to explore the mock-up data model.</p>
         <div class="pipeline" role="img" aria-labelledby="pipelineTitle">
           <p id="pipelineTitle" class="pipeline-sr">Data sources feed the FP&amp;A data model, which feeds output</p>
           <div class="pipe-board">
@@ -651,7 +670,7 @@
                     <div class="pipe-h-arrow" aria-hidden="true">→</div>
                     <div class="pipe-col pipe-col-rpt">
                       <h3>Reporting Tier</h3>
-                      <p class="pipe-blurb">Organizes data into purpose-specific metrics and tables, including plans, forecasts, actuals, and related analysis</p>
+                      <p class="pipe-blurb">Organizes data into purpose-specific metrics and tables, with actuals and forecast kept as separate files</p>
                     </div>
                   </div>
                 </div>
@@ -661,6 +680,7 @@
               <p class="pipe-panel-title">Output</p>
               <ul class="pipe-stack">
                 <li>BI Tools and Dashboard<br>(Tableau, Power BI, Sigma, etc)</li>
+                <li>Static Reports</li>
                 <li>LLM Applications</li>
               </ul>
             </div>
@@ -805,6 +825,7 @@ function lineSeries(lines, months, reportingLine) {
 
 function buildForecast(summary, lines, transactions) {
   summary = summary.slice().sort((a, b) => String(a.reporting_month).localeCompare(String(b.reporting_month)));
+  summary = summary.filter(r => r.reporting_month >= "2026-09-01" && r.reporting_month <= "2027-09-01");
   const months = summary.map(r => r.reporting_month);
   NUM_MONTHS = months.length;
   MONTH_LABELS = months.map(monthLabel);
@@ -972,8 +993,9 @@ function showValidation(failures) {
 
 function renderChart(forecast) {
   const svg = document.getElementById("chartSvg");
-  const W = 1180, H = 270;
+  const H = 270;
   const marginLeft = 68, marginRight = 20, marginTop = 26, marginBottom = 64;
+  const W = marginLeft + marginRight + NUM_MONTHS * 90;
   const plotW = W - marginLeft - marginRight;
   const plotH = H - marginTop - marginBottom;
 
@@ -1041,6 +1063,7 @@ function renderChart(forecast) {
   });
 
   svg.setAttribute("viewBox", `0 0 ${W} ${H}`);
+  svg.style.minWidth = W + "px";
   svg.innerHTML = svgParts.join("\n");
 }
 
@@ -1097,12 +1120,12 @@ function renderTable(forecast) {
     return `<th${cls}>${label}<span class="fcst-mark">${mark}</span></th>`;
   }).join("");
 
-  let html = `<tr class="row-total"><td>Beginning cash</td>${forecast.beginning.map(v => fmtCell(v)).join("")}</tr>`;
+  let html = `<tr><td>Beginning cash</td>${forecast.beginning.map(v => fmtCell(v)).join("")}</tr>`;
   STATEMENT_SECTIONS.forEach(section => {
     const expanded = sectionExpanded[section.id];
     const caret = expanded ? "▾" : "▸";
     const netCells = forecast[section.netKey].map(v => fmtCell(v)).join("");
-    html += `<tr class="row-parent row-total" data-section="${section.id}"><td><span class="caret">${caret}</span><span class="cat-dot" style="background:${section.color}"></span>${section.label}</td>${netCells}</tr>`;
+    html += `<tr class="row-parent" data-section="${section.id}"><td><span class="caret">${caret}</span><span class="cat-dot" style="background:${section.color}"></span>${section.label}</td>${netCells}</tr>`;
     if (!expanded) return;
     section.activities.forEach(activity => {
       const activityOpen = activityExpanded[activity.id] !== false;
@@ -1118,8 +1141,8 @@ function renderTable(forecast) {
       });
     });
   });
-  html += `<tr class="row-total"><td>Net change in cash</td>${forecast.net.map(v => fmtHeatCell(v)).join("")}</tr>`;
-  html += `<tr class="row-total"><td>Ending cash</td>${forecast.ending.map(v => fmtHeatCell(v)).join("")}</tr>`;
+  html += `<tr><td>Net change in cash</td>${forecast.net.map(v => fmtHeatCell(v)).join("")}</tr>`;
+  html += `<tr><td>Ending cash</td>${forecast.ending.map(v => fmtHeatCell(v)).join("")}</tr>`;
 
   const body = document.getElementById("tableBody");
   body.innerHTML = html;
@@ -1201,11 +1224,15 @@ function num(v) {
 
 function loadReportingMart() {
   return Promise.all([
-    fetchCsv(REPORTING_DIR + "monthly_cash_summary.csv"),
-    fetchCsv(REPORTING_DIR + "monthly_cash_flow_lines.csv"),
+    fetchCsv(REPORTING_DIR + "actual_cash_summary.csv"),
+    fetchCsv(REPORTING_DIR + "forecast_cash_summary.csv"),
+    fetchCsv(REPORTING_DIR + "actual_cash_flow_lines.csv"),
+    fetchCsv(REPORTING_DIR + "forecast_cash_flow_lines.csv"),
     fetchCsv(TRANSFORMED_DIR + "cash_transactions.csv"),
     fetchCsv(TRANSFORMED_DIR + "forecast_transactions.csv")
-  ]).then(([summary, lines, actuals, forecastTxns]) => {
+  ]).then(([actualSummary, forecastSummary, actualLines, forecastLines, actuals, forecastTxns]) => {
+    const summary = actualSummary.concat(forecastSummary);
+    const lines = actualLines.concat(forecastLines);
     const transactions = actuals.concat(forecastTxns);
     lastForecast = buildForecast(summary, lines, transactions);
     showValidation(validateAggregates(lastForecast, summary, lines, transactions));

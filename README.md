@@ -24,7 +24,7 @@ Raw Tier – Data captured by operational systems in its original format, before
 
 Transformed Tier – Data is validated, cleaned, standardized, and mapped to consistent business definitions. Records retain a link to their sources.
 
-Reporting Tier – Transformed data is aggregated into metrics and tables designed for dashboards, analysis, and decision-making.
+Reporting Tier – Transformed data is aggregated into metrics and tables. Actuals and forecast are separate files in `data/reporting/`.
 
 Output – Output can use BI tools and dashboards (Tableau, Power BI, Sigma, etc.) and LLM applications on top of the foundation data model.
 
@@ -42,7 +42,7 @@ Rebuild with DuckDB SQL (`scripts/sql/`):
 python scripts/run_sql.py
 ```
 
-That runs three scripts: actuals for January–September, the October–December forecast, then the monthly report. The forecast is calculated in SQL. The browser only displays it.
+That runs three scripts: actuals for January–September 2026, the forecast through September 2027, then the monthly report. The forecast is calculated in SQL. The browser only displays it.
 
 ## 3. Semantic Layer
 
@@ -64,22 +64,24 @@ The **Finance team** can use this dimension to summarize monthly cash flow by ca
 
 The Data Flow tab walks through payment `INV-PWR-2026-01` in five selectable steps: the original Accounts Payable record, the shared mapping, quality checks with two what-if simulations, the January operating cash-flow lines, and Finance versus Operations views. Displayed amounts are read from the sample files. The simulations describe how the existing SQL rejects a repeated transaction ID or an unmapped category; they do not change the files or run the pipeline. “View this payment in the report” opens the Forecast tab on that payment’s reporting-line drilldown.
 
-The reporting layer turns the shared definitions into the tables that reports actually read: one row per reporting line per month, and a monthly summary carrying the section nets and the cash roll-forward. It is built for a rolling twelve-month view refreshed after each close, so treasury, FP&A, and operations all work from the same numbers at the level of detail each one needs.
+The reporting layer turns the shared definitions into the tables that reports actually read: one row per reporting line per month, and a monthly summary carrying the section nets and the cash roll-forward. It runs from January 2026 through September 2027 and is refreshed after each close, so treasury, FP&A, and operations all work from the same numbers at the level of detail each one needs.
 
 | Report | Audience | Question it answers | Built with |
 | --- | --- | --- | --- |
-| Rolling twelve-month cash flow | Treasury and finance leadership | Where is cash heading over the next year? | `monthly_cash_summary.csv` |
-| Monthly cash flow detail | FP&A | Which lines moved, and by how much? | `monthly_cash_flow_lines.csv` |
+| Rolling cash flow through September 2027 | Treasury and finance leadership | Where is cash heading through next September? | `actual_cash_summary.csv` and `forecast_cash_summary.csv` |
+| Monthly cash flow detail | FP&A | Which lines moved, and by how much? | `actual_cash_flow_lines.csv` and `forecast_cash_flow_lines.csv` |
 | Payment-level review | Operations | Which transactions sit behind a line? | `cash_transactions.csv` drilldown |
 
 Reports carry no business logic of their own. Every figure arrives precomputed from `data/reporting/`, so a chart and a spreadsheet built on the same file cannot disagree, and a definition changes in one place rather than in each report. Amounts are signed once, with inflows positive and outflows negative, and months are stored as month starts so periods line up across files.
 
-Each number stays traceable back to a transaction. A bar in the chart is a section net, which resolves to statement lines in `monthly_cash_flow_lines.csv`, which join to individual `transaction_id` values in `data/transformed/cash_transactions.csv` on `reporting_month` and `reporting_line`. The Forecast tab works that path end to end: expand a section, then click a monthly figure to list the source transactions behind it. Column-level detail for both reporting files is in `data/reporting/README.md`.
+Each number stays traceable back to a transaction. A bar in the chart is a section net, which resolves to statement lines in the actual or forecast line file, which join to individual `transaction_id` values in `data/transformed/cash_transactions.csv` or `forecast_transactions.csv` on `reporting_month` and `reporting_line`. The Forecast tab works that path end to end: expand a section, then click a monthly figure to list the source transactions behind it. Column-level detail is in `data/reporting/README.md`.
 
 | Reporting file | What is kept | Used for |
 | --- | --- | --- |
-| `monthly_cash_flow_lines.csv` | Signed amount by month and reporting line | Statement lines and drilldown keys |
-| `monthly_cash_summary.csv` | Section nets, beginning and ending cash | Chart totals and cash roll-forward |
+| `actual_cash_flow_lines.csv` | Signed amount by actual month and reporting line | Statement lines and drilldown keys |
+| `forecast_cash_flow_lines.csv` | Signed amount by forecast month and reporting line | Statement lines and drilldown keys |
+| `actual_cash_summary.csv` | Actual section nets, beginning and ending cash | Chart totals and cash roll-forward |
+| `forecast_cash_summary.csv` | Forecast section nets, beginning and ending cash | Chart totals and cash roll-forward |
 
 Serve the folder and open the dashboard:
 

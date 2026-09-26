@@ -7,7 +7,7 @@
     capital: "data/raw/capital_payments.csv",
     mapping: "data/transformed/activity_mapping.csv",
     transactions: "data/transformed/cash_transactions.csv",
-    lines: "data/reporting/monthly_cash_flow_lines.csv"
+    lines: "data/reporting/actual_cash_flow_lines.csv"
   };
   var MONTHS = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
   var model = null;
@@ -248,16 +248,11 @@
       + "</table></div>";
   }
 
-  function rulesRow(record) {
+  function rulesResultRow(record) {
     var payment = record.payment;
     var txn = record.txn;
     return "<tr>"
       + "<td>" + esc(payment.id) + "</td>"
-      + "<td>" + esc(payment.vendor) + "</td>"
-      + "<td>" + esc(formatLongDate(payment.payment_date)) + "</td>"
-      + "<td>" + esc(payment.source_category) + "</td>"
-      + "<td class=\"num\">" + esc(formatUsd(payment.amount_paid)) + "</td>"
-      + "<td>" + esc(payment.status) + "</td>"
       + "<td>" + esc(formatMonth(txn.reporting_month)) + "</td>"
       + "<td>Credit</td>"
       + "<td>" + esc(txn.cash_flow_section) + "</td>"
@@ -270,12 +265,9 @@
     return ""
       + "<p>Finance approves the rules; Technology maintains their implementation.</p>"
       + "<div class=\"table-wrap\" tabindex=\"-1\">"
-      + "<table class=\"source-table wt-record-table wt-rules-table\">"
+      + "<table class=\"source-table wt-record-table\">"
       + "<thead>"
-      + "<tr>"
-      + "<th scope=\"colgroup\" colspan=\"6\">Original record</th>"
-      + "<th scope=\"colgroup\" colspan=\"5\" class=\"wt-rules-head\">Shared rules</th>"
-      + "</tr>"
+      + "<tr><th scope=\"colgroup\" colspan=\"6\">Original record</th></tr>"
       + "<tr>"
       + "<th scope=\"col\">Unique ID</th>"
       + "<th scope=\"col\">Vendor</th>"
@@ -283,13 +275,29 @@
       + "<th scope=\"col\">Source category</th>"
       + "<th scope=\"col\" class=\"num\">Amount</th>"
       + "<th scope=\"col\">Status</th>"
+      + "</tr></thead>"
+      + "<tbody>" + m.rulesRecords.map(function (record) { return originalRecordRow(record.payment); }).join("") + "</tbody></table></div>"
+      + "<div class=\"table-wrap\" tabindex=\"-1\">"
+      + "<table class=\"source-table wt-record-table wt-rules-result\">"
+      + "<thead>"
+      + "<tr><th scope=\"colgroup\" colspan=\"6\" class=\"wt-rules-head\">Shared rules</th></tr>"
+      + "<tr>"
+      + "<th scope=\"col\">Unique ID</th>"
       + "<th scope=\"col\">Reporting month</th>"
       + "<th scope=\"col\">Transaction Type</th>"
       + "<th scope=\"col\">Cash-flow category</th>"
       + "<th scope=\"col\">Business activity</th>"
       + "<th scope=\"col\">Reporting line</th>"
       + "</tr></thead>"
-      + "<tbody>" + m.rulesRecords.map(rulesRow).join("") + "</tbody></table></div>";
+      + "<tbody>" + m.rulesRecords.map(rulesResultRow).join("") + "</tbody></table></div>";
+  }
+
+  function exampleCard(title, detail) {
+    return "<li class=\"wt-check\">"
+      + "<span class=\"wt-result wt-example\">Example</span>"
+      + "<p class=\"wt-check-title\">" + esc(title) + "</p>"
+      + "<p class=\"wt-check-detail\">" + esc(detail) + "</p>"
+      + "</li>";
   }
 
   function renderChecks(m) {
@@ -300,22 +308,31 @@
         + "<p class=\"wt-check-detail\">" + esc(check.detail) + "</p>"
         + "</li>";
     }).join("");
+    var examples = [
+      exampleCard(
+        "A duplicate record is rejected.",
+        "If PAY-MIN-EQ-2026-02 appeared twice, the transformation would stop and report that transaction IDs are not unique. The repeated row would not be written to cash_transactions.csv."
+      ),
+      exampleCard(
+        "An unmapped category is rejected.",
+        "If a payment used a source category with no row in activity_mapping.csv, the transformation would stop and ask for that category to be added. Unmapped activity is not assigned to Other."
+      )
+    ].join("");
     return ""
-      + "<ul class=\"wt-checks\">" + items + "</ul>";
+      + "<ul class=\"wt-checks\">" + items + "</ul>"
+      + "<p>These examples show how the same checks treat a problem. They are not in the sample files.</p>"
+      + "<ul class=\"wt-checks\">" + examples + "</ul>";
   }
 
   function renderTeams(m) {
-    var month = formatMonth(m.rulesRecords[0].txn.reporting_month);
     var parts = m.financeParts.map(function (part) {
       return "<li>" + esc(part.name) + ": <span class=\"" + amountClass(part.amount) + "\">" + esc(formatUsd(part.amount)) + "</span></li>";
     }).join("");
-    var names = joinAnd(m.financeParts.map(function (part) { return part.name; }));
     var lineItems = m.operationParts.map(function (part) {
       return "<li>" + esc(part.name) + ": <span class=\"" + amountClass(part.amount) + "\">" + esc(formatUsd(part.amount)) + "</span></li>";
     }).join("");
-    var lineNames = joinAnd(m.operationParts.map(function (part) { return part.name; }));
     return ""
-      + "<p>Finance is summarizing the " + esc(month) + " cash-flow types " + esc(names) + ". Operations is looking at the business activity " + esc(lineNames) + ". Both teams should obtain matching results when using the same period, business activity, and underlying records.</p>"
+      + "<p>Finance defines how cash flows are classified, such as Operating and Investing, while Operations reviews payments by business activity, such as Bitcoin mining operations, and resolves questions about the source data. Technology maintains the pipeline and validation checks that support both teams. This shared foundation lets each team analyze the data from its own perspective while arriving at consistent numbers when using the same scope and reporting period.</p>"
       + "<div class=\"wt-teams\">"
       + "<article class=\"wt-card\"><h4>Finance</h4>"
       + "<ul>" + parts + "</ul>"

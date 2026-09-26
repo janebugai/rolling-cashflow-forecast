@@ -41,6 +41,7 @@ SOURCES = [
 ]
 REPORTS = [
     "BI Tools and Dashboard\n(Tableau, Power BI, Sigma, etc)",
+    "Static Reports",
     "LLM Applications",
 ]
 TIERS = [
@@ -49,7 +50,7 @@ TIERS = [
     ("Transformed Tier", BLUE_SOFT,
      "Validates, cleans, and standardizes the data while maintaining source traceability"),
     ("Reporting Tier", VIOLET,
-     "Organizes data into purpose-specific metrics and tables, including plans, forecasts, actuals, and related analysis"),
+     "Organizes data into purpose-specific metrics and tables, with actuals and forecast kept as separate files"),
 ]
 
 parts = []

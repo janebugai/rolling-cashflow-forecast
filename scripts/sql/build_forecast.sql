@@ -1,4 +1,4 @@
--- Calculate October–December from the 9+3 scenario.
+-- Calculate October 2026–September 2027 from the 9+12 scenario.
 -- Recurring operating lines use the trailing three actual months, rounded half away from zero.
 -- Data center buildout repeats the last actual month. Equipment and loan draws stay 0
 -- unless plan_schedule.csv supplies that reporting line and month.
@@ -13,7 +13,7 @@ SELECT
     fiscal_year::INTEGER AS fiscal_year,
     actual_months::INTEGER AS actual_months,
     forecast_months::INTEGER AS forecast_months
-FROM read_csv_auto('data/forecast/forecast_9_plus_3.csv', header = true);
+FROM read_csv_auto('data/reporting/forecast_scenario.csv', header = true);
 
 CREATE OR REPLACE TEMP TABLE actuals AS
 SELECT
@@ -28,7 +28,7 @@ SELECT
     reporting_line,
     amount_usd
 FROM read_csv(
-    'data/forecast/plan_schedule.csv',
+    'data/reporting/plan_schedule.csv',
     header = true,
     columns = {
         'reporting_month': 'DATE',
@@ -49,7 +49,7 @@ SELECT * FROM (
 ) AS d(reporting_line, business_activity, cash_flow_section, cash_direction, id_prefix, driver_kind);
 
 CREATE OR REPLACE TEMP TABLE forecast_months AS
-SELECT make_date(s.fiscal_year, s.actual_months + gs.step, 1) AS reporting_month
+SELECT (make_date(s.fiscal_year, s.actual_months, 1) + gs.step * INTERVAL 1 MONTH)::DATE AS reporting_month
 FROM scenario s
 CROSS JOIN generate_series(1, (SELECT forecast_months FROM scenario), 1) AS gs(step);
 
@@ -80,7 +80,7 @@ SELECT
     'Forecast' AS source_system,
     CASE
         WHEN p.amount_usd IS NOT NULL THEN 'plan_schedule.csv'
-        ELSE 'forecast_9_plus_3.csv'
+        ELSE 'forecast_scenario.csv'
     END AS source_file,
     d.reporting_line AS source_category,
     '' AS vendor,
@@ -128,8 +128,8 @@ COPY (
 ) TO 'data/transformed/forecast_transactions.csv' (HEADER, DELIMITER ',');
 
 SELECT CASE
-    WHEN (SELECT count(*) FROM forecast_rows) <> 18
-    THEN error('Expected 18 forecast transactions (6 lines x 3 months)')
+    WHEN (SELECT count(*) FROM forecast_rows) <> (SELECT forecast_months * 6 FROM scenario)
+    THEN error('Expected one forecast transaction for each reporting line and forecast month')
     WHEN (SELECT count(*) FROM forecast_rows) <> (SELECT count(DISTINCT transaction_id) FROM forecast_rows)
     THEN error('Forecast transaction_id values are not unique')
     WHEN EXISTS (
