@@ -8,9 +8,9 @@ This project demonstrates how fragmented financial data can become a **consisten
 - **Data model:** Raw records are cleaned, validated, standardized, and organized into reporting tables.
 - **Shared definitions:** A semantic layer standardizes cash-flow categories and calculations, allowing teams to use consistent business logic for their analytics while retaining the flexibility to create their own reports.
 - **Governance and transparency:** Users can trace reported figures to individual transactions and explore how duplicate records and unmapped categories are handled.
-- **Forecasting:** SQL combines January–September actuals with October–December forecasts to calculate monthly cash movements and balances.
+- **Forecasting:** The forecast is built on historical actuals, with simple assumptions for BTC sales, price, and a run-rate cost increase. The Forecast tab lets users change the BTC scenario and see the result immediately.
 
-**This project presents a general concept to illustrate the approach. It is not a detailed architectural design, which would typically specify technology choices, engineering methodologies, and implementation details.**
+**This project illustrates a conceptual approach. A detailed architectural design would further define specific user requirements, technology choices, engineering methodologies, and implementation details.**
 
 ## 2. Data Model
 

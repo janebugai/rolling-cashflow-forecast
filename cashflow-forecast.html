@@ -547,6 +547,8 @@
 
   .process-lead:last-child { margin-bottom: 0; }
 
+  .process-underline { text-decoration: underline; }
+
   .process-points {
     margin: 0 0 10px 0;
     padding-left: 22px;
@@ -711,9 +713,9 @@
           <li><strong>Data model:</strong> Raw records are cleaned, validated, standardized, and organized into reporting tables.</li>
           <li><strong>Shared definitions:</strong> A semantic layer standardizes cash-flow categories and calculations, allowing teams to use consistent business logic for their analytics while retaining the flexibility to create their own reports.</li>
           <li><strong>Governance and transparency:</strong> Users can trace reported figures to individual transactions and explore how duplicate records and unmapped categories are handled.</li>
-          <li><strong>Forecasting:</strong> SQL combines January–September actuals with October–December forecasts to calculate monthly cash movements and balances.</li>
+          <li><strong>Forecasting:</strong> The forecast is built on historical actuals, with simple assumptions for BTC sales, price, and a run-rate cost increase. The Forecast tab lets users change the BTC scenario and see the result immediately.</li>
         </ul>
-        <p class="process-lead"><strong>This project presents a general concept to illustrate the approach. It is not a detailed architectural design, which would typically specify technology choices, engineering methodologies, and implementation details.</strong></p>
+        <p class="process-lead process-underline"><strong>This project illustrates a conceptual approach. A detailed architectural design would further define specific user requirements, technology choices, engineering methodologies, and implementation details.</strong></p>
       </section>
 
       <section class="process-section" id="proc-model">
